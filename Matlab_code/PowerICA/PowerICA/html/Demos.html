@@ -1,0 +1,262 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>PowerICA</title><meta name="generator" content="MATLAB 9.2"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-09"><meta name="DC.source" content="Demos.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>PowerICA</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Introduction</a></li><li><a href="#2">How to cite</a></li><li><a href="#3">Syntax</a></li><li><a href="#4">Description</a></li><li><a href="#7">Example</a></li><li><a href="#18">References</a></li></ul></div><h2 id="1">Introduction</h2><p>PowerICA is a numerically stable ICA algorithm, which is especially useful when the sample size is not orders of magnitude larger than the data dimensionality [1]. This is the finite-sample regime in which the fixed-point FastICA algorithm [2] is often reported to have convergence problems [3].</p><h2 id="2">How to cite</h2><p>This function is implemented based on Algorithm 1 in paper below.</p><p><i>S. Basiri, E. Ollila and V. Koivunen, "Alternative Derivation of FastICA With Novel Power Iteration Algorithm," in IEEE Signal Processing Letters, vol. 24, no. 9, pp. 1378-1382, Sept. 2017.</i></p><p>If you use this function in your publication please cite our paper using the above citation info.</p><h2 id="3">Syntax</h2><p>[ <b>W</b> , flg] = PowerICA( <b>X</b> , nonlin, <b>W0</b> , mode)</p><h2 id="4">Description</h2><p>Input parameters:</p><div><ul><li><b>X</b> : is a real valued <img src="Demos_eq01139515633759372603.png" alt="$$ d \times n $$"> array of mixture recordings, where <img src="Demos_eq09616998636783658588.png" alt="$$ d $$"> and <img src="Demos_eq07193383391687160905.png" alt="$$ n $$"> denote the dimensionality and the number of observations respectively. Data <b>X</b> should be centered and whitened.</li><li>nonlin: ICA nonlinearities. It can be either a single string or a <img src="Demos_eq08107751320294557283.png" alt="$$ d \times 1 $$"> array of strings. The following nonlinearities are supported. <i>tanh, pow3, gaus, skew, rt06, lt06, bt00, bt02, bt06, bt10, bt12, bt14, bt16, tan1, tan2, tan3, tan4, gau1, gau2, gau3.</i> We refer the reader to [4] for detailed description of the other nonlinearities besides the standard ones ( <i>tanh, gaus, pow3, skew</i> ). The default value is <i>tanh</i> .</li><li><b>W0</b> : is an orthogonal <img src="Demos_eq08308973387663156908.png" alt="$$ d \times d $$"> matrix used as the initial start of the algorithm.</li><li>mode: can be set either to <i>serial</i> or <i>parallel</i> . The <i>serial</i> mode is used when only one computing node is available or the dataset is of small size. The default mode is <i>serial</i> . The <i>parallel</i> mode runs two parallel Matlab instances on different CPU cores. The two instances communicate via a Java socket. Make sure you have installed and updated Java on your system.</li></ul></div><p>Note: In order to use the <i>parallel</i> mode in MacOS, line 81 of the PowerICA function should be edited according to your installed Matlab version. For example: !/Applications/MATLAB R2017a.app/bin/matlab -r parnode &amp;</p><p>Output parameters:</p><div><ul><li><b>W</b>: PowerICA estimate of orthogonal <img src="Demos_eq08308973387663156908.png" alt="$$ d \times d $$"> demixing matrix.</li><li>flg: Returns 1, when the algorithm has converged successfully and 0 when the algorithm has failed to converge.</li></ul></div><h2 id="7">Example</h2><p>This is a synthetic example of utilizing the PowerICA method in extracting independent source signals from their observed mixture recordings.</p><p>Initialize:</p><pre class="codeinput">d = 4;  <span class="comment">%number of ICs</span>
+p = 5;  <span class="comment">%number of mixture recordings</span>
+n = 500; <span class="comment">%sample size</span>
+</pre><p>Generate the data:</p><pre class="codeinput">A = randn(p,d); <span class="comment">%random mixing matrix</span>
+<span class="comment">% Generate a 4-by-n array of source signals (independent components)</span>
+S = demosig;
+<span class="comment">% Generate a random p-by-n mixture array</span>
+Y = A*S;
+</pre><p>Center the data:</p><pre class="codeinput">Y = bsxfun(@minus, Y, mean(Y,2));
+</pre><p>Whiten the data:</p><pre class="codeinput">[E,D] = eig(cov(Y',1)); <span class="comment">% EVD of sample covariance</span>
+[Ds,ord] = sort( diag(D),<span class="string">'descend'</span>) ; <span class="comment">%% Sort by decreasing variance</span>
+E = E(:,ord(1:d));      <span class="comment">% E contains d largest eigenvectors</span>
+lam = Ds(1:d);          <span class="comment">% vector of d largest eigenvalues</span>
+whiteningMatrix = diag(1./sqrt(lam))*E(:,1:d)';
+dewhiteningMatrix = E(:,1:d) *diag(sqrt(lam));
+X = whiteningMatrix*Y;
+</pre><p>Use the PowerICA algorithm to estimate the <img src="Demos_eq08308973387663156908.png" alt="$$ d \times d $$"> demixing matrix <b>W</b>:</p><pre class="codeinput">W0 = orth(randn(d,d)); <span class="comment">% random initial start</span>
+[W_est , flg] = PowerICA(X, <span class="string">'tanh'</span>, W0, <span class="string">'serial'</span>);
+</pre><p>PowerICA estimate of the ICs:</p><pre class="codeinput">S_est = W_est*X;
+</pre><p>PowerICA estimate of A (up to sign and permutation ambiguities):</p><pre class="codeinput">A_est = dewhiteningMatrix*W_est';
+fprintf(<span class="string">'The powerICA estimate of A is\n'</span>);
+display(A_est);
+</pre><pre class="codeoutput">The powerICA estimate of A is
+
+A_est =
+
+    1.9495    0.0912    1.1859    1.1474
+    0.4115   -2.0449    0.2420    0.5074
+    0.8622    0.8588    2.3597    0.9446
+    0.7731    0.4109    2.8135    0.7917
+    1.1223   -1.1851    0.1133   -0.3780
+
+</pre><p>Plotting the source signals (independent components):</p><pre class="codeinput">figure;
+subplot(4,1,1);plot(S(1,:));ylabel(<span class="string">'IC#1'</span>);
+title(<span class="string">'Source signals (independent components)'</span>);
+subplot(4,1,2);plot(S(2,:));ylabel(<span class="string">'IC#2'</span>);
+subplot(4,1,3);plot(S(3,:));ylabel(<span class="string">'IC#3'</span>);
+subplot(4,1,4);plot(S(4,:));ylabel(<span class="string">'IC#4'</span>);
+</pre><img vspace="5" hspace="5" src="Demos_01.png" alt=""> <p>Plotting the mixture recordings:</p><pre class="codeinput">figure;
+<span class="keyword">for</span> i = 1:p
+subplot(p,1,i);plot(Y(i,:));ylabel([<span class="string">'MIX#'</span> num2str(i)]);
+<span class="keyword">if</span> i == 1, title(<span class="string">'Observed mixtures'</span>);<span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="Demos_02.png" alt=""> <p>Plotting the PowerICA estimate of source signals (independent components) find the order of extraction:</p><pre class="codeinput">W = (whiteningMatrix*A)';
+[~, ord]=max(abs(W_est/W),[],2);
+figure;
+subplot(4,1,1);plot(S_est(1,:));ylabel([<span class="string">'IC#'</span> num2str(ord(1))]);
+title(<span class="string">'PowerICA estimate of source signals'</span>);
+subplot(4,1,2);plot(S_est(2,:));ylabel([<span class="string">'IC#'</span> num2str(ord(2))])
+subplot(4,1,3);plot(S_est(3,:));ylabel([<span class="string">'IC#'</span> num2str(ord(3))])
+subplot(4,1,4);plot(S_est(4,:));ylabel([<span class="string">'IC#'</span> num2str(ord(4))]);
+</pre><img vspace="5" hspace="5" src="Demos_03.png" alt=""> <h2 id="18">References</h2><p>[1] S. Basiri, E. Ollila, and V. Koivunen, <i>"Alternative derivation of FastICA with novel power iteration algorithm,"</i> IEEE Signal Processing Letters, vol. 24, no. 9, pp. 1378-1382, Sept 2017.</p><p>[2] A. Hyvarinen and E. Oja, <i>"A fast fixed-point algorithm for independent component analysis,"</i> Neural Computation, vol. 9, pp. 1483-1492, 1997.</p><p>[3] P. Tichavsky, Z. Koldovsky, and E. Oja, <i>"Performance analysis of the FastICA algorithm and Cramer-Rao bounds for linear independent component analysis,"</i> IEEE Transactions on Signal Processing, vol. 54, no. 4, pp. 1189-1203, April 2006.</p><p>[4] J. Miettinen, K. Nordhausen, H. Oja, and S. Taskinen, <i>"Deflation-based FastICA with adaptive choices of nonlinearities,"</i> IEEE Transactions on Signal Process- ing, vol. 62, no. 21, pp. 5716-5724, Nov 2014.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% PowerICA
+%% Introduction
+% PowerICA is a numerically stable ICA algorithm, which is especially useful when the sample
+% size is not orders of magnitude larger than the data dimensionality [1]. This is the
+% finite-sample regime in which the fixed-point FastICA algorithm [2] is often reported
+% to have convergence problems [3].
+%% How to cite
+% This function is implemented based on Algorithm 1 in paper below.
+%
+% _S. Basiri, E. Ollila and V. Koivunen, "Alternative Derivation of 
+% FastICA With Novel Power Iteration Algorithm," in IEEE Signal 
+% Processing Letters, vol. 24, no. 9, pp. 1378-1382, Sept. 2017._
+%
+% If you use this function in your publication please cite our paper using 
+% the above citation info.
+%% Syntax
+% [ *W* , flg] = PowerICA( *X* , nonlin, *W0* , mode)
+%% Description
+% Input parameters:
+%%
+% 
+% * *X* : is a real valued $$ d \times n $$ array of mixture recordings, 
+% where $$ d $$ and $$ n $$ denote the
+% dimensionality and the number of observations respectively. Data *X* should
+% be centered and whitened.
+% * nonlin: ICA nonlinearities. It can be either a single string or a $$ d \times 1 $$ array of
+% strings. The following nonlinearities are supported.
+% _tanh, pow3, gaus, skew, rt06, lt06, bt00, bt02, bt06, bt10, bt12, bt14, bt16,
+% tan1, tan2, tan3, tan4, gau1, gau2, gau3._
+% We refer the reader to [4] for detailed description of the other nonlinearities
+% besides the standard ones ( _tanh, gaus, pow3, skew_ ). The default value is _tanh_ . 
+% * *W0* : is an orthogonal $$ d \times d $$ matrix used as the initial start of the algorithm.
+% * mode: can be set either to _serial_ or _parallel_ . The _serial_ mode is used when only one
+% computing node is available or the dataset is of small size. The default mode
+% is _serial_ . The _parallel_ mode runs two parallel Matlab instances on different
+% CPU cores. The two instances communicate via a Java socket. Make sure you
+% have installed and updated Java on your system. 
+% 
+% Note: In order to use the _parallel_ mode in MacOS, line 81 of the 
+% PowerICA function should be edited according to your installed Matlab 
+% version. For example: 
+% !/Applications/MATLAB R2017a.app/bin/matlab -r parnode &
+%
+% Output parameters:
+%%
+% 
+% * *W*: PowerICA estimate of orthogonal $$ d \times d $$ demixing matrix.
+% * flg: Returns 1, when the algorithm has converged successfully and 0 when the algorithm
+% has failed to converge.
+% 
+% 
+%% Example
+% This is a synthetic example of utilizing the PowerICA method in
+% extracting independent source signals from their observed mixture 
+% recordings.
+%%
+% Initialize:
+d = 4;  %number of ICs
+p = 5;  %number of mixture recordings
+n = 500; %sample size
+%%
+% Generate the data:
+A = randn(p,d); %random mixing matrix
+% Generate a 4-by-n array of source signals (independent components)
+S = demosig;
+% Generate a random p-by-n mixture array
+Y = A*S;
+%%
+% Center the data:
+Y = bsxfun(@minus, Y, mean(Y,2));
+%%
+% Whiten the data:
+[E,D] = eig(cov(Y',1)); % EVD of sample covariance
+[Ds,ord] = sort( diag(D),'descend') ; %% Sort by decreasing variance
+E = E(:,ord(1:d));      % E contains d largest eigenvectors
+lam = Ds(1:d);          % vector of d largest eigenvalues
+whiteningMatrix = diag(1./sqrt(lam))*E(:,1:d)';
+dewhiteningMatrix = E(:,1:d) *diag(sqrt(lam));
+X = whiteningMatrix*Y;
+%%
+% Use the PowerICA algorithm to estimate the $$ d \times d $$ demixing
+% matrix *W*:
+W0 = orth(randn(d,d)); % random initial start
+[W_est , flg] = PowerICA(X, 'tanh', W0, 'serial'); 
+%%
+% PowerICA estimate of the ICs:
+S_est = W_est*X;
+%%
+% PowerICA estimate of A (up to sign and permutation ambiguities):
+A_est = dewhiteningMatrix*W_est';
+fprintf('The powerICA estimate of A is\n');
+display(A_est);
+%%
+% Plotting
+% the source signals (independent components):
+figure;
+subplot(4,1,1);plot(S(1,:));ylabel('IC#1');
+title('Source signals (independent components)');
+subplot(4,1,2);plot(S(2,:));ylabel('IC#2');
+subplot(4,1,3);plot(S(3,:));ylabel('IC#3');
+subplot(4,1,4);plot(S(4,:));ylabel('IC#4');
+%%
+% Plotting
+% the mixture recordings:
+figure;
+for i = 1:p
+subplot(p,1,i);plot(Y(i,:));ylabel(['MIX#' num2str(i)]);
+if i == 1, title('Observed mixtures');end
+end
+%%
+% Plotting
+% the PowerICA estimate of source signals (independent components)
+% find the order of extraction:
+W = (whiteningMatrix*A)';
+[~, ord]=max(abs(W_est/W),[],2);
+figure;
+subplot(4,1,1);plot(S_est(1,:));ylabel(['IC#' num2str(ord(1))]);
+title('PowerICA estimate of source signals');
+subplot(4,1,2);plot(S_est(2,:));ylabel(['IC#' num2str(ord(2))])
+subplot(4,1,3);plot(S_est(3,:));ylabel(['IC#' num2str(ord(3))])
+subplot(4,1,4);plot(S_est(4,:));ylabel(['IC#' num2str(ord(4))]);
+
+%% References
+% [1] S. Basiri, E. Ollila, and V. Koivunen, _"Alternative derivation of FastICA with
+% novel power iteration algorithm,"_ IEEE Signal Processing Letters, vol. 24, no. 9,
+% pp. 1378-1382, Sept 2017.
+% 
+% [2] A. Hyvarinen and E. Oja, _"A fast fixed-point algorithm for independent component
+% analysis,"_ Neural Computation, vol. 9, pp. 1483-1492, 1997.
+% 
+% [3] P. Tichavsky, Z. Koldovsky, and E. Oja, _"Performance analysis of the FastICA
+% algorithm and Cramer-Rao bounds for linear independent component analysis,"_
+% IEEE Transactions on Signal Processing, vol. 54, no. 4, pp. 1189-1203, April
+% 2006.
+% 
+% [4] J. Miettinen, K. Nordhausen, H. Oja, and S. Taskinen, _"Deflation-based 
+% FastICA with adaptive choices of nonlinearities,"_ 
+% IEEE Transactions on Signal Process-
+% ing, vol. 62, no. 21, pp. 5716-5724, Nov 2014.
+##### SOURCE END #####
+--></body></html>
