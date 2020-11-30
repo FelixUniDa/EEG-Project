@@ -1,0 +1,701 @@
+==== STARTING RUN 1 with 1000 samples ====
+Using indexes 1 to 1000
+FastICA - pow3 error: 1.9051
+Orthogonalizing Data...
+Acceptance rate: 0.73227
+HTICA error: 1.9118
+FastICA - tanh error: 2.1757
+==== STARTING RUN 2 with 1000 samples ====
+Using indexes 1 to 1000
+FastICA - pow3 error: 1.9921
+Orthogonalizing Data...
+Acceptance rate: 0.75624
+HTICA error: 1.8343
+FastICA - tanh error: 2.0794
+==== STARTING RUN 3 with 1000 samples ====
+Using indexes 1 to 1000
+FastICA - pow3 error: 1.9896
+Orthogonalizing Data...
+Acceptance rate: 0.74026
+HTICA error: 1.9633
+FastICA - tanh error: 2.1878
+==== STARTING RUN 4 with 1000 samples ====
+Using indexes 1 to 1000
+FastICA - pow3 error: 1.9422
+Orthogonalizing Data...
+Acceptance rate: 0.73826
+HTICA error: 1.9445
+FastICA - tanh error: 2.1726
+==== STARTING RUN 5 with 1000 samples ====
+Using indexes 1 to 1000
+FastICA - pow3 error: 2.0079
+Orthogonalizing Data...
+Acceptance rate: 0.74525
+HTICA error: 1.9039
+FastICA - tanh error: 2.2655
+==== STARTING RUN 6 with 1000 samples ====
+Using indexes 1 to 1000
+FastICA - pow3 error: 1.9701
+Orthogonalizing Data...
+Acceptance rate: 0.73826
+HTICA error: 1.9311
+FastICA - tanh error: 2.0877
+==== STARTING RUN 7 with 1000 samples ====
+Using indexes 1 to 1000
+FastICA - pow3 error: 1.9052
+Orthogonalizing Data...
+Acceptance rate: 0.72727
+HTICA error: 1.9641
+FastICA - tanh error: 2.2802
+==== STARTING RUN 8 with 1000 samples ====
+Using indexes 1 to 1000
+FastICA - pow3 error: 1.8521
+Orthogonalizing Data...
+Acceptance rate: 0.73427
+HTICA error: 1.8917
+FastICA - tanh error: 2.0232
+==== STARTING RUN 9 with 1000 samples ====
+Using indexes 1 to 1000
+FastICA - pow3 error: 1.9704
+Orthogonalizing Data...
+Acceptance rate: 0.6993
+HTICA error: 1.5877
+FastICA - tanh error: 2.1546
+==== STARTING RUN 10 with 1000 samples ====
+Using indexes 1 to 1000
+FastICA - pow3 error: 1.9051
+Orthogonalizing Data...
+Acceptance rate: 0.71928
+HTICA error: 1.8426
+FastICA - tanh error: 2.138
+==== STARTING RUN 1 with 2000 samples ====
+Using indexes 1 to 2000
+FastICA - pow3 error: 1.7452
+Orthogonalizing Data...
+Acceptance rate: 0.74113
+HTICA error: 1.6126
+FastICA - tanh error: 1.7454
+==== STARTING RUN 2 with 2000 samples ====
+Using indexes 1 to 2000
+FastICA - pow3 error: 1.7775
+Orthogonalizing Data...
+Acceptance rate: 0.75712
+HTICA error: 1.6274
+FastICA - tanh error: 1.7561
+==== STARTING RUN 3 with 2000 samples ====
+Using indexes 1 to 2000
+FastICA - pow3 error: 1.7856
+Orthogonalizing Data...
+Acceptance rate: 0.73063
+HTICA error: 1.6299
+FastICA - tanh error: 1.8003
+==== STARTING RUN 4 with 2000 samples ====
+Using indexes 1 to 2000
+FastICA - pow3 error: 1.7029
+Orthogonalizing Data...
+Acceptance rate: 0.74313
+HTICA error: 1.7086
+FastICA - tanh error: 1.7985
+==== STARTING RUN 5 with 2000 samples ====
+Using indexes 1 to 2000
+FastICA - pow3 error: 1.7451
+Orthogonalizing Data...
+Acceptance rate: 0.73913
+HTICA error: 1.6899
+FastICA - tanh error: 1.9449
+==== STARTING RUN 6 with 2000 samples ====
+Using indexes 1 to 2000
+FastICA - pow3 error: 1.7539
+Orthogonalizing Data...
+Acceptance rate: 0.72564
+HTICA error: 1.642
+FastICA - tanh error: 1.7812
+==== STARTING RUN 7 with 2000 samples ====
+Using indexes 1 to 2000
+FastICA - pow3 error: 1.7029
+Orthogonalizing Data...
+Acceptance rate: 0.72464
+HTICA error: 1.6372
+FastICA - tanh error: 1.7888
+==== STARTING RUN 8 with 2000 samples ====
+Using indexes 1 to 2000
+FastICA - pow3 error: 1.7857
+Orthogonalizing Data...
+Acceptance rate: 0.73263
+HTICA error: 1.5022
+FastICA - tanh error: 1.7882
+==== STARTING RUN 9 with 2000 samples ====
+Using indexes 1 to 2000
+FastICA - pow3 error: 1.7202
+Orthogonalizing Data...
+Acceptance rate: 0.74913
+HTICA error: 1.632
+FastICA - tanh error: 1.7946
+==== STARTING RUN 10 with 2000 samples ====
+Using indexes 1 to 2000
+FastICA - pow3 error: 1.758
+Orthogonalizing Data...
+Acceptance rate: 0.72364
+HTICA error: 1.5042
+FastICA - tanh error: 1.82
+==== STARTING RUN 1 with 3000 samples ====
+Using indexes 1 to 3000
+FastICA - pow3 error: 1.8391
+Orthogonalizing Data...
+Acceptance rate: 0.74309
+HTICA error: 1.6742
+FastICA - tanh error: 1.7969
+==== STARTING RUN 2 with 3000 samples ====
+Using indexes 1 to 3000
+FastICA - pow3 error: 1.641
+Orthogonalizing Data...
+Acceptance rate: 0.74675
+HTICA error: 1.5444
+FastICA - tanh error: 1.7338
+==== STARTING RUN 3 with 3000 samples ====
+Using indexes 1 to 3000
+FastICA - pow3 error: 1.6484
+Orthogonalizing Data...
+Acceptance rate: 0.74608
+HTICA error: 1.6384
+FastICA - tanh error: 1.7217
+==== STARTING RUN 4 with 3000 samples ====
+Using indexes 1 to 3000
+FastICA - pow3 error: 1.839
+Orthogonalizing Data...
+Acceptance rate: 0.75042
+HTICA error: 1.523
+FastICA - tanh error: 1.7763
+==== STARTING RUN 5 with 3000 samples ====
+Using indexes 1 to 3000
+FastICA - pow3 error: 1.8477
+Orthogonalizing Data...
+Acceptance rate: 0.75475
+HTICA error: 1.5583
+FastICA - tanh error: 1.7346
+==== STARTING RUN 6 with 3000 samples ====
+Using indexes 1 to 3000
+FastICA - pow3 error: 1.8132
+Orthogonalizing Data...
+Acceptance rate: 0.74209
+HTICA error: 1.5981
+FastICA - tanh error: 1.7841
+==== STARTING RUN 7 with 3000 samples ====
+Using indexes 1 to 3000
+FastICA - pow3 error: 1.839
+Orthogonalizing Data...
+Acceptance rate: 0.75175
+HTICA error: 1.5603
+FastICA - tanh error: 1.7857
+==== STARTING RUN 8 with 3000 samples ====
+Using indexes 1 to 3000
+FastICA - pow3 error: 1.7877
+Orthogonalizing Data...
+Acceptance rate: 0.74942
+HTICA error: 1.8756
+FastICA - tanh error: 1.7508
+==== STARTING RUN 9 with 3000 samples ====
+Using indexes 1 to 3000
+FastICA - pow3 error: 1.7877
+Orthogonalizing Data...
+Acceptance rate: 0.73809
+HTICA error: 1.5328
+FastICA - tanh error: 1.7745
+==== STARTING RUN 10 with 3000 samples ====
+Using indexes 1 to 3000
+FastICA - pow3 error: 1.839
+Orthogonalizing Data...
+Acceptance rate: 0.73109
+HTICA error: 1.774
+FastICA - tanh error: 1.7377
+==== STARTING RUN 1 with 4000 samples ====
+Using indexes 1 to 4000
+FastICA - pow3 error: 1.4427
+Orthogonalizing Data...
+Acceptance rate: 0.74806
+HTICA error: 1.2434
+FastICA - tanh error: 1.5943
+==== STARTING RUN 2 with 4000 samples ====
+Using indexes 1 to 4000
+FastICA - pow3 error: 1.7018
+Orthogonalizing Data...
+Acceptance rate: 0.75531
+HTICA error: 1.4578
+FastICA - tanh error: 1.647
+==== STARTING RUN 3 with 4000 samples ====
+Using indexes 1 to 4000
+FastICA - pow3 error: 1.4823
+Orthogonalizing Data...
+Acceptance rate: 0.74531
+HTICA error: 1.4299
+FastICA - tanh error: 1.9595
+==== STARTING RUN 4 with 4000 samples ====
+Using indexes 1 to 4000
+FastICA - pow3 error: 1.6995
+Orthogonalizing Data...
+Acceptance rate: 0.74956
+HTICA error: 1.4531
+FastICA - tanh error: 1.6005
+==== STARTING RUN 5 with 4000 samples ====
+Using indexes 1 to 4000
+FastICA - pow3 error: 1.4423
+Orthogonalizing Data...
+Acceptance rate: 0.74881
+HTICA error: 1.5321
+FastICA - tanh error: 1.6226
+==== STARTING RUN 6 with 4000 samples ====
+Using indexes 1 to 4000
+FastICA - pow3 error: 1.7
+Orthogonalizing Data...
+Acceptance rate: 0.73832
+HTICA error: 1.6498
+FastICA - tanh error: 1.6673
+==== STARTING RUN 7 with 4000 samples ====
+Using indexes 1 to 4000
+FastICA - pow3 error: 1.4596
+Orthogonalizing Data...
+Acceptance rate: 0.74056
+HTICA error: 1.4631
+FastICA - tanh error: 1.9662
+==== STARTING RUN 8 with 4000 samples ====
+Using indexes 1 to 4000
+FastICA - pow3 error: 1.6008
+Orthogonalizing Data...
+Acceptance rate: 0.74556
+HTICA error: 1.6417
+FastICA - tanh error: 1.6476
+==== STARTING RUN 9 with 4000 samples ====
+Using indexes 1 to 4000
+FastICA - pow3 error: 1.5796
+Orthogonalizing Data...
+Acceptance rate: 0.76081
+HTICA error: 1.4557
+FastICA - tanh error: 1.79
+==== STARTING RUN 10 with 4000 samples ====
+Using indexes 1 to 4000
+FastICA - pow3 error: 1.6909
+Orthogonalizing Data...
+Acceptance rate: 0.75356
+HTICA error: 1.6089
+FastICA - tanh error: 1.6311
+==== STARTING RUN 1 with 5000 samples ====
+Using indexes 1 to 5000
+FastICA - pow3 error: 1.869
+Orthogonalizing Data...
+Acceptance rate: 0.73805
+HTICA error: 1.7926
+FastICA - tanh error: 1.6725
+==== STARTING RUN 2 with 5000 samples ====
+Using indexes 1 to 5000
+FastICA - pow3 error: 1.5342
+Orthogonalizing Data...
+Acceptance rate: 0.74425
+HTICA error: 1.4637
+FastICA - tanh error: 1.8336
+==== STARTING RUN 3 with 5000 samples ====
+Using indexes 1 to 5000
+FastICA - pow3 error: 1.4668
+Orthogonalizing Data...
+Acceptance rate: 0.74145
+HTICA error: 1.4747
+FastICA - tanh error: 1.9061
+==== STARTING RUN 4 with 5000 samples ====
+Using indexes 1 to 5000
+FastICA - pow3 error: 1.8683
+Orthogonalizing Data...
+Acceptance rate: 0.73805
+HTICA error: 1.5613
+FastICA - tanh error: 1.607
+==== STARTING RUN 5 with 5000 samples ====
+Using indexes 1 to 5000
+FastICA - pow3 error: 1.6092
+Orthogonalizing Data...
+Acceptance rate: 0.74465
+HTICA error: 1.4714
+FastICA - tanh error: 1.7056
+==== STARTING RUN 6 with 5000 samples ====
+Using indexes 1 to 5000
+FastICA - pow3 error: 1.5306
+Orthogonalizing Data...
+Acceptance rate: 0.73845
+HTICA error: 1.4494
+FastICA - tanh error: 1.7482
+==== STARTING RUN 7 with 5000 samples ====
+Using indexes 1 to 5000
+FastICA - pow3 error: 1.9522
+Orthogonalizing Data...
+Acceptance rate: 0.74725
+HTICA error: 1.4329
+FastICA - tanh error: 1.6965
+==== STARTING RUN 8 with 5000 samples ====
+Using indexes 1 to 5000
+FastICA - pow3 error: 1.8576
+Orthogonalizing Data...
+Acceptance rate: 0.74225
+HTICA error: 1.2186
+FastICA - tanh error: 1.6292
+==== STARTING RUN 9 with 5000 samples ====
+Using indexes 1 to 5000
+FastICA - pow3 error: 1.8691
+Orthogonalizing Data...
+Acceptance rate: 0.75005
+HTICA error: 1.2632
+FastICA - tanh error: 1.9615
+==== STARTING RUN 10 with 5000 samples ====
+Using indexes 1 to 5000
+FastICA - pow3 error: 1.5306
+Orthogonalizing Data...
+Acceptance rate: 0.73465
+HTICA error: 1.8375
+FastICA - tanh error: 1.7487
+==== STARTING RUN 1 with 6000 samples ====
+Using indexes 1 to 6000
+FastICA - pow3 error: 1.7082
+Orthogonalizing Data...
+Acceptance rate: 0.74621
+HTICA error: 1.5946
+FastICA - tanh error: 1.7554
+==== STARTING RUN 2 with 6000 samples ====
+Using indexes 1 to 6000
+FastICA - pow3 error: 1.6785
+Orthogonalizing Data...
+Acceptance rate: 0.74854
+HTICA error: 1.6144
+FastICA - tanh error: 1.7294
+==== STARTING RUN 3 with 6000 samples ====
+Using indexes 1 to 6000
+FastICA - pow3 error: 1.5734
+Orthogonalizing Data...
+Acceptance rate: 0.75554
+HTICA error: 1.5875
+FastICA - tanh error: 1.7576
+==== STARTING RUN 4 with 6000 samples ====
+Using indexes 1 to 6000
+FastICA - pow3 error: 1.5791
+Orthogonalizing Data...
+Acceptance rate: 0.73754
+HTICA error: 1.5611
+FastICA - tanh error: 1.8212
+==== STARTING RUN 5 with 6000 samples ====
+Using indexes 1 to 6000
+FastICA - pow3 error: 1.5799
+Orthogonalizing Data...
+Acceptance rate: 0.74721
+HTICA error: 1.6567
+FastICA - tanh error: 1.654
+==== STARTING RUN 6 with 6000 samples ====
+Using indexes 1 to 6000
+FastICA - pow3 error: 1.711
+Orthogonalizing Data...
+Acceptance rate: 0.73621
+HTICA error: 1.5747
+FastICA - tanh error: 2.1208
+==== STARTING RUN 7 with 6000 samples ====
+Using indexes 1 to 6000
+FastICA - pow3 error: 1.671
+Orthogonalizing Data...
+Acceptance rate: 0.74921
+HTICA error: 1.5923
+FastICA - tanh error: 1.8508
+==== STARTING RUN 8 with 6000 samples ====
+Using indexes 1 to 6000
+FastICA - pow3 error: 1.6779
+Orthogonalizing Data...
+Acceptance rate: 0.75071
+HTICA error: 1.7206
+FastICA - tanh error: 2.1147
+==== STARTING RUN 9 with 6000 samples ====
+Using indexes 1 to 6000
+FastICA - pow3 error: 1.5639
+Orthogonalizing Data...
+Acceptance rate: 0.73638
+HTICA error: 1.5653
+FastICA - tanh error: 1.8683
+==== STARTING RUN 10 with 6000 samples ====
+Using indexes 1 to 6000
+FastICA - pow3 error: 1.7305
+Orthogonalizing Data...
+Acceptance rate: 0.75571
+HTICA error: 1.5685
+FastICA - tanh error: 1.8685
+==== STARTING RUN 1 with 7000 samples ====
+Using indexes 1 to 7000
+FastICA - pow3 error: 1.588
+Orthogonalizing Data...
+Acceptance rate: 0.74504
+HTICA error: 1.51
+FastICA - tanh error: 1.7758
+==== STARTING RUN 2 with 7000 samples ====
+Using indexes 1 to 7000
+FastICA - pow3 error: 1.5731
+Orthogonalizing Data...
+Acceptance rate: 0.74589
+HTICA error: 1.5223
+FastICA - tanh error: 1.9437
+==== STARTING RUN 3 with 7000 samples ====
+Using indexes 1 to 7000
+FastICA - pow3 error: 1.5878
+Orthogonalizing Data...
+Acceptance rate: 0.73889
+HTICA error: 1.5127
+FastICA - tanh error: 1.735
+==== STARTING RUN 4 with 7000 samples ====
+Using indexes 1 to 7000
+FastICA - pow3 error: 1.5872
+Orthogonalizing Data...
+Acceptance rate: 0.74504
+HTICA error: 1.5252
+FastICA - tanh error: 1.7599
+==== STARTING RUN 5 with 7000 samples ====
+Using indexes 1 to 7000
+FastICA - pow3 error: 1.5873
+Orthogonalizing Data...
+Acceptance rate: 0.74447
+HTICA error: 1.5347
+FastICA - tanh error: 1.9323
+==== STARTING RUN 6 with 7000 samples ====
+Using indexes 1 to 7000
+FastICA - pow3 error: 1.5878
+Orthogonalizing Data...
+Acceptance rate: 0.75532
+HTICA error: 1.4239
+FastICA - tanh error: 1.723
+==== STARTING RUN 7 with 7000 samples ====
+Using indexes 1 to 7000
+FastICA - pow3 error: 1.5245
+Orthogonalizing Data...
+Acceptance rate: 0.74761
+HTICA error: 1.6678
+FastICA - tanh error: 1.693
+==== STARTING RUN 8 with 7000 samples ====
+Using indexes 1 to 7000
+FastICA - pow3 error: 1.5245
+Orthogonalizing Data...
+Acceptance rate: 0.75661
+HTICA error: 1.5251
+FastICA - tanh error: 1.9562
+==== STARTING RUN 9 with 7000 samples ====
+Using indexes 1 to 7000
+FastICA - pow3 error: 1.5872
+Orthogonalizing Data...
+Acceptance rate: 0.74846
+HTICA error: 1.5124
+FastICA - tanh error: 1.9311
+==== STARTING RUN 10 with 7000 samples ====
+Using indexes 1 to 7000
+FastICA - pow3 error: 1.5879
+Orthogonalizing Data...
+Acceptance rate: 0.75089
+HTICA error: 1.5249
+FastICA - tanh error: 1.8102
+==== STARTING RUN 1 with 8000 samples ====
+Using indexes 1 to 8000
+FastICA - pow3 error: 1.642
+Orthogonalizing Data...
+Acceptance rate: 0.74828
+HTICA error: 1.616
+FastICA - tanh error: 1.8584
+==== STARTING RUN 2 with 8000 samples ====
+Using indexes 1 to 8000
+FastICA - pow3 error: 1.6804
+Orthogonalizing Data...
+Acceptance rate: 0.74153
+HTICA error: 1.5244
+FastICA - tanh error: 1.8478
+==== STARTING RUN 3 with 8000 samples ====
+Using indexes 1 to 8000
+FastICA - pow3 error: 1.6804
+Orthogonalizing Data...
+Acceptance rate: 0.74816
+HTICA error: 1.64
+FastICA - tanh error: 1.5817
+==== STARTING RUN 4 with 8000 samples ====
+Using indexes 1 to 8000
+FastICA - pow3 error: 1.6695
+Orthogonalizing Data...
+Acceptance rate: 0.74766
+HTICA error: 1.5821
+FastICA - tanh error: 1.5559
+==== STARTING RUN 5 with 8000 samples ====
+Using indexes 1 to 8000
+FastICA - pow3 error: 1.6807
+Orthogonalizing Data...
+Acceptance rate: 0.74403
+HTICA error: 1.6298
+FastICA - tanh error: 1.8902
+==== STARTING RUN 6 with 8000 samples ====
+Using indexes 1 to 8000
+FastICA - pow3 error: 1.6574
+Orthogonalizing Data...
+Acceptance rate: 0.74578
+HTICA error: 1.6145
+FastICA - tanh error: 1.8713
+==== STARTING RUN 7 with 8000 samples ====
+Using indexes 1 to 8000
+FastICA - pow3 error: 1.6697
+Orthogonalizing Data...
+Acceptance rate: 0.74728
+HTICA error: 1.66
+FastICA - tanh error: 1.7905
+==== STARTING RUN 8 with 8000 samples ====
+Using indexes 1 to 8000
+FastICA - pow3 error: 1.6355
+Orthogonalizing Data...
+Acceptance rate: 0.75328
+HTICA error: 1.5748
+FastICA - tanh error: 1.7872
+==== STARTING RUN 9 with 8000 samples ====
+Using indexes 1 to 8000
+FastICA - pow3 error: 1.6486
+Orthogonalizing Data...
+Acceptance rate: 0.75353
+HTICA error: 1.5922
+FastICA - tanh error: 1.8621
+==== STARTING RUN 10 with 8000 samples ====
+Using indexes 1 to 8000
+FastICA - pow3 error: 1.7489
+Orthogonalizing Data...
+Acceptance rate: 0.74428
+HTICA error: 1.6582
+FastICA - tanh error: 1.8195
+==== STARTING RUN 1 with 9000 samples ====
+Using indexes 1 to 9000
+FastICA - pow3 error: 1.7502
+Orthogonalizing Data...
+Acceptance rate: 0.73725
+HTICA error: 1.7363
+FastICA - tanh error: 2.0317
+==== STARTING RUN 2 with 9000 samples ====
+Using indexes 1 to 9000
+FastICA - pow3 error: 1.6424
+Orthogonalizing Data...
+Acceptance rate: 0.75147
+HTICA error: 1.6055
+FastICA - tanh error: 1.9212
+==== STARTING RUN 3 with 9000 samples ====
+Using indexes 1 to 9000
+FastICA - pow3 error: 1.5621
+Orthogonalizing Data...
+Acceptance rate: 0.75347
+HTICA error: 1.5642
+FastICA - tanh error: 1.8078
+==== STARTING RUN 4 with 9000 samples ====
+Using indexes 1 to 9000
+FastICA - pow3 error: 1.615
+Orthogonalizing Data...
+Acceptance rate: 0.74425
+HTICA error: 1.6699
+FastICA - tanh error: 2.0084
+==== STARTING RUN 5 with 9000 samples ====
+Using indexes 1 to 9000
+FastICA - pow3 error: 1.6003
+Orthogonalizing Data...
+Acceptance rate: 0.75103
+HTICA error: 1.6274
+FastICA - tanh error: 2.0001
+==== STARTING RUN 6 with 9000 samples ====
+Using indexes 1 to 9000
+FastICA - pow3 error: 1.7108
+Orthogonalizing Data...
+Acceptance rate: 0.74747
+HTICA error: 1.6978
+FastICA - tanh error: 1.8929
+==== STARTING RUN 7 with 9000 samples ====
+Using indexes 1 to 9000
+FastICA - pow3 error: 1.6003
+Orthogonalizing Data...
+Acceptance rate: 0.75125
+HTICA error: 1.681
+FastICA - tanh error: 1.9019
+==== STARTING RUN 8 with 9000 samples ====
+Using indexes 1 to 9000
+FastICA - pow3 error: 1.6153
+Orthogonalizing Data...
+Acceptance rate: 0.75514
+HTICA error: 1.5401
+FastICA - tanh error: 1.7527
+==== STARTING RUN 9 with 9000 samples ====
+Using indexes 1 to 9000
+FastICA - pow3 error: 1.6457
+Orthogonalizing Data...
+Acceptance rate: 0.75169
+HTICA error: 1.6664
+FastICA - tanh error: 1.7688
+==== STARTING RUN 10 with 9000 samples ====
+Using indexes 1 to 9000
+FastICA - pow3 error: 1.6251
+Orthogonalizing Data...
+Acceptance rate: 0.73981
+HTICA error: 1.6961
+FastICA - tanh error: 1.7207
+==== STARTING RUN 1 with 10000 samples ====
+Using indexes 1 to 10000
+FastICA - pow3 error: 1.6866
+Orthogonalizing Data...
+Acceptance rate: 0.74863
+HTICA error: 1.5306
+FastICA - tanh error: 1.8346
+==== STARTING RUN 2 with 10000 samples ====
+Using indexes 1 to 10000
+FastICA - pow3 error: 1.7541
+Orthogonalizing Data...
+Acceptance rate: 0.74873
+HTICA error: 1.6698
+FastICA - tanh error: 1.9208
+==== STARTING RUN 3 with 10000 samples ====
+Using indexes 1 to 10000
+FastICA - pow3 error: 1.6397
+Orthogonalizing Data...
+Acceptance rate: 0.74983
+HTICA error: 1.5595
+FastICA - tanh error: 1.9426
+==== STARTING RUN 4 with 10000 samples ====
+Using indexes 1 to 10000
+FastICA - pow3 error: 1.6416
+Orthogonalizing Data...
+Acceptance rate: 0.74853
+HTICA error: 1.6568
+FastICA - tanh error: 1.9854
+==== STARTING RUN 5 with 10000 samples ====
+Using indexes 1 to 10000
+FastICA - pow3 error: 1.7152
+Orthogonalizing Data...
+Acceptance rate: 0.74403
+HTICA error: 1.5969
+FastICA - tanh error: 1.9451
+==== STARTING RUN 6 with 10000 samples ====
+Using indexes 1 to 10000
+FastICA - pow3 error: 1.6498
+Orthogonalizing Data...
+Acceptance rate: 0.74423
+HTICA error: 1.6883
+FastICA - tanh error: 1.9124
+==== STARTING RUN 7 with 10000 samples ====
+Using indexes 1 to 10000
+FastICA - pow3 error: 1.7766
+Orthogonalizing Data...
+Acceptance rate: 0.74153
+HTICA error: 1.7253
+FastICA - tanh error: 1.9192
+==== STARTING RUN 8 with 10000 samples ====
+Using indexes 1 to 10000
+FastICA - pow3 error: 1.7223
+Orthogonalizing Data...
+Acceptance rate: 0.75582
+HTICA error: 1.6341
+FastICA - tanh error: 2.1432
+==== STARTING RUN 9 with 10000 samples ====
+Using indexes 1 to 10000
+FastICA - pow3 error: 1.6589
+Orthogonalizing Data...
+Acceptance rate: 0.74803
+HTICA error: 1.74
+FastICA - tanh error: 1.8221
+==== STARTING RUN 10 with 10000 samples ====
+Using indexes 1 to 10000
+FastICA - pow3 error: 1.7333
+Orthogonalizing Data...
+Acceptance rate: 0.74653
+HTICA error: 1.6423
+FastICA - tanh error: 1.8641
+Elapsed time is 10786.364998 seconds.

@@ -1,0 +1,512 @@
+------------- Starting run 1 ------------------
+Time to generate samples: 17.5401
+Smallest angle among columns of A: 27.3881
+s_min of normalized columns of orthogonalizer*A: 0.93291
+s_min of orthogonalizer*A: 0.033251
+s_max of orthogonalizer*A: 1.8293
+Chosen R: 4
+Samples remaining after rejection: 666 out of 1000 (66.6%)
+s_min of normalized columns of orthogonalizer*A: 0.96356
+s_min of orthogonalizer*A: 0.0062216
+s_max of orthogonalizer*A: 1.806
+Chosen R: 4
+Samples remaining after rejection: 2021 out of 3000 (67.3667%)
+s_min of normalized columns of orthogonalizer*A: 0.96245
+s_min of orthogonalizer*A: 0.017325
+s_max of orthogonalizer*A: 1.7361
+Chosen R: 4
+Samples remaining after rejection: 3427 out of 5000 (68.54%)
+s_min of normalized columns of orthogonalizer*A: 0.96322
+s_min of orthogonalizer*A: 0.0029697
+s_max of orthogonalizer*A: 1.7187
+Chosen R: 4
+Samples remaining after rejection: 4775 out of 7000 (68.2143%)
+s_min of normalized columns of orthogonalizer*A: 0.9749
+s_min of orthogonalizer*A: 0.0056086
+s_max of orthogonalizer*A: 1.7043
+Chosen R: 4
+Samples remaining after rejection: 6117 out of 9000 (67.9667%)
+s_min of normalized columns of orthogonalizer*A: 0.97598
+s_min of orthogonalizer*A: 0.001129
+s_max of orthogonalizer*A: 1.675
+Chosen R: 4
+Samples remaining after rejection: 7595 out of 11000 (69.0455%)
+Smallest angle among columns of A: 27.3881
+Time to orthogonalize via centroid body: 4.5239
+s_min of normalized columns of orthogonalizer*A: 0.93566
+s_min of orthogonalizer*A: 0.19194
+s_max of orthogonalizer*A: 2.4473
+Chosen R: 8
+Samples remaining after rejection: 771 out of 1000 (77.1%)
+Time to orthogonalize via centroid body: 37.4928
+s_min of normalized columns of orthogonalizer*A: 0.95822
+s_min of orthogonalizer*A: 0.14988
+s_max of orthogonalizer*A: 2.4037
+Chosen R: 8
+Samples remaining after rejection: 2280 out of 3000 (76%)
+Time to orthogonalize via centroid body: 116.2195
+s_min of normalized columns of orthogonalizer*A: 0.95688
+s_min of orthogonalizer*A: 0.16869
+s_max of orthogonalizer*A: 2.3801
+Chosen R: 8
+Samples remaining after rejection: 3781 out of 5000 (75.62%)
+Time to orthogonalize via centroid body: 221.7971
+s_min of normalized columns of orthogonalizer*A: 0.96234
+s_min of orthogonalizer*A: 0.12531
+s_max of orthogonalizer*A: 2.3985
+Chosen R: 8
+Samples remaining after rejection: 5331 out of 7000 (76.1571%)
+Time to orthogonalize via centroid body: 396.397
+s_min of normalized columns of orthogonalizer*A: 0.97388
+s_min of orthogonalizer*A: 0.13712
+s_max of orthogonalizer*A: 2.3528
+Chosen R: 8
+Samples remaining after rejection: 6932 out of 9000 (77.0222%)
+Time to orthogonalize via centroid body: 559.5494
+s_min of normalized columns of orthogonalizer*A: 0.97393
+s_min of orthogonalizer*A: 0.11764
+s_max of orthogonalizer*A: 2.3616
+Chosen R: 8
+Samples remaining after rejection: 8431 out of 11000 (76.6455%)
+Smallest angle among columns of A: 27.3881
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 637 out of 1000 (63.7%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 1887 out of 3000 (62.9%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 3173 out of 5000 (63.46%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 4425 out of 7000 (63.2143%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 5737 out of 9000 (63.7444%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 6872 out of 11000 (62.4727%)
+Smallest angle among columns of A: 27.3881
+------------- Starting run 2 ------------------
+Time to generate samples: 17.4212
+Smallest angle among columns of A: 65.5122
+s_min of normalized columns of orthogonalizer*A: 0.94328
+s_min of orthogonalizer*A: 0.031866
+s_max of orthogonalizer*A: 1.9639
+Chosen R: 4
+Samples remaining after rejection: 661 out of 1000 (66.1%)
+s_min of normalized columns of orthogonalizer*A: 0.96581
+s_min of orthogonalizer*A: 0.0093216
+s_max of orthogonalizer*A: 1.7019
+Chosen R: 4
+Samples remaining after rejection: 2035 out of 3000 (67.8333%)
+s_min of normalized columns of orthogonalizer*A: 0.9668
+s_min of orthogonalizer*A: 0.0088061
+s_max of orthogonalizer*A: 1.7256
+Chosen R: 4
+Samples remaining after rejection: 3420 out of 5000 (68.4%)
+s_min of normalized columns of orthogonalizer*A: 0.97371
+s_min of orthogonalizer*A: 0.010663
+s_max of orthogonalizer*A: 1.7155
+Chosen R: 4
+Samples remaining after rejection: 4758 out of 7000 (67.9714%)
+s_min of normalized columns of orthogonalizer*A: 0.97568
+s_min of orthogonalizer*A: 0.018135
+s_max of orthogonalizer*A: 1.679
+Chosen R: 4
+Samples remaining after rejection: 6108 out of 9000 (67.8667%)
+s_min of normalized columns of orthogonalizer*A: 0.96817
+s_min of orthogonalizer*A: 0.0044996
+s_max of orthogonalizer*A: 1.6887
+Chosen R: 4
+Samples remaining after rejection: 7632 out of 11000 (69.3818%)
+Smallest angle among columns of A: 65.5122
+Time to orthogonalize via centroid body: 4.0365
+s_min of normalized columns of orthogonalizer*A: 0.92167
+s_min of orthogonalizer*A: 0.2021
+s_max of orthogonalizer*A: 2.5228
+Chosen R: 8
+Samples remaining after rejection: 772 out of 1000 (77.2%)
+Time to orthogonalize via centroid body: 32.194
+s_min of normalized columns of orthogonalizer*A: 0.95238
+s_min of orthogonalizer*A: 0.16114
+s_max of orthogonalizer*A: 2.3571
+Chosen R: 8
+Samples remaining after rejection: 2248 out of 3000 (74.9333%)
+Time to orthogonalize via centroid body: 99.8088
+s_min of normalized columns of orthogonalizer*A: 0.95389
+s_min of orthogonalizer*A: 0.13545
+s_max of orthogonalizer*A: 2.3933
+Chosen R: 8
+Samples remaining after rejection: 3805 out of 5000 (76.1%)
+Time to orthogonalize via centroid body: 194.4606
+s_min of normalized columns of orthogonalizer*A: 0.96594
+s_min of orthogonalizer*A: 0.15802
+s_max of orthogonalizer*A: 2.3395
+Chosen R: 8
+Samples remaining after rejection: 5346 out of 7000 (76.3714%)
+Time to orthogonalize via centroid body: 352.3863
+s_min of normalized columns of orthogonalizer*A: 0.9695
+s_min of orthogonalizer*A: 0.167
+s_max of orthogonalizer*A: 2.28
+Chosen R: 8
+Samples remaining after rejection: 6854 out of 9000 (76.1556%)
+Time to orthogonalize via centroid body: 496.3355
+s_min of normalized columns of orthogonalizer*A: 0.9801
+s_min of orthogonalizer*A: 0.14407
+s_max of orthogonalizer*A: 2.34
+Chosen R: 8
+Samples remaining after rejection: 8376 out of 11000 (76.1455%)
+Smallest angle among columns of A: 65.5122
+s_min of normalized columns of orthogonalizer*A: 
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 655 out of 1000 (65.5%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 1881 out of 3000 (62.7%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 3161 out of 5000 (63.22%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 4418 out of 7000 (63.1143%)
+s_min of normalized columns of orthogonalizer*A: 
+s_min of orthogonalizer*A: 
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 5664 out of 9000 (62.9333%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 6865 out of 11000 (62.4091%)
+Smallest angle among columns of A: 65.5122
+------------- Starting run 3 ------------------
+Time to generate samples: 16.5013
+Smallest angle among columns of A: 47.6128
+s_min of normalized columns of orthogonalizer*A: 0.92677
+s_min of orthogonalizer*A: 0.021147
+s_max of orthogonalizer*A: 1.8713
+Chosen R: 4
+Samples remaining after rejection: 692 out of 1000 (69.2%)
+s_min of normalized columns of orthogonalizer*A: 0.96067
+s_min of orthogonalizer*A: 0.0027745
+s_max of orthogonalizer*A: 1.8005
+Chosen R: 4
+Samples remaining after rejection: 2042 out of 3000 (68.0667%)
+s_min of normalized columns of orthogonalizer*A: 0.96704
+s_min of orthogonalizer*A: 0.009297
+s_max of orthogonalizer*A: 1.7228
+Chosen R: 4
+Samples remaining after rejection: 3449 out of 5000 (68.98%)
+s_min of normalized columns of orthogonalizer*A: 0.97234
+s_min of orthogonalizer*A: 0.0021171
+s_max of orthogonalizer*A: 1.7497
+Chosen R: 4
+Samples remaining after rejection: 4758 out of 7000 (67.9714%)
+s_min of normalized columns of orthogonalizer*A: 0.97352
+s_min of orthogonalizer*A: 0.012468
+s_max of orthogonalizer*A: 1.6904
+Chosen R: 4
+Samples remaining after rejection: 6161 out of 9000 (68.4556%)
+s_min of normalized columns of orthogonalizer*A: 0.97859
+s_min of orthogonalizer*A: 0.0020446
+s_max of orthogonalizer*A: 1.7243
+Chosen R: 4
+Samples remaining after rejection: 7497 out of 11000 (68.1545%)
+Smallest angle among columns of A: 47.6128
+Time to orthogonalize via centroid body: 3.952
+s_min of normalized columns of orthogonalizer*A: 0.8977
+s_min of orthogonalizer*A: 0.16119
+s_max of orthogonalizer*A: 2.5246
+Chosen R: 8
+Samples remaining after rejection: 754 out of 1000 (75.4%)
+Time to orthogonalize via centroid body: 33.0315
+s_min of normalized columns of orthogonalizer*A: 0.95096
+s_min of orthogonalizer*A: 0.12133
+s_max of orthogonalizer*A: 2.4793
+Chosen R: 8
+Samples remaining after rejection: 2343 out of 3000 (78.1%)
+Time to orthogonalize via centroid body: 97.2154
+s_min of normalized columns of orthogonalizer*A: 0.96241
+s_min of orthogonalizer*A: 0.1574
+s_max of orthogonalizer*A: 2.3957
+Chosen R: 8
+Samples remaining after rejection: 3826 out of 5000 (76.52%)
+Time to orthogonalize via centroid body: 184.6875
+s_min of normalized columns of orthogonalizer*A: 0.96561
+s_min of orthogonalizer*A: 0.10545
+s_max of orthogonalizer*A: 2.3902
+Chosen R: 8
+Samples remaining after rejection: 5340 out of 7000 (76.2857%)
+Time to orthogonalize via centroid body: 341.7557
+s_min of normalized columns of orthogonalizer*A: 0.96766
+s_min of orthogonalizer*A: 0.16861
+s_max of orthogonalizer*A: 2.3436
+Chosen R: 16
+Samples remaining after rejection: 8187 out of 9000 (90.9667%)
+Time to orthogonalize via centroid body: 478.2901
+s_min of normalized columns of orthogonalizer*A: 0.97212
+s_min of orthogonalizer*A: 0.12356
+s_max of orthogonalizer*A: 2.3917
+Chosen R: 8
+Samples remaining after rejection: 8407 out of 11000 (76.4273%)
+Smallest angle among columns of A: 47.6128
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 624 out of 1000 (62.4%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 1857 out of 3000 (61.9%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 3186 out of 5000 (63.72%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 4349 out of 7000 (62.1286%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 5782 out of 9000 (64.2444%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 6882 out of 11000 (62.5636%)
+Smallest angle among columns of A: 47.6128
+------------- Starting run 4 ------------------
+Time to generate samples: 17.6544
+Smallest angle among columns of A: 57.6544
+s_min of normalized columns of orthogonalizer*A: 0.91967
+s_min of orthogonalizer*A: 0.038011
+s_max of orthogonalizer*A: 1.7214
+Chosen R: 4
+Samples remaining after rejection: 660 out of 1000 (66%)
+s_min of normalized columns of orthogonalizer*A: 0.95579
+s_min of orthogonalizer*A: 0.0067687
+s_max of orthogonalizer*A: 1.767
+Chosen R: 4
+Samples remaining after rejection: 2005 out of 3000 (66.8333%)
+s_min of normalized columns of orthogonalizer*A: 0.97177
+s_min of orthogonalizer*A: 0.0072179
+s_max of orthogonalizer*A: 1.7516
+Chosen R: 4
+Samples remaining after rejection: 3491 out of 5000 (69.82%)
+s_min of normalized columns of orthogonalizer*A: 0.96564
+s_min of orthogonalizer*A: 0.019211
+s_max of orthogonalizer*A: 1.7183
+Chosen R: 4
+Samples remaining after rejection: 4704 out of 7000 (67.2%)
+s_min of normalized columns of orthogonalizer*A: 0.9771
+s_min of orthogonalizer*A: 0.0017265
+s_max of orthogonalizer*A: 1.718
+Chosen R: 4
+Samples remaining after rejection: 6166 out of 9000 (68.5111%)
+s_min of normalized columns of orthogonalizer*A: 0.97738
+s_min of orthogonalizer*A: 0.011937
+s_max of orthogonalizer*A: 1.7009
+Chosen R: 4
+Samples remaining after rejection: 7437 out of 11000 (67.6091%)
+Smallest angle among columns of A: 57.6544
+Time to orthogonalize via centroid body: 4.1925
+s_min of normalized columns of orthogonalizer*A: 0.90966
+s_min of orthogonalizer*A: 0.16808
+s_max of orthogonalizer*A: 2.4306
+Chosen R: 8
+Samples remaining after rejection: 748 out of 1000 (74.8%)
+Time to orthogonalize via centroid body: 35.6905
+s_min of normalized columns of orthogonalizer*A: 0.94996
+s_min of orthogonalizer*A: 0.14738
+s_max of orthogonalizer*A: 2.4073
+Chosen R: 8
+Samples remaining after rejection: 2270 out of 3000 (75.6667%)
+Time to orthogonalize via centroid body: 102.0238
+s_min of normalized columns of orthogonalizer*A: 0.96373
+s_min of orthogonalizer*A: 0.1492
+s_max of orthogonalizer*A: 2.4082
+Chosen R: 8
+Samples remaining after rejection: 3807 out of 5000 (76.14%)
+Time to orthogonalize via centroid body: 220.9904
+s_min of normalized columns of orthogonalizer*A: 0.96043
+s_min of orthogonalizer*A: 0.17975
+s_max of orthogonalizer*A: 2.3324
+Chosen R: 8
+Samples remaining after rejection: 5294 out of 7000 (75.6286%)
+Time to orthogonalize via centroid body: 335.972
+s_min of normalized columns of orthogonalizer*A: 0.97056
+s_min of orthogonalizer*A: 0.11759
+s_max of orthogonalizer*A: 2.3627
+Chosen R: 8
+Samples remaining after rejection: 6947 out of 9000 (77.1889%)
+Time to orthogonalize via centroid body: 563.0578
+s_min of normalized columns of orthogonalizer*A: 0.9738
+s_min of orthogonalizer*A: 0.16189
+s_max of orthogonalizer*A: 2.3352
+Chosen R: 8
+Samples remaining after rejection: 8259 out of 11000 (75.0818%)
+Smallest angle among columns of A: 57.6544
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 614 out of 1000 (61.4%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 1880 out of 3000 (62.6667%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 3179 out of 5000 (63.58%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 4421 out of 7000 (63.1571%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 5649 out of 9000 (62.7667%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 6910 out of 11000 (62.8182%)
+Smallest angle among columns of A: 57.6544
+------------- Starting run 5 ------------------
+Time to generate samples: 17.6454
+Smallest angle among columns of A: 40.0912
+s_min of normalized columns of orthogonalizer*A: 0.93808
+s_min of orthogonalizer*A: 0.01169
+s_max of orthogonalizer*A: 1.8842
+Chosen R: 4
+Samples remaining after rejection: 666 out of 1000 (66.6%)
+s_min of normalized columns of orthogonalizer*A: 0.95255
+s_min of orthogonalizer*A: 0.0074048
+s_max of orthogonalizer*A: 1.7565
+Chosen R: 4
+Samples remaining after rejection: 2052 out of 3000 (68.4%)
+s_min of normalized columns of orthogonalizer*A: 0.96621
+s_min of orthogonalizer*A: 0.025998
+s_max of orthogonalizer*A: 1.6825
+Chosen R: 8
+Samples remaining after rejection: 4450 out of 5000 (89%)
+s_min of normalized columns of orthogonalizer*A: 0.97335
+s_min of orthogonalizer*A: 0.0019897
+s_max of orthogonalizer*A: 1.767
+Chosen R: 4
+Samples remaining after rejection: 4737 out of 7000 (67.6714%)
+s_min of normalized columns of orthogonalizer*A: 0.97595
+s_min of orthogonalizer*A: 0.0028397
+s_max of orthogonalizer*A: 1.691
+Chosen R: 4
+Samples remaining after rejection: 6089 out of 9000 (67.6556%)
+s_min of normalized columns of orthogonalizer*A: 0.97808
+s_min of orthogonalizer*A: 0.0020574
+s_max of orthogonalizer*A: 1.6754
+Chosen R: 4
+Samples remaining after rejection: 7565 out of 11000 (68.7727%)
+Smallest angle among columns of A: 40.0912
+Time to orthogonalize via centroid body: 4.0483
+s_min of normalized columns of orthogonalizer*A: 0.93483
+s_min of orthogonalizer*A: 0.17342
+s_max of orthogonalizer*A: 2.4692
+Chosen R: 8
+Samples remaining after rejection: 772 out of 1000 (77.2%)
+Time to orthogonalize via centroid body: 34.1465
+s_min of normalized columns of orthogonalizer*A: 0.95696
+s_min of orthogonalizer*A: 0.13152
+s_max of orthogonalizer*A: 2.4191
+Chosen R: 8
+Samples remaining after rejection: 2246 out of 3000 (74.8667%)
+Time to orthogonalize via centroid body: 113.7281
+s_min of normalized columns of orthogonalizer*A: 0.9588
+s_min of orthogonalizer*A: 0.17939
+s_max of orthogonalizer*A: 2.3497
+Chosen R: 8
+Samples remaining after rejection: 3779 out of 5000 (75.58%)
+Time to orthogonalize via centroid body: 193.0806
+s_min of normalized columns of orthogonalizer*A: 0.96791
+s_min of orthogonalizer*A: 0.11904
+s_max of orthogonalizer*A: 2.4199
+Chosen R: 8
+Samples remaining after rejection: 5375 out of 7000 (76.7857%)
+Time to orthogonalize via centroid body: 358.602
+s_min of normalized columns of orthogonalizer*A: 0.96942
+s_min of orthogonalizer*A: 0.12027
+s_max of orthogonalizer*A: 2.3413
+Chosen R: 8
+Samples remaining after rejection: 6898 out of 9000 (76.6444%)
+Time to orthogonalize via centroid body: 548.2295
+s_min of normalized columns of orthogonalizer*A: 0.9727
+s_min of orthogonalizer*A: 0.11244
+s_max of orthogonalizer*A: 2.3551
+Chosen R: 8
+Samples remaining after rejection: 8375 out of 11000 (76.1364%)
+Smallest angle among columns of A: 40.0912
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 665 out of 1000 (66.5%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 1864 out of 3000 (62.1333%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 3113 out of 5000 (62.26%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 4396 out of 7000 (62.8%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 5711 out of 9000 (63.4556%)
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 6831 out of 11000 (62.1%)
+Smallest angle among columns of A: 40.0912
+Elapsed time is 551.227382 seconds.
+Elapsed time is 51.258858 seconds.

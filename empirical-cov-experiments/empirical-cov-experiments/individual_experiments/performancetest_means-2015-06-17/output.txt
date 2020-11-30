@@ -1,0 +1,88 @@
+--- Starting run 1 -------
+Number of signals: 10
+Number of samples: 5000
+Calculating covariance...
+Dimension not reduced.
+Selected [ 10 ] dimensions.
+Smallest remaining (non-zero) eigenvalue [ 4614.52 ]
+Largest remaining (non-zero) eigenvalue [ 2.69673e+06 ]
+Sum of removed eigenvalues [ 0 ]
+[ 100 ] % of (non-zero) eigenvalues retained.
+Whitening...
+Check: covariance differs from identity by [ 4.21885e-15 ].
+Used approach [ defl ].
+Used nonlinearity [ pow3 ].
+Starting ICA calculation...
+IC 1 ......computed ( 6 steps ) 
+IC 2 ......computed ( 6 steps ) 
+IC 3 .....computed ( 5 steps ) 
+IC 4 ......computed ( 6 steps ) 
+IC 5 ......computed ( 6 steps ) 
+IC 6 ......computed ( 6 steps ) 
+IC 7 ......computed ( 6 steps ) 
+IC 8 ......computed ( 6 steps ) 
+IC 9 ......computed ( 6 steps ) 
+IC 10 ..computed ( 2 steps ) 
+Done.
+Adding the mean back to the data.
+Samples remaining after rejection: 4180 out of 5000 (83.6%)
+Number of signals: 10
+Number of samples: 4180
+Calculating covariance...
+Dimension not reduced.
+Selected [ 10 ] dimensions.
+Smallest remaining (non-zero) eigenvalue [ 72.1912 ]
+Largest remaining (non-zero) eigenvalue [ 106.776 ]
+Sum of removed eigenvalues [ 0 ]
+[ 100 ] % of (non-zero) eigenvalues retained.
+Whitening...
+Check: covariance differs from identity by [ 1.55431e-15 ].
+Used approach [ defl ].
+Used nonlinearity [ pow3 ].
+Starting ICA calculation...
+IC 1 .........computed ( 9 steps ) 
+IC 2 ........computed ( 8 steps ) 
+IC 3 ......computed ( 6 steps ) 
+IC 4 .......computed ( 7 steps ) 
+IC 5 .........computed ( 9 steps ) 
+IC 6 .........computed ( 9 steps ) 
+IC 7 ..........computed ( 10 steps ) 
+IC 8 ......computed ( 6 steps ) 
+IC 9 .....computed ( 5 steps ) 
+IC 10 ..computed ( 2 steps ) 
+Done.
+Adding the mean back to the data.
+Samples remaining after rejection: 4868 out of 5000 (97.36%)
+Number of signals: 10
+Number of samples: 4868
+Calculating covariance...
+Dimension not reduced.
+Selected [ 10 ] dimensions.
+Smallest remaining (non-zero) eigenvalue [ 8.69061 ]
+Largest remaining (non-zero) eigenvalue [ 19.173 ]
+Sum of removed eigenvalues [ 0 ]
+[ 100 ] % of (non-zero) eigenvalues retained.
+Whitening...
+Check: covariance differs from identity by [ 1.11022e-15 ].
+Used approach [ defl ].
+Used nonlinearity [ pow3 ].
+Starting ICA calculation...
+IC 1 .....computed ( 5 steps ) 
+IC 2 .....computed ( 5 steps ) 
+IC 3 .......computed ( 7 steps ) 
+IC 4 ........computed ( 8 steps ) 
+IC 5 ......computed ( 6 steps ) 
+IC 6 .....computed ( 5 steps ) 
+IC 7 .......computed ( 7 steps ) 
+IC 8 .......computed ( 7 steps ) 
+IC 9 ......computed ( 6 steps ) 
+IC 10 ..computed ( 2 steps ) 
+Done.
+Adding the mean back to the data.
+
+cumulants =
+
+   1.0e+16 *
+
+    0.0000    0.0003    0.0008    0.0001    0.0000    0.0000    0.0000    3.6254    0.0003    0.0005
+
