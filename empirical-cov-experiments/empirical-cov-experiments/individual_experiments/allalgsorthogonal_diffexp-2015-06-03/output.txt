@@ -1,0 +1,956 @@
+Starting run 1
+Smallest angle among columns of A: 90
+Smallest angle among B*A: 81.7149
+Whitened center norm:1.0482e-15
+Smallest angle among B*A: 88.1841
+Whitened center norm:8.128e-15
+Smallest angle among B*A: 88.0163
+Whitened center norm:1.0911e-15
+Smallest angle among B*A: 88.5713
+Whitened center norm:3.3651e-15
+Smallest angle among B*A: 89.1854
+Whitened center norm:5.7005e-15
+Smallest angle among B*A: 88.2857
+Whitened center norm:1.2137e-13
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 511 out of 1000 (51.1%)
+Smallest angle among B*A: 83.028
+Whitened center norm:8.1305e-17
+Chosen R: 8
+Samples remaining after rejection: 1532 out of 3000 (51.0667%)
+Smallest angle among B*A: 87.5517
+Whitened center norm:7.027e-17
+Chosen R: 8
+Samples remaining after rejection: 2532 out of 5000 (50.64%)
+Smallest angle among B*A: 87.996
+Whitened center norm:9.0989e-17
+Chosen R: 8
+Samples remaining after rejection: 3561 out of 7000 (50.8714%)
+Smallest angle among B*A: 87.1804
+Whitened center norm:1.2869e-16
+Chosen R: 16
+Samples remaining after rejection: 6547 out of 9000 (72.7444%)
+Smallest angle among B*A: 88.7923
+Whitened center norm:2.5719e-16
+Chosen R: 8
+Samples remaining after rejection: 5645 out of 11000 (51.3182%)
+Smallest angle among B*A: 87.8351
+Whitened center norm:1.3688e-16
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 500 out of 1000 (50%)
+Chosen R: 8
+Samples remaining after rejection: 1518 out of 3000 (50.6%)
+Chosen R: 8
+Samples remaining after rejection: 2542 out of 5000 (50.84%)
+Chosen R: 8
+Samples remaining after rejection: 3567 out of 7000 (50.9571%)
+Chosen R: 16
+Samples remaining after rejection: 6513 out of 9000 (72.3667%)
+Chosen R: 8
+Samples remaining after rejection: 5644 out of 11000 (51.3091%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 503 out of 1000 (50.3%)
+Chosen R: 8
+Samples remaining after rejection: 1512 out of 3000 (50.4%)
+Chosen R: 8
+Samples remaining after rejection: 2592 out of 5000 (51.84%)
+Chosen R: 8
+Samples remaining after rejection: 3467 out of 7000 (49.5286%)
+Chosen R: 16
+Samples remaining after rejection: 6519 out of 9000 (72.4333%)
+Chosen R: 8
+Samples remaining after rejection: 5637 out of 11000 (51.2455%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 507 out of 1000 (50.7%)
+Chosen R: 8
+Samples remaining after rejection: 1483 out of 3000 (49.4333%)
+Chosen R: 8
+Samples remaining after rejection: 2540 out of 5000 (50.8%)
+Chosen R: 8
+Samples remaining after rejection: 3470 out of 7000 (49.5714%)
+Chosen R: 16
+Samples remaining after rejection: 6484 out of 9000 (72.0444%)
+Chosen R: 8
+Samples remaining after rejection: 5563 out of 11000 (50.5727%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 543 out of 1000 (54.3%)
+Chosen R: 8
+Samples remaining after rejection: 1513 out of 3000 (50.4333%)
+Chosen R: 8
+Samples remaining after rejection: 2523 out of 5000 (50.46%)
+Chosen R: 8
+Samples remaining after rejection: 3509 out of 7000 (50.1286%)
+Chosen R: 16
+Samples remaining after rejection: 6547 out of 9000 (72.7444%)
+Chosen R: 8
+Samples remaining after rejection: 5668 out of 11000 (51.5273%)
+Starting run 2
+Smallest angle among columns of A: 90
+Smallest angle among B*A: 81.9305
+Whitened center norm:1.6273e-15
+Smallest angle among B*A: 85.7345
+Whitened center norm:6.2647e-16
+Smallest angle among B*A: 86.6547
+Whitened center norm:1.6404e-15
+Smallest angle among B*A: 88.6292
+Whitened center norm:7.2553e-15
+Smallest angle among B*A: 87.9286
+Whitened center norm:2.9795e-15
+Smallest angle among B*A: 88.7296
+Whitened center norm:6.2444e-16
+Smallest angle among columns of A: 90
+Chosen R: 16
+Samples remaining after rejection: 715 out of 1000 (71.5%)
+Smallest angle among B*A: 86.4657
+Whitened center norm:2.2475e-16
+Chosen R: 8
+Samples remaining after rejection: 1538 out of 3000 (51.2667%)
+Smallest angle among B*A: 85.4673
+Whitened center norm:1.7204e-16
+Chosen R: 8
+Samples remaining after rejection: 2495 out of 5000 (49.9%)
+Smallest angle among B*A: 87.5941
+Whitened center norm:7.2226e-17
+Chosen R: 8
+Samples remaining after rejection: 3518 out of 7000 (50.2571%)
+Smallest angle among B*A: 87.5938
+Whitened center norm:5.9754e-17
+Chosen R: 8
+Samples remaining after rejection: 4558 out of 9000 (50.6444%)
+Smallest angle among B*A: 88.2696
+Whitened center norm:1.7837e-16
+Chosen R: 8
+Samples remaining after rejection: 5607 out of 11000 (50.9727%)
+Smallest angle among B*A: 88.2636
+Whitened center norm:1.6065e-16
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 16
+Samples remaining after rejection: 719 out of 1000 (71.9%)
+Chosen R: 8
+Samples remaining after rejection: 1542 out of 3000 (51.4%)
+Chosen R: 8
+Samples remaining after rejection: 2489 out of 5000 (49.78%)
+Chosen R: 8
+Samples remaining after rejection: 3540 out of 7000 (50.5714%)
+Chosen R: 8
+Samples remaining after rejection: 4563 out of 9000 (50.7%)
+Chosen R: 8
+Samples remaining after rejection: 5597 out of 11000 (50.8818%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 16
+Samples remaining after rejection: 712 out of 1000 (71.2%)
+Chosen R: 8
+Samples remaining after rejection: 1560 out of 3000 (52%)
+Chosen R: 8
+Samples remaining after rejection: 2506 out of 5000 (50.12%)
+Chosen R: 8
+Samples remaining after rejection: 3542 out of 7000 (50.6%)
+Chosen R: 8
+Samples remaining after rejection: 4551 out of 9000 (50.5667%)
+Chosen R: 8
+Samples remaining after rejection: 5536 out of 11000 (50.3273%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 16
+Samples remaining after rejection: 728 out of 1000 (72.8%)
+Chosen R: 8
+Samples remaining after rejection: 1550 out of 3000 (51.6667%)
+Chosen R: 8
+Samples remaining after rejection: 2490 out of 5000 (49.8%)
+Chosen R: 8
+Samples remaining after rejection: 3560 out of 7000 (50.8571%)
+Chosen R: 8
+Samples remaining after rejection: 4620 out of 9000 (51.3333%)
+Chosen R: 8
+Samples remaining after rejection: 5625 out of 11000 (51.1364%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 16
+Samples remaining after rejection: 724 out of 1000 (72.4%)
+Chosen R: 8
+Samples remaining after rejection: 1568 out of 3000 (52.2667%)
+Chosen R: 8
+Samples remaining after rejection: 2504 out of 5000 (50.08%)
+Chosen R: 8
+Samples remaining after rejection: 3502 out of 7000 (50.0286%)
+Chosen R: 8
+Samples remaining after rejection: 4561 out of 9000 (50.6778%)
+Chosen R: 8
+Samples remaining after rejection: 5588 out of 11000 (50.8%)
+Starting run 3
+Smallest angle among columns of A: 90
+Smallest angle among B*A: 86.6406
+Whitened center norm:2.1784e-15
+Smallest angle among B*A: 84.0388
+Whitened center norm:1.6555e-15
+Smallest angle among B*A: 85.9274
+Whitened center norm:4.3039e-15
+Smallest angle among B*A: 88.188
+Whitened center norm:2.4528e-15
+Smallest angle among B*A: 88.1981
+Whitened center norm:6.4719e-15
+Smallest angle among B*A: 88.1546
+Whitened center norm:2.8223e-15
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 493 out of 1000 (49.3%)
+Smallest angle among B*A: 83.8759
+Whitened center norm:1.2895e-16
+Chosen R: 8
+Samples remaining after rejection: 1564 out of 3000 (52.1333%)
+Smallest angle among B*A: 87.4288
+Whitened center norm:1.6515e-16
+Chosen R: 8
+Samples remaining after rejection: 2535 out of 5000 (50.7%)
+Smallest angle among B*A: 86.7464
+Whitened center norm:1.2282e-16
+Chosen R: 8
+Samples remaining after rejection: 3549 out of 7000 (50.7%)
+Smallest angle among B*A: 87.9363
+Whitened center norm:8.4824e-17
+Chosen R: 8
+Samples remaining after rejection: 4597 out of 9000 (51.0778%)
+Smallest angle among B*A: 87.3311
+Whitened center norm:1.203e-16
+Chosen R: 8
+Samples remaining after rejection: 5567 out of 11000 (50.6091%)
+Smallest angle among B*A: 87.8259
+Whitened center norm:2.0655e-16
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 502 out of 1000 (50.2%)
+Chosen R: 8
+Samples remaining after rejection: 1533 out of 3000 (51.1%)
+Chosen R: 8
+Samples remaining after rejection: 2501 out of 5000 (50.02%)
+Chosen R: 8
+Samples remaining after rejection: 3511 out of 7000 (50.1571%)
+Chosen R: 8
+Samples remaining after rejection: 4634 out of 9000 (51.4889%)
+Chosen R: 8
+Samples remaining after rejection: 5586 out of 11000 (50.7818%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 494 out of 1000 (49.4%)
+Chosen R: 8
+Samples remaining after rejection: 1538 out of 3000 (51.2667%)
+Chosen R: 8
+Samples remaining after rejection: 2499 out of 5000 (49.98%)
+Chosen R: 8
+Samples remaining after rejection: 3587 out of 7000 (51.2429%)
+Chosen R: 8
+Samples remaining after rejection: 4682 out of 9000 (52.0222%)
+Chosen R: 8
+Samples remaining after rejection: 5559 out of 11000 (50.5364%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 495 out of 1000 (49.5%)
+Chosen R: 8
+Samples remaining after rejection: 1524 out of 3000 (50.8%)
+Chosen R: 8
+Samples remaining after rejection: 2508 out of 5000 (50.16%)
+Chosen R: 8
+Samples remaining after rejection: 3579 out of 7000 (51.1286%)
+Chosen R: 8
+Samples remaining after rejection: 4666 out of 9000 (51.8444%)
+Chosen R: 8
+Samples remaining after rejection: 5611 out of 11000 (51.0091%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 519 out of 1000 (51.9%)
+Chosen R: 8
+Samples remaining after rejection: 1535 out of 3000 (51.1667%)
+Chosen R: 8
+Samples remaining after rejection: 2493 out of 5000 (49.86%)
+Chosen R: 8
+Samples remaining after rejection: 3617 out of 7000 (51.6714%)
+Chosen R: 8
+Samples remaining after rejection: 4644 out of 9000 (51.6%)
+Chosen R: 8
+Samples remaining after rejection: 5571 out of 11000 (50.6455%)
+Starting run 4
+Smallest angle among columns of A: 90
+Smallest angle among B*A: 84.1977
+Whitened center norm:1.1205e-15
+Smallest angle among B*A: 87.2435
+Whitened center norm:1.3757e-15
+Smallest angle among B*A: 88.2676
+Whitened center norm:2.5932e-15
+Smallest angle among B*A: 88.0171
+Whitened center norm:9.9028e-16
+Smallest angle among B*A: 88.188
+Whitened center norm:2.3698e-14
+Smallest angle among B*A: 88.9084
+Whitened center norm:4.1378e-15
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 517 out of 1000 (51.7%)
+Smallest angle among B*A: 85.5725
+Whitened center norm:1.8011e-16
+Chosen R: 8
+Samples remaining after rejection: 1560 out of 3000 (52%)
+Smallest angle among B*A: 86.9927
+Whitened center norm:1.4807e-16
+Chosen R: 8
+Samples remaining after rejection: 2551 out of 5000 (51.02%)
+Smallest angle among B*A: 88.0074
+Whitened center norm:6.3514e-17
+Chosen R: 8
+Samples remaining after rejection: 3563 out of 7000 (50.9%)
+Smallest angle among B*A: 87.7844
+Whitened center norm:1.8295e-16
+Chosen R: 8
+Samples remaining after rejection: 4529 out of 9000 (50.3222%)
+Smallest angle among B*A: 87.0836
+Whitened center norm:1.3335e-16
+Chosen R: 8
+Samples remaining after rejection: 5612 out of 11000 (51.0182%)
+Smallest angle among B*A: 88.126
+Whitened center norm:1.8031e-16
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 513 out of 1000 (51.3%)
+Chosen R: 8
+Samples remaining after rejection: 1545 out of 3000 (51.5%)
+Chosen R: 8
+Samples remaining after rejection: 2551 out of 5000 (51.02%)
+Chosen R: 8
+Samples remaining after rejection: 3668 out of 7000 (52.4%)
+Chosen R: 8
+Samples remaining after rejection: 4525 out of 9000 (50.2778%)
+Chosen R: 8
+Samples remaining after rejection: 5645 out of 11000 (51.3182%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 515 out of 1000 (51.5%)
+Chosen R: 8
+Samples remaining after rejection: 1534 out of 3000 (51.1333%)
+Chosen R: 8
+Samples remaining after rejection: 2537 out of 5000 (50.74%)
+Chosen R: 8
+Samples remaining after rejection: 3637 out of 7000 (51.9571%)
+Chosen R: 8
+Samples remaining after rejection: 4532 out of 9000 (50.3556%)
+Chosen R: 8
+Samples remaining after rejection: 5629 out of 11000 (51.1727%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 524 out of 1000 (52.4%)
+Chosen R: 8
+Samples remaining after rejection: 1525 out of 3000 (50.8333%)
+Chosen R: 8
+Samples remaining after rejection: 2571 out of 5000 (51.42%)
+Chosen R: 8
+Samples remaining after rejection: 3645 out of 7000 (52.0714%)
+Chosen R: 8
+Samples remaining after rejection: 4570 out of 9000 (50.7778%)
+Chosen R: 8
+Samples remaining after rejection: 5648 out of 11000 (51.3455%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 498 out of 1000 (49.8%)
+Chosen R: 8
+Samples remaining after rejection: 1514 out of 3000 (50.4667%)
+Chosen R: 8
+Samples remaining after rejection: 2552 out of 5000 (51.04%)
+Chosen R: 8
+Samples remaining after rejection: 3690 out of 7000 (52.7143%)
+Chosen R: 8
+Samples remaining after rejection: 4612 out of 9000 (51.2444%)
+Chosen R: 8
+Samples remaining after rejection: 5649 out of 11000 (51.3545%)
+Starting run 5
+Smallest angle among columns of A: 90
+Smallest angle among B*A: 88.5526
+Whitened center norm:4.1136e-15
+Smallest angle among B*A: 87.7076
+Whitened center norm:7.7661e-16
+Smallest angle among B*A: 88.6445
+Whitened center norm:1.1157e-14
+Smallest angle among B*A: 88.1956
+Whitened center norm:1.1605e-15
+Smallest angle among B*A: 88.7465
+Whitened center norm:3.9284e-15
+Smallest angle among B*A: 88.567
+Whitened center norm:1.3503e-15
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 509 out of 1000 (50.9%)
+Smallest angle among B*A: 85.4198
+Whitened center norm:1.9781e-16
+Chosen R: 8
+Samples remaining after rejection: 1477 out of 3000 (49.2333%)
+Smallest angle among B*A: 87.6981
+Whitened center norm:9.7376e-17
+Chosen R: 8
+Samples remaining after rejection: 2487 out of 5000 (49.74%)
+Smallest angle among B*A: 87.091
+Whitened center norm:1.6004e-16
+Chosen R: 8
+Samples remaining after rejection: 3566 out of 7000 (50.9429%)
+Smallest angle among B*A: 87.9542
+Whitened center norm:7.6236e-17
+Chosen R: 8
+Samples remaining after rejection: 4522 out of 9000 (50.2444%)
+Smallest angle among B*A: 88.1953
+Whitened center norm:1.1768e-16
+Chosen R: 8
+Samples remaining after rejection: 5617 out of 11000 (51.0636%)
+Smallest angle among B*A: 87.4806
+Whitened center norm:1.3209e-16
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 482 out of 1000 (48.2%)
+Chosen R: 8
+Samples remaining after rejection: 1511 out of 3000 (50.3667%)
+Chosen R: 8
+Samples remaining after rejection: 2531 out of 5000 (50.62%)
+Chosen R: 8
+Samples remaining after rejection: 3599 out of 7000 (51.4143%)
+Chosen R: 8
+Samples remaining after rejection: 4623 out of 9000 (51.3667%)
+Chosen R: 8
+Samples remaining after rejection: 5549 out of 11000 (50.4455%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 479 out of 1000 (47.9%)
+Chosen R: 8
+Samples remaining after rejection: 1478 out of 3000 (49.2667%)
+Chosen R: 8
+Samples remaining after rejection: 2564 out of 5000 (51.28%)
+Chosen R: 8
+Samples remaining after rejection: 3587 out of 7000 (51.2429%)
+Chosen R: 8
+Samples remaining after rejection: 4652 out of 9000 (51.6889%)
+Chosen R: 8
+Samples remaining after rejection: 5645 out of 11000 (51.3182%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 513 out of 1000 (51.3%)
+Chosen R: 8
+Samples remaining after rejection: 1499 out of 3000 (49.9667%)
+Chosen R: 8
+Samples remaining after rejection: 2582 out of 5000 (51.64%)
+Chosen R: 8
+Samples remaining after rejection: 3586 out of 7000 (51.2286%)
+Chosen R: 8
+Samples remaining after rejection: 4544 out of 9000 (50.4889%)
+Chosen R: 8
+Samples remaining after rejection: 5685 out of 11000 (51.6818%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 490 out of 1000 (49%)
+Chosen R: 8
+Samples remaining after rejection: 1522 out of 3000 (50.7333%)
+Chosen R: 8
+Samples remaining after rejection: 2498 out of 5000 (49.96%)
+Chosen R: 8
+Samples remaining after rejection: 3591 out of 7000 (51.3%)
+Chosen R: 8
+Samples remaining after rejection: 4505 out of 9000 (50.0556%)
+Chosen R: 8
+Samples remaining after rejection: 5639 out of 11000 (51.2636%)
+Starting run 6
+Smallest angle among columns of A: 90
+Smallest angle among B*A: 85.3783
+Whitened center norm:9.4978e-16
+Smallest angle among B*A: 83.8119
+Whitened center norm:9.9937e-16
+Smallest angle among B*A: 89.0149
+Whitened center norm:2.6612e-15
+Smallest angle among B*A: 88.8852
+Whitened center norm:1.5511e-14
+Smallest angle among B*A: 87.9842
+Whitened center norm:1.5151e-14
+Smallest angle among B*A: 87.5864
+Whitened center norm:4.7192e-15
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 505 out of 1000 (50.5%)
+Smallest angle among B*A: 84.6051
+Whitened center norm:2.032e-16
+Chosen R: 16
+Samples remaining after rejection: 2158 out of 3000 (71.9333%)
+Smallest angle among B*A: 87.4254
+Whitened center norm:1.1713e-16
+Chosen R: 8
+Samples remaining after rejection: 2540 out of 5000 (50.8%)
+Smallest angle among B*A: 88.3952
+Whitened center norm:1.3156e-16
+Chosen R: 8
+Samples remaining after rejection: 3604 out of 7000 (51.4857%)
+Smallest angle among B*A: 86.1539
+Whitened center norm:1.873e-16
+Chosen R: 8
+Samples remaining after rejection: 4639 out of 9000 (51.5444%)
+Smallest angle among B*A: 87.9568
+Whitened center norm:2.902e-16
+Chosen R: 8
+Samples remaining after rejection: 5632 out of 11000 (51.2%)
+Smallest angle among B*A: 88.618
+Whitened center norm:2.8907e-16
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 495 out of 1000 (49.5%)
+Chosen R: 16
+Samples remaining after rejection: 2136 out of 3000 (71.2%)
+Chosen R: 8
+Samples remaining after rejection: 2559 out of 5000 (51.18%)
+Chosen R: 8
+Samples remaining after rejection: 3586 out of 7000 (51.2286%)
+Chosen R: 8
+Samples remaining after rejection: 4526 out of 9000 (50.2889%)
+Chosen R: 8
+Samples remaining after rejection: 5650 out of 11000 (51.3636%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 542 out of 1000 (54.2%)
+Chosen R: 16
+Samples remaining after rejection: 2134 out of 3000 (71.1333%)
+Chosen R: 8
+Samples remaining after rejection: 2536 out of 5000 (50.72%)
+Chosen R: 8
+Samples remaining after rejection: 3560 out of 7000 (50.8571%)
+Chosen R: 8
+Samples remaining after rejection: 4517 out of 9000 (50.1889%)
+Chosen R: 8
+Samples remaining after rejection: 5584 out of 11000 (50.7636%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 538 out of 1000 (53.8%)
+Chosen R: 16
+Samples remaining after rejection: 2165 out of 3000 (72.1667%)
+Chosen R: 8
+Samples remaining after rejection: 2531 out of 5000 (50.62%)
+Chosen R: 8
+Samples remaining after rejection: 3614 out of 7000 (51.6286%)
+Chosen R: 8
+Samples remaining after rejection: 4568 out of 9000 (50.7556%)
+Chosen R: 8
+Samples remaining after rejection: 5648 out of 11000 (51.3455%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 532 out of 1000 (53.2%)
+Chosen R: 16
+Samples remaining after rejection: 2140 out of 3000 (71.3333%)
+Chosen R: 8
+Samples remaining after rejection: 2557 out of 5000 (51.14%)
+Chosen R: 8
+Samples remaining after rejection: 3621 out of 7000 (51.7286%)
+Chosen R: 8
+Samples remaining after rejection: 4600 out of 9000 (51.1111%)
+Chosen R: 8
+Samples remaining after rejection: 5588 out of 11000 (50.8%)
+Starting run 7
+Smallest angle among columns of A: 90
+Smallest angle among B*A: 85.9811
+Whitened center norm:6.0535e-16
+Smallest angle among B*A: 87.8076
+Whitened center norm:3.0977e-15
+Smallest angle among B*A: 88.2322
+Whitened center norm:3.0001e-15
+Smallest angle among B*A: 88.1604
+Whitened center norm:7.8488e-16
+Smallest angle among B*A: 88.8384
+Whitened center norm:5.4009e-15
+Smallest angle among B*A: 88.8638
+Whitened center norm:5.5312e-15
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 530 out of 1000 (53%)
+Smallest angle among B*A: 85.9819
+Whitened center norm:1.1132e-16
+Chosen R: 8
+Samples remaining after rejection: 1541 out of 3000 (51.3667%)
+Smallest angle among B*A: 87.0018
+Whitened center norm:1.3159e-16
+Chosen R: 8
+Samples remaining after rejection: 2567 out of 5000 (51.34%)
+Smallest angle among B*A: 88.1287
+Whitened center norm:2.9031e-16
+Chosen R: 8
+Samples remaining after rejection: 3534 out of 7000 (50.4857%)
+Smallest angle among B*A: 87.8744
+Whitened center norm:1.325e-16
+Chosen R: 8
+Samples remaining after rejection: 4502 out of 9000 (50.0222%)
+Smallest angle among B*A: 88.0944
+Whitened center norm:2.022e-16
+Chosen R: 8
+Samples remaining after rejection: 5536 out of 11000 (50.3273%)
+Smallest angle among B*A: 88.5747
+Whitened center norm:8.7444e-17
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 521 out of 1000 (52.1%)
+Chosen R: 8
+Samples remaining after rejection: 1528 out of 3000 (50.9333%)
+Chosen R: 8
+Samples remaining after rejection: 2548 out of 5000 (50.96%)
+Chosen R: 8
+Samples remaining after rejection: 3511 out of 7000 (50.1571%)
+Chosen R: 8
+Samples remaining after rejection: 4525 out of 9000 (50.2778%)
+Chosen R: 8
+Samples remaining after rejection: 5557 out of 11000 (50.5182%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 520 out of 1000 (52%)
+Chosen R: 8
+Samples remaining after rejection: 1576 out of 3000 (52.5333%)
+Chosen R: 8
+Samples remaining after rejection: 2566 out of 5000 (51.32%)
+Chosen R: 8
+Samples remaining after rejection: 3535 out of 7000 (50.5%)
+Chosen R: 8
+Samples remaining after rejection: 4483 out of 9000 (49.8111%)
+Chosen R: 8
+Samples remaining after rejection: 5642 out of 11000 (51.2909%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 514 out of 1000 (51.4%)
+Chosen R: 8
+Samples remaining after rejection: 1531 out of 3000 (51.0333%)
+Chosen R: 8
+Samples remaining after rejection: 2535 out of 5000 (50.7%)
+Chosen R: 8
+Samples remaining after rejection: 3576 out of 7000 (51.0857%)
+Chosen R: 8
+Samples remaining after rejection: 4487 out of 9000 (49.8556%)
+Chosen R: 8
+Samples remaining after rejection: 5565 out of 11000 (50.5909%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 538 out of 1000 (53.8%)
+Chosen R: 8
+Samples remaining after rejection: 1535 out of 3000 (51.1667%)
+Chosen R: 8
+Samples remaining after rejection: 2574 out of 5000 (51.48%)
+Chosen R: 8
+Samples remaining after rejection: 3551 out of 7000 (50.7286%)
+Chosen R: 8
+Samples remaining after rejection: 4500 out of 9000 (50%)
+Chosen R: 8
+Samples remaining after rejection: 5562 out of 11000 (50.5636%)
+Starting run 8
+Smallest angle among columns of A: 90
+Smallest angle among B*A: 87.5289
+Whitened center norm:5.2829e-16
+Smallest angle among B*A: 87.9904
+Whitened center norm:1.0541e-15
+Smallest angle among B*A: 88.1712
+Whitened center norm:1.6605e-15
+Smallest angle among B*A: 88.2888
+Whitened center norm:8.9617e-15
+Smallest angle among B*A: 89.0041
+Whitened center norm:3.1824e-15
+Smallest angle among B*A: 88.9771
+Whitened center norm:2.2737e-14
+Smallest angle among columns of A: 90
+Chosen R: 16
+Samples remaining after rejection: 739 out of 1000 (73.9%)
+Smallest angle among B*A: 86.5781
+Whitened center norm:1.4705e-16
+Chosen R: 8
+Samples remaining after rejection: 1532 out of 3000 (51.0667%)
+Smallest angle among B*A: 86.6457
+Whitened center norm:1.3722e-16
+Chosen R: 8
+Samples remaining after rejection: 2561 out of 5000 (51.22%)
+Smallest angle among B*A: 87.8382
+Whitened center norm:2.1972e-16
+Chosen R: 8
+Samples remaining after rejection: 3604 out of 7000 (51.4857%)
+Smallest angle among B*A: 87.9044
+Whitened center norm:9.0612e-17
+Chosen R: 8
+Samples remaining after rejection: 4593 out of 9000 (51.0333%)
+Smallest angle among B*A: 88.4551
+Whitened center norm:1.027e-16
+Chosen R: 8
+Samples remaining after rejection: 5617 out of 11000 (51.0636%)
+Smallest angle among B*A: 88.1721
+Whitened center norm:2.4595e-16
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 16
+Samples remaining after rejection: 731 out of 1000 (73.1%)
+Chosen R: 8
+Samples remaining after rejection: 1573 out of 3000 (52.4333%)
+Chosen R: 8
+Samples remaining after rejection: 2546 out of 5000 (50.92%)
+Chosen R: 8
+Samples remaining after rejection: 3600 out of 7000 (51.4286%)
+Chosen R: 8
+Samples remaining after rejection: 4591 out of 9000 (51.0111%)
+Chosen R: 8
+Samples remaining after rejection: 5642 out of 11000 (51.2909%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 16
+Samples remaining after rejection: 732 out of 1000 (73.2%)
+Chosen R: 8
+Samples remaining after rejection: 1547 out of 3000 (51.5667%)
+Chosen R: 8
+Samples remaining after rejection: 2607 out of 5000 (52.14%)
+Chosen R: 8
+Samples remaining after rejection: 3609 out of 7000 (51.5571%)
+Chosen R: 8
+Samples remaining after rejection: 4600 out of 9000 (51.1111%)
+Chosen R: 8
+Samples remaining after rejection: 5658 out of 11000 (51.4364%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 16
+Samples remaining after rejection: 730 out of 1000 (73%)
+Chosen R: 8
+Samples remaining after rejection: 1584 out of 3000 (52.8%)
+Chosen R: 8
+Samples remaining after rejection: 2567 out of 5000 (51.34%)
+Chosen R: 8
+Samples remaining after rejection: 3600 out of 7000 (51.4286%)
+Chosen R: 8
+Samples remaining after rejection: 4622 out of 9000 (51.3556%)
+Chosen R: 8
+Samples remaining after rejection: 5667 out of 11000 (51.5182%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 16
+Samples remaining after rejection: 734 out of 1000 (73.4%)
+Chosen R: 8
+Samples remaining after rejection: 1550 out of 3000 (51.6667%)
+Chosen R: 8
+Samples remaining after rejection: 2598 out of 5000 (51.96%)
+Chosen R: 8
+Samples remaining after rejection: 3623 out of 7000 (51.7571%)
+Chosen R: 8
+Samples remaining after rejection: 4516 out of 9000 (50.1778%)
+Chosen R: 8
+Samples remaining after rejection: 5613 out of 11000 (51.0273%)
+Starting run 9
+Smallest angle among columns of A: 90
+Smallest angle among B*A: 87.5269
+Whitened center norm:9.8937e-16
+Smallest angle among B*A: 86.5217
+Whitened center norm:5.1831e-15
+Smallest angle among B*A: 86.3321
+Whitened center norm:3.2845e-15
+Smallest angle among B*A: 88.0624
+Whitened center norm:7.7791e-16
+Smallest angle among B*A: 87.597
+Whitened center norm:1.3844e-15
+Smallest angle among B*A: 89.0128
+Whitened center norm:2.6457e-16
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 514 out of 1000 (51.4%)
+Smallest angle among B*A: 84.4382
+Whitened center norm:1.1839e-16
+Chosen R: 8
+Samples remaining after rejection: 1531 out of 3000 (51.0333%)
+Smallest angle among B*A: 87.7826
+Whitened center norm:1.0091e-16
+Chosen R: 8
+Samples remaining after rejection: 2490 out of 5000 (49.8%)
+Smallest angle among B*A: 88.1155
+Whitened center norm:2.0251e-16
+Chosen R: 8
+Samples remaining after rejection: 3626 out of 7000 (51.8%)
+Smallest angle among B*A: 87.9518
+Whitened center norm:1.2637e-16
+Chosen R: 8
+Samples remaining after rejection: 4727 out of 9000 (52.5222%)
+Smallest angle among B*A: 87.9472
+Whitened center norm:1.5889e-16
+Chosen R: 8
+Samples remaining after rejection: 5611 out of 11000 (51.0091%)
+Smallest angle among B*A: 87.9203
+Whitened center norm:5.6353e-17
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 514 out of 1000 (51.4%)
+Chosen R: 8
+Samples remaining after rejection: 1550 out of 3000 (51.6667%)
+Chosen R: 8
+Samples remaining after rejection: 2500 out of 5000 (50%)
+Chosen R: 8
+Samples remaining after rejection: 3517 out of 7000 (50.2429%)
+Chosen R: 8
+Samples remaining after rejection: 4673 out of 9000 (51.9222%)
+Chosen R: 8
+Samples remaining after rejection: 5654 out of 11000 (51.4%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 522 out of 1000 (52.2%)
+Chosen R: 8
+Samples remaining after rejection: 1505 out of 3000 (50.1667%)
+Chosen R: 8
+Samples remaining after rejection: 2526 out of 5000 (50.52%)
+Chosen R: 8
+Samples remaining after rejection: 3588 out of 7000 (51.2571%)
+Chosen R: 8
+Samples remaining after rejection: 4625 out of 9000 (51.3889%)
+Chosen R: 8
+Samples remaining after rejection: 5540 out of 11000 (50.3636%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 501 out of 1000 (50.1%)
+Chosen R: 8
+Samples remaining after rejection: 1521 out of 3000 (50.7%)
+Chosen R: 8
+Samples remaining after rejection: 2478 out of 5000 (49.56%)
+Chosen R: 8
+Samples remaining after rejection: 3560 out of 7000 (50.8571%)
+Chosen R: 8
+Samples remaining after rejection: 4633 out of 9000 (51.4778%)
+Chosen R: 8
+Samples remaining after rejection: 5701 out of 11000 (51.8273%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 504 out of 1000 (50.4%)
+Chosen R: 8
+Samples remaining after rejection: 1554 out of 3000 (51.8%)
+Chosen R: 8
+Samples remaining after rejection: 2497 out of 5000 (49.94%)
+Chosen R: 8
+Samples remaining after rejection: 3524 out of 7000 (50.3429%)
+Chosen R: 8
+Samples remaining after rejection: 4631 out of 9000 (51.4556%)
+Chosen R: 8
+Samples remaining after rejection: 5542 out of 11000 (50.3818%)
+Starting run 10
+Smallest angle among columns of A: 90
+Smallest angle among B*A: 85.8606
+Whitened center norm:5.4433e-15
+Smallest angle among B*A: 88.7353
+Whitened center norm:7.9854e-16
+Smallest angle among B*A: 87.7904
+Whitened center norm:1.4755e-15
+Smallest angle among B*A: 88.8945
+Whitened center norm:1.6332e-14
+Smallest angle among B*A: 88.9684
+Whitened center norm:2.3384e-15
+Smallest angle among B*A: 87.7148
+Whitened center norm:1.7386e-14
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 518 out of 1000 (51.8%)
+Smallest angle among B*A: 82.282
+Whitened center norm:1.43e-16
+Chosen R: 8
+Samples remaining after rejection: 1527 out of 3000 (50.9%)
+Smallest angle among B*A: 84.9475
+Whitened center norm:1.1377e-16
+Chosen R: 8
+Samples remaining after rejection: 2550 out of 5000 (51%)
+Smallest angle among B*A: 87.8737
+Whitened center norm:1.0861e-16
+Chosen R: 8
+Samples remaining after rejection: 3543 out of 7000 (50.6143%)
+Smallest angle among B*A: 86.5162
+Whitened center norm:8.9386e-17
+Chosen R: 8
+Samples remaining after rejection: 4601 out of 9000 (51.1222%)
+Smallest angle among B*A: 87.9036
+Whitened center norm:1.7871e-16
+Chosen R: 8
+Samples remaining after rejection: 5520 out of 11000 (50.1818%)
+Smallest angle among B*A: 87.8564
+Whitened center norm:1.4091e-16
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 514 out of 1000 (51.4%)
+Chosen R: 8
+Samples remaining after rejection: 1570 out of 3000 (52.3333%)
+Chosen R: 8
+Samples remaining after rejection: 2546 out of 5000 (50.92%)
+Chosen R: 8
+Samples remaining after rejection: 3554 out of 7000 (50.7714%)
+Chosen R: 8
+Samples remaining after rejection: 4660 out of 9000 (51.7778%)
+Chosen R: 8
+Samples remaining after rejection: 5571 out of 11000 (50.6455%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 525 out of 1000 (52.5%)
+Chosen R: 8
+Samples remaining after rejection: 1525 out of 3000 (50.8333%)
+Chosen R: 8
+Samples remaining after rejection: 2518 out of 5000 (50.36%)
+Chosen R: 8
+Samples remaining after rejection: 3520 out of 7000 (50.2857%)
+Chosen R: 8
+Samples remaining after rejection: 4572 out of 9000 (50.8%)
+Chosen R: 8
+Samples remaining after rejection: 5501 out of 11000 (50.0091%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 518 out of 1000 (51.8%)
+Chosen R: 8
+Samples remaining after rejection: 1539 out of 3000 (51.3%)
+Chosen R: 8
+Samples remaining after rejection: 2508 out of 5000 (50.16%)
+Chosen R: 8
+Samples remaining after rejection: 3584 out of 7000 (51.2%)
+Chosen R: 8
+Samples remaining after rejection: 4621 out of 9000 (51.3444%)
+Chosen R: 8
+Samples remaining after rejection: 5545 out of 11000 (50.4091%)
+Smallest angle among columns of A: 90
+Smallest angle among columns of A: 90
+Chosen R: 8
+Samples remaining after rejection: 522 out of 1000 (52.2%)
+Chosen R: 8
+Samples remaining after rejection: 1546 out of 3000 (51.5333%)
+Chosen R: 8
+Samples remaining after rejection: 2520 out of 5000 (50.4%)
+Chosen R: 8
+Samples remaining after rejection: 3616 out of 7000 (51.6571%)
+Chosen R: 8
+Samples remaining after rejection: 4571 out of 9000 (50.7889%)
+Chosen R: 8
+Samples remaining after rejection: 5539 out of 11000 (50.3545%)
+[Warning: Ignoring extra legend entries.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('legend>set_children_and_strings', '/Applications/MATLAB_R2015b.app/toolbox/matlab/scribe/legend.p', 629)" style="font-weight:bold">legend>set_children_and_strings</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015b.app/toolbox/matlab/scribe/legend.p',629,0)">line 629</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('legend>make_legend', '/Applications/MATLAB_R2015b.app/toolbox/matlab/scribe/legend.p', 321)" style="font-weight:bold">legend>make_legend</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015b.app/toolbox/matlab/scribe/legend.p',321,0)">line 321</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('legend', '/Applications/MATLAB_R2015b.app/toolbox/matlab/scribe/legend.p', 247)" style="font-weight:bold">legend</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015b.app/toolbox/matlab/scribe/legend.p',247,0)">line 247</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/allalgsorthogonal_diffexp-2015-06-03/main.m', 85)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/allalgsorthogonal_diffexp-2015-06-03/main.m',85,0)">line 85</a>)] 
+Elapsed time is 2259.886761 seconds.

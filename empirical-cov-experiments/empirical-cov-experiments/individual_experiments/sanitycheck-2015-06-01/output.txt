@@ -1,0 +1,202 @@
+---Starting run 1--------------
+{6, 6, 6, 6, 2.1, 2.1}
+Time to generate samples: 3.2684
+Smallest angle among columns of A: 65.5789
+Smallest angle among B*A: 85.8928
+Whitened center norm:1.6258e-14
+Smallest angle among B*A: 84.9482
+Whitened center norm:2.1705e-15
+Smallest angle among columns of A: 65.5789
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 335 out of 500 (67%)
+Smallest angle among B*orthogonalizer*A: 84.1653
+Whitened center norm:6.6707e-17
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 639 out of 1000 (63.9%)
+Smallest angle among B*orthogonalizer*A: 84.2458
+Whitened center norm:6.5644e-17
+Smallest angle among columns of A: 65.5789
+s_min of normalized columns of orthogonalizer*A: 0.93513
+s_min of orthogonalizer*A: 0.020712
+s_max of orthogonalizer*A: 1.7876
+Chosen R: 2
+Samples remaining after rejection: 287 out of 500 (57.4%)
+Smallest angle among B*orthogonalizer*A: 85.2215
+Whitened center norm:4.1965e-17
+s_min of normalized columns of orthogonalizer*A: 0.92327
+s_min of orthogonalizer*A: 0.019102
+s_max of orthogonalizer*A: 1.8847
+Chosen R: 2
+Samples remaining after rejection: 535 out of 1000 (53.5%)
+Smallest angle among B*orthogonalizer*A: 86.9012
+Whitened center norm:2.1222e-16
+Smallest angle among columns of A: 65.5789
+Time to orthogonalize via centroid body: 2.181
+s_min of normalized columns of orthogonalizer*A: 0.91341
+s_min of orthogonalizer*A: 0.21385
+s_max of orthogonalizer*A: 2.7122
+Chosen R: 4
+Samples remaining after rejection: 290 out of 500 (58%)
+Smallest angle among B*orthogonalizer*A: 83.1517
+Whitened center norm:6.4791e-17
+Time to orthogonalize via centroid body: 6.9803
+s_min of normalized columns of orthogonalizer*A: 0.94037
+s_min of orthogonalizer*A: 0.20479
+s_max of orthogonalizer*A: 2.8667
+Chosen R: 4
+Samples remaining after rejection: 600 out of 1000 (60%)
+Smallest angle among B*orthogonalizer*A: 85.0421
+Whitened center norm:9.8137e-17
+---Starting run 2--------------
+{6, 6, 6, 6, 2.1, 2.1}
+Time to generate samples: 2.8042
+Smallest angle among columns of A: 52.3483
+Smallest angle among B*A: 87.5458
+Whitened center norm:1.306e-14
+Smallest angle among B*A: 83.836
+Whitened center norm:6.9389e-15
+Smallest angle among columns of A: 52.3483
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 327 out of 500 (65.4%)
+Smallest angle among B*orthogonalizer*A: 86.6947
+Whitened center norm:1.8192e-16
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 659 out of 1000 (65.9%)
+Smallest angle among B*orthogonalizer*A: 84.7194
+Whitened center norm:4.0713e-16
+Smallest angle among columns of A: 52.3483
+s_min of normalized columns of orthogonalizer*A: 0.93914
+s_min of orthogonalizer*A: 0.0082817
+s_max of orthogonalizer*A: 1.8683
+Chosen R: 2
+Samples remaining after rejection: 267 out of 500 (53.4%)
+Smallest angle among B*orthogonalizer*A: 81.147
+Whitened center norm:2.0908e-16
+s_min of normalized columns of orthogonalizer*A: 0.93204
+s_min of orthogonalizer*A: 0.0074537
+s_max of orthogonalizer*A: 1.8464
+Chosen R: 2
+Samples remaining after rejection: 592 out of 1000 (59.2%)
+Smallest angle among B*orthogonalizer*A: 84.8262
+Whitened center norm:1.2626e-16
+Smallest angle among columns of A: 52.3483
+Time to orthogonalize via centroid body: 2.1666
+s_min of normalized columns of orthogonalizer*A: 0.94769
+s_min of orthogonalizer*A: 0.15769
+s_max of orthogonalizer*A: 2.8795
+Chosen R: 4
+Samples remaining after rejection: 286 out of 500 (57.2%)
+Smallest angle among B*orthogonalizer*A: 83.3017
+Whitened center norm:5.8337e-17
+Time to orthogonalize via centroid body: 6.9838
+s_min of normalized columns of orthogonalizer*A: 0.93242
+s_min of orthogonalizer*A: 0.13385
+s_max of orthogonalizer*A: 2.8605
+Chosen R: 4
+Samples remaining after rejection: 597 out of 1000 (59.7%)
+Smallest angle among B*orthogonalizer*A: 85.2875
+Whitened center norm:7.121e-17
+---Starting run 3--------------
+{6, 6, 6, 6, 2.1, 2.1}
+Time to generate samples: 2.6398
+Smallest angle among columns of A: 26.3782
+Smallest angle among B*A: 84.3164
+Whitened center norm:2.7851e-15
+Smallest angle among B*A: 86.3126
+Whitened center norm:9.6787e-14
+Smallest angle among columns of A: 26.3782
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 330 out of 500 (66%)
+Smallest angle among B*orthogonalizer*A: 84.0706
+Whitened center norm:2.209e-16
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 651 out of 1000 (65.1%)
+Smallest angle among B*orthogonalizer*A: 85.472
+Whitened center norm:3.2483e-16
+Smallest angle among columns of A: 26.3782
+s_min of normalized columns of orthogonalizer*A: 0.88554
+s_min of orthogonalizer*A: 0.014697
+s_max of orthogonalizer*A: 1.7901
+Chosen R: 2
+Samples remaining after rejection: 278 out of 500 (55.6%)
+Smallest angle among B*orthogonalizer*A: 83.5748
+Whitened center norm:6.5344e-17
+s_min of normalized columns of orthogonalizer*A: 0.95376
+s_min of orthogonalizer*A: 0.01099
+s_max of orthogonalizer*A: 1.8088
+Chosen R: 2
+Samples remaining after rejection: 577 out of 1000 (57.7%)
+Smallest angle among B*orthogonalizer*A: 85.8709
+Whitened center norm:1.1339e-16
+Smallest angle among columns of A: 26.3782
+Time to orthogonalize via centroid body: 2.117
+s_min of normalized columns of orthogonalizer*A: 0.9145
+s_min of orthogonalizer*A: 0.18222
+s_max of orthogonalizer*A: 2.7835
+Chosen R: 4
+Samples remaining after rejection: 276 out of 500 (55.2%)
+Smallest angle among B*orthogonalizer*A: 85.1194
+Whitened center norm:1.5677e-16
+Time to orthogonalize via centroid body: 7.4274
+s_min of normalized columns of orthogonalizer*A: 0.96602
+s_min of orthogonalizer*A: 0.16849
+s_max of orthogonalizer*A: 2.7154
+Chosen R: 4
+Samples remaining after rejection: 595 out of 1000 (59.5%)
+Smallest angle among B*orthogonalizer*A: 85.4101
+Whitened center norm:7.9885e-17
+
+amaridata =
+
+    9.2823    9.0564
+    8.8336    6.5658
+    8.2744    6.5361
+
+
+sizes =
+
+         500        1000
+
+
+amaridata =
+
+    9.2823    9.0564
+    8.8336    6.5658
+    8.2744    6.5361
+
+
+sizes =
+
+         500        1000
+
+
+amaridata =
+
+    9.2823    9.0564
+    8.8336    6.5658
+    8.2744    6.5361
+
+
+sizes =
+
+         500        1000
+
+Total time:7.4971

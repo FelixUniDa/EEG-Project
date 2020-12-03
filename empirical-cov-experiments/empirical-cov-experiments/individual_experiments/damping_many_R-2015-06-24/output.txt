@@ -1,0 +1,44 @@
+Samples remaining after rejection: 4265 out of 5000 (85.3%)
+
+Interrupt request received
+{Reference to non-existent field 'objval'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('centroidFilteringGurobi', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/centroidFilteringGurobi.m', 54)" style="font-weight:bold">centroidFilteringGurobi</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/centroidFilteringGurobi.m',54,0)">line 54</a>)
+    minkowski(i) = -1/result.objval;
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('centroidOrthogonalizer', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/centroidOrthogonalizer.m', 15)" style="font-weight:bold">centroidOrthogonalizer</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/centroidOrthogonalizer.m',15,0)">line 15</a>)
+        sample = centroidFilteringGurobi(X);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/damping_many_R_2462015/main.m', 75)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/damping_many_R_2462015/main.m',75,0)">line 75</a>)
+        orthogonalizer = centroidOrthogonalizer(X);
+} 
+help norm
+ <strong>norm</strong>   Matrix or vector norm.
+      <strong>norm</strong>(X,2) returns the 2-norm of X.
+ 
+      <strong>norm</strong>(X) is the same as <strong>norm</strong>(X,2).
+ 
+      <strong>norm</strong>(X,1) returns the 1-norm of X.
+ 
+      <strong>norm</strong>(X,Inf) returns the infinity norm of X.
+ 
+      <strong>norm</strong>(X,'fro') returns the Frobenius norm of X.
+ 
+    In addition, for vectors...
+ 
+      <strong>norm</strong>(V,P) returns the p-norm of V defined as SUM(ABS(V).^P)^(1/P).
+ 
+      <strong>norm</strong>(V,Inf) returns the largest element of ABS(V).
+ 
+      <strong>norm</strong>(V,-Inf) returns the smallest element of ABS(V).
+ 
+    By convention, NaN is returned if X or V contains NaNs.
+ 
+    See also <a href="matlab:help cond">cond</a>, <a href="matlab:help rcond">rcond</a>, <a href="matlab:help condest">condest</a>, <a href="matlab:help normest">normest</a>, <a href="matlab:help hypot">hypot</a>.
+
+    <a href="matlab:matlab.internal.language.introspective.displayOverloads('norm')">Other functions named norm</a>
+
+    Reference page in Help browser
+       <a href="matlab:doc norm">doc norm</a>
+
+main
