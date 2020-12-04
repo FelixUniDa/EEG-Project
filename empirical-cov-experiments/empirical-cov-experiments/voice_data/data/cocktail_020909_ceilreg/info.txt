@@ -1,0 +1,6 @@
+c = 345.9 m/s
+RT60 = .232 s
+FOV = [0 0 0; 3 3 2.2]'
+Fs = 22050 Hz.
+mics = 16 Behringer ECM8000 measurement microphones
+amps = M-Audio AudioBuddy Dual Microphone Preamp with Phantom Power and Direct Box

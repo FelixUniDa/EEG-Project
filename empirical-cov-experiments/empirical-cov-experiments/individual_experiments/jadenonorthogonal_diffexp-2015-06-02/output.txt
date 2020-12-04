@@ -1,0 +1,258 @@
+------------- Starting run 1 ------------------
+Time to generate samples: 40.918
+Smallest angle among columns of A: 27.3881
+[Warning: NORMEST did not converge for 100 iterations with tolerance 1e-06] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('normest', '/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m', 40)" style="font-weight:bold">normest</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m',40,0)">line 40</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('svds', '/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m', 145)" style="font-weight:bold">svds</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m',145,0)">line 145</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('singlecomparison', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m', 183)" style="font-weight:bold">singlecomparison</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m',183,0)">line 183</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m', 51)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m',51,0)">line 51</a>)] 
+s_min of normalized columns of orthogonalizer*A: 0.93515
+s_min of orthogonalizer*A: 0.012248
+s_max of orthogonalizer*A: 1.1699
+Chosen R: 4
+Samples remaining after rejection: 728 out of 1000 (72.8%)
+Smallest angle among B*orthogonalizer*A: 84.1726
+Whitened center norm:1.064e-16
+s_min of normalized columns of orthogonalizer*A: 0.95896
+s_min of orthogonalizer*A: 0.012744
+s_max of orthogonalizer*A: 1.2502
+Chosen R: 4
+Samples remaining after rejection: 2184 out of 3000 (72.8%)
+Smallest angle among B*orthogonalizer*A: 85.6231
+Whitened center norm:1.7174e-16
+[Warning: NORMEST did not converge for 100 iterations with tolerance 1e-06] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('normest', '/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m', 40)" style="font-weight:bold">normest</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m',40,0)">line 40</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('svds', '/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m', 145)" style="font-weight:bold">svds</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m',145,0)">line 145</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('singlecomparison', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m', 183)" style="font-weight:bold">singlecomparison</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m',183,0)">line 183</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m', 51)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m',51,0)">line 51</a>)] 
+s_min of normalized columns of orthogonalizer*A: 0.96619
+s_min of orthogonalizer*A: 0.0020118
+s_max of orthogonalizer*A: 1.1511
+Chosen R: 4
+Samples remaining after rejection: 3824 out of 5000 (76.48%)
+Smallest angle among B*orthogonalizer*A: 87.3694
+Whitened center norm:1.3911e-16
+[Warning: NORMEST did not converge for 100 iterations with tolerance 1e-06] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('normest', '/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m', 40)" style="font-weight:bold">normest</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m',40,0)">line 40</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('svds', '/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m', 145)" style="font-weight:bold">svds</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m',145,0)">line 145</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('singlecomparison', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m', 183)" style="font-weight:bold">singlecomparison</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m',183,0)">line 183</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m', 51)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m',51,0)">line 51</a>)] 
+s_min of normalized columns of orthogonalizer*A: 0.97533
+s_min of orthogonalizer*A: 0.014005
+s_max of orthogonalizer*A: 1.183
+Chosen R: 4
+Samples remaining after rejection: 5260 out of 7000 (75.1429%)
+Smallest angle among B*orthogonalizer*A: 88.9378
+Whitened center norm:1.5625e-16
+[Warning: NORMEST did not converge for 100 iterations with tolerance 1e-06] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('normest', '/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m', 40)" style="font-weight:bold">normest</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m',40,0)">line 40</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('svds', '/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m', 145)" style="font-weight:bold">svds</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m',145,0)">line 145</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('singlecomparison', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m', 183)" style="font-weight:bold">singlecomparison</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m',183,0)">line 183</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m', 51)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m',51,0)">line 51</a>)] 
+s_min of normalized columns of orthogonalizer*A: 0.97426
+s_min of orthogonalizer*A: 0.0093058
+s_max of orthogonalizer*A: 1.1737
+Chosen R: 2
+Samples remaining after rejection: 4651 out of 9000 (51.6778%)
+Smallest angle among B*orthogonalizer*A: 88.2365
+Whitened center norm:2.2403e-16
+[Warning: NORMEST did not converge for 100 iterations with tolerance 1e-06] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('normest', '/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m', 40)" style="font-weight:bold">normest</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m',40,0)">line 40</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('svds', '/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m', 145)" style="font-weight:bold">svds</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m',145,0)">line 145</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('singlecomparison', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m', 183)" style="font-weight:bold">singlecomparison</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m',183,0)">line 183</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m', 51)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m',51,0)">line 51</a>)] 
+s_min of normalized columns of orthogonalizer*A: 0.97665
+s_min of orthogonalizer*A: 0.0037011
+s_max of orthogonalizer*A: 1.1856
+Chosen R: 4
+Samples remaining after rejection: 8526 out of 11000 (77.5091%)
+Smallest angle among B*orthogonalizer*A: 88.0921
+Whitened center norm:2.6476e-16
+Smallest angle among columns of A: 27.3881
+Time to orthogonalize via centroid body: 3.4998
+s_min of normalized columns of orthogonalizer*A: 0.91366
+s_min of orthogonalizer*A: 0.11624
+s_max of orthogonalizer*A: 1.8109
+Chosen R: 8
+Samples remaining after rejection: 749 out of 1000 (74.9%)
+Smallest angle among B*orthogonalizer*A: 85.3728
+Whitened center norm:1.0913e-16
+Time to orthogonalize via centroid body: 31.4526
+s_min of normalized columns of orthogonalizer*A: 0.94328
+s_min of orthogonalizer*A: 0.11307
+s_max of orthogonalizer*A: 1.7542
+Chosen R: 8
+Samples remaining after rejection: 2175 out of 3000 (72.5%)
+Smallest angle among B*orthogonalizer*A: 87.1596
+Whitened center norm:1.4948e-16
+Time to orthogonalize via centroid body: 82.6365
+[Warning: NORMEST did not converge for 100 iterations with tolerance 1e-06] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('normest', '/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m', 40)" style="font-weight:bold">normest</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m',40,0)">line 40</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('svds', '/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m', 145)" style="font-weight:bold">svds</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m',145,0)">line 145</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('singlecomparison', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m', 183)" style="font-weight:bold">singlecomparison</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m',183,0)">line 183</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m', 51)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m',51,0)">line 51</a>)] 
+s_min of normalized columns of orthogonalizer*A: 0.96655
+s_min of orthogonalizer*A: 0.085087
+s_max of orthogonalizer*A: 1.6747
+Chosen R: 8
+Samples remaining after rejection: 3742 out of 5000 (74.84%)
+Smallest angle among B*orthogonalizer*A: 87.985
+Whitened center norm:9.0226e-17
+Time to orthogonalize via centroid body: 182.352
+[Warning: NORMEST did not converge for 100 iterations with tolerance 1e-06] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('normest', '/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m', 40)" style="font-weight:bold">normest</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m',40,0)">line 40</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('svds', '/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m', 145)" style="font-weight:bold">svds</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m',145,0)">line 145</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('singlecomparison', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m', 183)" style="font-weight:bold">singlecomparison</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m',183,0)">line 183</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m', 51)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m',51,0)">line 51</a>)] 
+s_min of normalized columns of orthogonalizer*A: 0.96896
+s_min of orthogonalizer*A: 0.13864
+s_max of orthogonalizer*A: 1.655
+Chosen R: 8
+Samples remaining after rejection: 5149 out of 7000 (73.5571%)
+Smallest angle among B*orthogonalizer*A: 87.9039
+Whitened center norm:1.4164e-16
+Time to orthogonalize via centroid body: 291.9646
+[Warning: NORMEST did not converge for 100 iterations with tolerance 1e-06] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('normest', '/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m', 40)" style="font-weight:bold">normest</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m',40,0)">line 40</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('svds', '/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m', 145)" style="font-weight:bold">svds</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m',145,0)">line 145</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('singlecomparison', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m', 183)" style="font-weight:bold">singlecomparison</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m',183,0)">line 183</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m', 51)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m',51,0)">line 51</a>)] 
+s_min of normalized columns of orthogonalizer*A: 0.96878
+s_min of orthogonalizer*A: 0.12216
+s_max of orthogonalizer*A: 1.692
+Chosen R: 8
+Samples remaining after rejection: 6732 out of 9000 (74.8%)
+Smallest angle among B*orthogonalizer*A: 88.5531
+Whitened center norm:1.3395e-16
+Time to orthogonalize via centroid body: 448.2449
+[Warning: NORMEST did not converge for 100 iterations with tolerance 1e-06] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('normest', '/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m', 40)" style="font-weight:bold">normest</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m',40,0)">line 40</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('svds', '/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m', 145)" style="font-weight:bold">svds</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m',145,0)">line 145</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('singlecomparison', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m', 183)" style="font-weight:bold">singlecomparison</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m',183,0)">line 183</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m', 51)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m',51,0)">line 51</a>)] 
+s_min of normalized columns of orthogonalizer*A: 0.97533
+s_min of orthogonalizer*A: 0.099508
+s_max of orthogonalizer*A: 1.6954
+Chosen R: 8
+Samples remaining after rejection: 8130 out of 11000 (73.9091%)
+Smallest angle among B*orthogonalizer*A: 88.8144
+Whitened center norm:1.1042e-16
+Smallest angle among columns of A: 27.3881
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 517 out of 1000 (51.7%)
+Smallest angle among B*orthogonalizer*A: 84.0587
+Whitened center norm:1.676e-16
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 
+s_max of orthogonalizer*A: 1
+Chosen R: 16
+Samples remaining after rejection: 2140 out of 3000 (71.3333%)
+Smallest angle among B*orthogonalizer*A: 87.2933
+Whitened center norm:2.088e-16
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 2535 out of 5000 (50.7%)
+Smallest angle among B*orthogonalizer*A: 87.5254
+Whitened center norm:1.8748e-16
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 3597 out of 7000 (51.3857%)
+Smallest angle among B*orthogonalizer*A: 87.6738
+Whitened center norm:1.8559e-16
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 4595 out of 9000 (51.0556%)
+Smallest angle among B*orthogonalizer*A: 87.671
+Whitened center norm:1.0975e-16
+s_min of normalized columns of orthogonalizer*A: 1
+s_min of orthogonalizer*A: 1
+s_max of orthogonalizer*A: 1
+Chosen R: 8
+Samples remaining after rejection: 5524 out of 11000 (50.2182%)
+Smallest angle among B*orthogonalizer*A: 88.8112
+Whitened center norm:1.5976e-16
+Smallest angle among columns of A: 27.3881
+Smallest angle among B*A: 87.0936
+Whitened center norm:8.4044e-15
+Smallest angle among B*A: 88.0025
+Whitened center norm:1.7065e-14
+Smallest angle among B*A: 88.0882
+Whitened center norm:1.7732e-14
+Smallest angle among B*A: 88.2921
+Whitened center norm:3.1053e-14
+Smallest angle among B*A: 88.9026
+Whitened center norm:5.0022e-14
+Smallest angle among B*A: 88.7048
+Whitened center norm:1.0536e-13
+------------- Starting run 2 ------------------
+Time to generate samples: 39.9851
+Smallest angle among columns of A: 65.5122
+s_min of normalized columns of orthogonalizer*A: 0.90893
+s_min of orthogonalizer*A: 0.020994
+s_max of orthogonalizer*A: 1.3309
+Chosen R: 4
+Samples remaining after rejection: 742 out of 1000 (74.2%)
+Smallest angle among B*orthogonalizer*A: 85.7685
+Whitened center norm:2.0002e-16
+[Warning: NORMEST did not converge for 100 iterations with tolerance 1e-06] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('normest', '/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m', 40)" style="font-weight:bold">normest</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m',40,0)">line 40</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('svds', '/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m', 145)" style="font-weight:bold">svds</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m',145,0)">line 145</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('singlecomparison', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m', 183)" style="font-weight:bold">singlecomparison</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m',183,0)">line 183</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m', 51)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m',51,0)">line 51</a>)] 
+s_min of normalized columns of orthogonalizer*A: 0.97146
+s_min of orthogonalizer*A: 0.0056446
+s_max of orthogonalizer*A: 1.1968
+Chosen R: 4
+Samples remaining after rejection: 2219 out of 3000 (73.9667%)
+Smallest angle among B*orthogonalizer*A: 85.9174
+Whitened center norm:2.1434e-16
+[Warning: NORMEST did not converge for 100 iterations with tolerance 1e-06] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('normest', '/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m', 40)" style="font-weight:bold">normest</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m',40,0)">line 40</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('svds', '/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m', 145)" style="font-weight:bold">svds</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m',145,0)">line 145</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('singlecomparison', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m', 183)" style="font-weight:bold">singlecomparison</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m',183,0)">line 183</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m', 51)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m',51,0)">line 51</a>)] 
+s_min of normalized columns of orthogonalizer*A: 0.96208
+s_min of orthogonalizer*A: 0.010664
+s_max of orthogonalizer*A: 1.1589
+Chosen R: 4
+Samples remaining after rejection: 3795 out of 5000 (75.9%)
+Smallest angle among B*orthogonalizer*A: 88.156
+Whitened center norm:2.1808e-16
+[Warning: NORMEST did not converge for 100 iterations with tolerance 1e-06] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('normest', '/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m', 40)" style="font-weight:bold">normest</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m',40,0)">line 40</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('svds', '/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m', 145)" style="font-weight:bold">svds</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m',145,0)">line 145</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('singlecomparison', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m', 183)" style="font-weight:bold">singlecomparison</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m',183,0)">line 183</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m', 51)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m',51,0)">line 51</a>)] 
+s_min of normalized columns of orthogonalizer*A: 0.96189
+s_min of orthogonalizer*A: 0.004937
+s_max of orthogonalizer*A: 1.1524
+Chosen R: 4
+Samples remaining after rejection: 5320 out of 7000 (76%)
+Smallest angle among B*orthogonalizer*A: 88.4957
+Whitened center norm:1.2506e-16
+[Warning: NORMEST did not converge for 100 iterations with tolerance 1e-06] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('normest', '/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m', 40)" style="font-weight:bold">normest</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m',40,0)">line 40</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('svds', '/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m', 145)" style="font-weight:bold">svds</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m',145,0)">line 145</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('singlecomparison', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m', 183)" style="font-weight:bold">singlecomparison</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m',183,0)">line 183</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m', 51)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/individual_experiments/jadenonorthogonal_diffexp_262015/main.m',51,0)">line 51</a>)] 
+s_min of normalized columns of orthogonalizer*A: 0.98478
+s_min of orthogonalizer*A: 0.0036014
+s_max of orthogonalizer*A: 1.1008
+Chosen R: 4
+Samples remaining after rejection: 6995 out of 9000 (77.7222%)
+Smallest angle among B*orthogonalizer*A: 88.5441
+Whitened center norm:1.2645e-16
+[Warning: NORMEST did not converge for 100 iterations with tolerance 1e-06] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('normest', '/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m', 40)" style="font-weight:bold">normest</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/matfun/normest.m',40,0)">line 40</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('svds', '/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m', 145)" style="font-weight:bold">svds</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2015a.app/toolbox/matlab/sparfun/svds.m',145,0)">line 145</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('singlecomparison', '/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m', 183)" style="font-weight:bold">singlecomparison</a> (<a href="matlab: opentoline('/Users/joe/Documents/Research/heavy-tailed-ica/empirical-cov-experiments/singlecomparison.m',183,0)">line 183</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', '/Users/joe/Documents/Research/heavy-tailed-ica/empiric

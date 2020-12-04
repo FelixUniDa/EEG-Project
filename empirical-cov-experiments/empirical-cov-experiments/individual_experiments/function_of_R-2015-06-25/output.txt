@@ -1,0 +1,103 @@
+--- Running for exponents {2.1,2.1,2.1,2.1,2.1,2.1,2.1,2.1,2.1,2.1}
+------ Starting run 1
+------ Starting run 2
+------ Starting run 3
+------ Starting run 4
+------ Starting run 5
+------ Starting run 6
+------ Starting run 7
+------ Starting run 8
+------ Starting run 9
+------ Starting run 10
+Done!
+myfig = figure(1);
+myfig = figure(1)
+
+myfig = 
+
+  <a href="matlab:helpPopup matlab.ui.Figure" style="font-weight:bold">Figure</a> (1) with properties:
+
+      Number: 1
+        Name: ''
+       Color: [0.940000000000000 0.940000000000000 0.940000000000000]
+    Position: [100 600 800 600]
+       Units: 'pixels'
+
+  Show <a href="matlab:if exist('myfig', 'var'), matlab.graphics.internal.getForDisplay('myfig', myfig, 'matlab.ui.Figure'), else, matlab.graphics.internal.getForDisplay('myfig'), end">all properties</a>
+
+disp(myfig)
+  <a href="matlab:helpPopup matlab.ui.Figure" style="font-weight:bold">Figure</a> (1) with properties:
+
+      Number: 1
+        Name: ''
+       Color: [0.940000000000000 0.940000000000000 0.940000000000000]
+    Position: [100 600 800 600]
+       Units: 'pixels'
+
+  Show <a href="matlab:if exist('myfig', 'var'), matlab.graphics.internal.getForDisplay('myfig', myfig, 'matlab.ui.Figure'), else, matlab.graphics.internal.getForDisplay('myfig'), end">all properties</a>
+
+clear
+myfig = figure(1);
+        clf(myfig);
+        set(myfig, 'Position', [100, 600, 800, 600]);
+        hold on;
+myfig = figure(1)
+
+myfig = 
+
+  <a href="matlab:helpPopup matlab.ui.Figure" style="font-weight:bold">Figure</a> (1) with properties:
+
+      Number: 1
+        Name: ''
+       Color: [0.940000000000000 0.940000000000000 0.940000000000000]
+    Position: [100 600 800 600]
+       Units: 'pixels'
+
+  Show <a href="matlab:if exist('myfig', 'var'), matlab.graphics.internal.getForDisplay('myfig', myfig, 'matlab.ui.Figure'), else, matlab.graphics.internal.getForDisplay('myfig'), end">all properties</a>
+
+        clf(myfig);
+        set(myfig, 'Position', [100, 600, 800, 600]);
+        hold on;
+myfig = figure()
+
+myfig = 
+
+  <a href="matlab:helpPopup matlab.ui.Figure" style="font-weight:bold">Figure</a> (2) with properties:
+
+      Number: 2
+        Name: ''
+       Color: [0.940000000000000 0.940000000000000 0.940000000000000]
+    Position: [1000 918 560 420]
+       Units: 'pixels'
+
+  Show <a href="matlab:if exist('myfig', 'var'), matlab.graphics.internal.getForDisplay('myfig', myfig, 'matlab.ui.Figure'), else, matlab.graphics.internal.getForDisplay('myfig'), end">all properties</a>
+
+myfig = figure()
+
+myfig = 
+
+  <a href="matlab:helpPopup matlab.ui.Figure" style="font-weight:bold">Figure</a> (2) with properties:
+
+      Number: 2
+        Name: ''
+       Color: [0.940000000000000 0.940000000000000 0.940000000000000]
+    Position: [1000 918 560 420]
+       Units: 'pixels'
+
+  Show <a href="matlab:if exist('myfig', 'var'), matlab.graphics.internal.getForDisplay('myfig', myfig, 'matlab.ui.Figure'), else, matlab.graphics.internal.getForDisplay('myfig'), end">all properties</a>
+
+myfig = figure()
+
+myfig = 
+
+  <a href="matlab:helpPopup matlab.ui.Figure" style="font-weight:bold">Figure</a> (2) with properties:
+
+      Number: 2
+        Name: ''
+       Color: [0.940000000000000 0.940000000000000 0.940000000000000]
+    Position: [1000 918 560 420]
+       Units: 'pixels'
+
+  Show <a href="matlab:if exist('myfig', 'var'), matlab.graphics.internal.getForDisplay('myfig', myfig, 'matlab.ui.Figure'), else, matlab.graphics.internal.getForDisplay('myfig'), end">all properties</a>
+
+main

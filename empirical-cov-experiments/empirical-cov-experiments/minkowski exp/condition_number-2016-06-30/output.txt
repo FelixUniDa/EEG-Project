@@ -1,0 +1,574 @@
+--------- Starting run 1 --------------
+Smallest angle among columns of A: 55.1297
+condition number of normalized columns of orthogonalizer*A: 1.1383
+s_min of normalized columns of orthogonalizer*A: 0.94265
+s_min of orthogonalizer*A: 0.0018186
+s_max of orthogonalizer*A: 1.8999
+condition number of normalized columns of orthogonalizer*A: 1.081
+s_min of normalized columns of orthogonalizer*A: 0.96162
+s_min of orthogonalizer*A: 0.0017982
+s_max of orthogonalizer*A: 1.7442
+condition number of normalized columns of orthogonalizer*A: 1.0656
+s_min of normalized columns of orthogonalizer*A: 0.96734
+s_min of orthogonalizer*A: 0.0015631
+s_max of orthogonalizer*A: 1.7249
+condition number of normalized columns of orthogonalizer*A: 1.061
+s_min of normalized columns of orthogonalizer*A: 0.9697
+s_min of orthogonalizer*A: 0.015165
+s_max of orthogonalizer*A: 1.7518
+condition number of normalized columns of orthogonalizer*A: 1.044
+s_min of normalized columns of orthogonalizer*A: 0.97938
+s_min of orthogonalizer*A: 0.0020138
+s_max of orthogonalizer*A: 1.706
+condition number of normalized columns of orthogonalizer*A: 1.047
+s_min of normalized columns of orthogonalizer*A: 0.97651
+s_min of orthogonalizer*A: 0.0060554
+s_max of orthogonalizer*A: 1.696
+Smallest angle among columns of A: 55.1297
+Time to orthogonalize via centroid body: 4.2988
+condition number of normalized columns of orthogonalizer*A: 1.1605
+s_min of normalized columns of orthogonalizer*A: 0.93302
+s_min of orthogonalizer*A: 0.18823
+s_max of orthogonalizer*A: 7.9068
+Time to orthogonalize via centroid body: 35.5488
+condition number of normalized columns of orthogonalizer*A: 1.0794
+s_min of normalized columns of orthogonalizer*A: 0.96217
+s_min of orthogonalizer*A: 0.28908
+s_max of orthogonalizer*A: 7.4186
+Time to orthogonalize via centroid body: 92.8161
+condition number of normalized columns of orthogonalizer*A: 1.0723
+s_min of normalized columns of orthogonalizer*A: 0.96879
+s_min of orthogonalizer*A: 0.30254
+s_max of orthogonalizer*A: 7.3808
+Time to orthogonalize via centroid body: 206.0186
+condition number of normalized columns of orthogonalizer*A: 1.0462
+s_min of normalized columns of orthogonalizer*A: 0.97858
+s_min of orthogonalizer*A: 0.4814
+s_max of orthogonalizer*A: 7.5023
+Time to orthogonalize via centroid body: 364.5469
+condition number of normalized columns of orthogonalizer*A: 1.0428
+s_min of normalized columns of orthogonalizer*A: 0.98061
+s_min of orthogonalizer*A: 0.31137
+s_max of orthogonalizer*A: 7.2153
+Time to orthogonalize via centroid body: 590.7367
+condition number of normalized columns of orthogonalizer*A: 1.046
+s_min of normalized columns of orthogonalizer*A: 0.97479
+s_min of orthogonalizer*A: 0.38749
+s_max of orthogonalizer*A: 7.2768
+--------- Starting run 2 --------------
+Smallest angle among columns of A: 51.4575
+condition number of normalized columns of orthogonalizer*A: 1.2131
+s_min of normalized columns of orthogonalizer*A: 0.89943
+s_min of orthogonalizer*A: 0.016971
+s_max of orthogonalizer*A: 1.9001
+condition number of normalized columns of orthogonalizer*A: 1.0886
+s_min of normalized columns of orthogonalizer*A: 0.96158
+s_min of orthogonalizer*A: 0.0033873
+s_max of orthogonalizer*A: 1.792
+condition number of normalized columns of orthogonalizer*A: 1.0772
+s_min of normalized columns of orthogonalizer*A: 0.96372
+s_min of orthogonalizer*A: 0.0096413
+s_max of orthogonalizer*A: 1.6849
+condition number of normalized columns of orthogonalizer*A: 1.0568
+s_min of normalized columns of orthogonalizer*A: 0.9692
+s_min of orthogonalizer*A: 0.0017923
+s_max of orthogonalizer*A: 1.7599
+condition number of normalized columns of orthogonalizer*A: 1.0724
+s_min of normalized columns of orthogonalizer*A: 0.96708
+s_min of orthogonalizer*A: 0.0074524
+s_max of orthogonalizer*A: 1.7672
+condition number of normalized columns of orthogonalizer*A: 1.0365
+s_min of normalized columns of orthogonalizer*A: 0.98198
+s_min of orthogonalizer*A: 0.0054352
+s_max of orthogonalizer*A: 1.687
+Smallest angle among columns of A: 51.4575
+Time to orthogonalize via centroid body: 4.4158
+condition number of normalized columns of orthogonalizer*A: 1.1847
+s_min of normalized columns of orthogonalizer*A: 0.92075
+s_min of orthogonalizer*A: 0.428
+s_max of orthogonalizer*A: 8.1975
+Time to orthogonalize via centroid body: 38.8792
+condition number of normalized columns of orthogonalizer*A: 1.0828
+s_min of normalized columns of orthogonalizer*A: 0.9591
+s_min of orthogonalizer*A: 0.33021
+s_max of orthogonalizer*A: 7.5101
+Time to orthogonalize via centroid body: 116.6352
+condition number of normalized columns of orthogonalizer*A: 1.0565
+s_min of normalized columns of orthogonalizer*A: 0.97756
+s_min of orthogonalizer*A: 0.41656
+s_max of orthogonalizer*A: 7.2873
+Time to orthogonalize via centroid body: 195.02
+condition number of normalized columns of orthogonalizer*A: 1.0495
+s_min of normalized columns of orthogonalizer*A: 0.97476
+s_min of orthogonalizer*A: 0.29543
+s_max of orthogonalizer*A: 7.3374
+Time to orthogonalize via centroid body: 383.6737
+condition number of normalized columns of orthogonalizer*A: 1.0382
+s_min of normalized columns of orthogonalizer*A: 0.9805
+s_min of orthogonalizer*A: 0.40359
+s_max of orthogonalizer*A: 7.4073
+Time to orthogonalize via centroid body: 586.2772
+condition number of normalized columns of orthogonalizer*A: 1.0432
+s_min of normalized columns of orthogonalizer*A: 0.98024
+s_min of orthogonalizer*A: 0.40295
+s_max of orthogonalizer*A: 7.2161
+--------- Starting run 3 --------------
+Smallest angle among columns of A: 48.6374
+condition number of normalized columns of orthogonalizer*A: 1.1811
+s_min of normalized columns of orthogonalizer*A: 0.92613
+s_min of orthogonalizer*A: 0.0089706
+s_max of orthogonalizer*A: 1.8465
+condition number of normalized columns of orthogonalizer*A: 1.0743
+s_min of normalized columns of orthogonalizer*A: 0.96505
+s_min of orthogonalizer*A: 0.021213
+s_max of orthogonalizer*A: 1.7744
+condition number of normalized columns of orthogonalizer*A: 1.0539
+s_min of normalized columns of orthogonalizer*A: 0.97183
+s_min of orthogonalizer*A: 0.015777
+s_max of orthogonalizer*A: 1.7001
+condition number of normalized columns of orthogonalizer*A: 1.0436
+s_min of normalized columns of orthogonalizer*A: 0.97581
+s_min of orthogonalizer*A: 0.010829
+s_max of orthogonalizer*A: 1.7061
+condition number of normalized columns of orthogonalizer*A: 1.0467
+s_min of normalized columns of orthogonalizer*A: 0.97793
+s_min of orthogonalizer*A: 0.0029767
+s_max of orthogonalizer*A: 1.7467
+condition number of normalized columns of orthogonalizer*A: 1.0555
+s_min of normalized columns of orthogonalizer*A: 0.97088
+s_min of orthogonalizer*A: 0.011344
+s_max of orthogonalizer*A: 1.7268
+Smallest angle among columns of A: 48.6374
+Time to orthogonalize via centroid body: 4.5925
+condition number of normalized columns of orthogonalizer*A: 1.1891
+s_min of normalized columns of orthogonalizer*A: 0.92103
+s_min of orthogonalizer*A: 0.38922
+s_max of orthogonalizer*A: 8.0771
+Time to orthogonalize via centroid body: 38.8569
+condition number of normalized columns of orthogonalizer*A: 1.075
+s_min of normalized columns of orthogonalizer*A: 0.96318
+s_min of orthogonalizer*A: 0.46285
+s_max of orthogonalizer*A: 7.4677
+Time to orthogonalize via centroid body: 116.7928
+condition number of normalized columns of orthogonalizer*A: 1.0491
+s_min of normalized columns of orthogonalizer*A: 0.97539
+s_min of orthogonalizer*A: 0.47724
+s_max of orthogonalizer*A: 7.3884
+Time to orthogonalize via centroid body: 229.2562
+condition number of normalized columns of orthogonalizer*A: 1.0587
+s_min of normalized columns of orthogonalizer*A: 0.97443
+s_min of orthogonalizer*A: 0.43529
+s_max of orthogonalizer*A: 7.4455
+Time to orthogonalize via centroid body: 383.0822
+condition number of normalized columns of orthogonalizer*A: 1.0438
+s_min of normalized columns of orthogonalizer*A: 0.97648
+s_min of orthogonalizer*A: 0.38114
+s_max of orthogonalizer*A: 7.2786
+Time to orthogonalize via centroid body: 645.7182
+condition number of normalized columns of orthogonalizer*A: 1.047
+s_min of normalized columns of orthogonalizer*A: 0.98185
+s_min of orthogonalizer*A: 0.43576
+s_max of orthogonalizer*A: 7.4379
+--------- Starting run 4 --------------
+Smallest angle among columns of A: 23.3098
+condition number of normalized columns of orthogonalizer*A: 1.1948
+s_min of normalized columns of orthogonalizer*A: 0.92522
+s_min of orthogonalizer*A: 0.0085469
+s_max of orthogonalizer*A: 1.8682
+condition number of normalized columns of orthogonalizer*A: 1.0882
+s_min of normalized columns of orthogonalizer*A: 0.95317
+s_min of orthogonalizer*A: 0.0045511
+s_max of orthogonalizer*A: 1.7974
+condition number of normalized columns of orthogonalizer*A: 1.0553
+s_min of normalized columns of orthogonalizer*A: 0.96982
+s_min of orthogonalizer*A: 0.013593
+s_max of orthogonalizer*A: 1.8097
+condition number of normalized columns of orthogonalizer*A: 1.0612
+s_min of normalized columns of orthogonalizer*A: 0.96995
+s_min of orthogonalizer*A: 0.011326
+s_max of orthogonalizer*A: 1.711
+condition number of normalized columns of orthogonalizer*A: 1.0507
+s_min of normalized columns of orthogonalizer*A: 0.97201
+s_min of orthogonalizer*A: 0.0019478
+s_max of orthogonalizer*A: 1.7049
+condition number of normalized columns of orthogonalizer*A: 1.0393
+s_min of normalized columns of orthogonalizer*A: 0.98095
+s_min of orthogonalizer*A: 0.0038206
+s_max of orthogonalizer*A: 1.7395
+Smallest angle among columns of A: 23.3098
+Time to orthogonalize via centroid body: 5.5779
+condition number of normalized columns of orthogonalizer*A: 1.1318
+s_min of normalized columns of orthogonalizer*A: 0.93612
+s_min of orthogonalizer*A: 0.40399
+s_max of orthogonalizer*A: 7.8527
+Time to orthogonalize via centroid body: 43.9677
+condition number of normalized columns of orthogonalizer*A: 1.093
+s_min of normalized columns of orthogonalizer*A: 0.94871
+s_min of orthogonalizer*A: 0.35039
+s_max of orthogonalizer*A: 7.6063
+Time to orthogonalize via centroid body: 120.195
+condition number of normalized columns of orthogonalizer*A: 1.0599
+s_min of normalized columns of orthogonalizer*A: 0.96779
+s_min of orthogonalizer*A: 0.47552
+s_max of orthogonalizer*A: 7.7287
+Time to orthogonalize via centroid body: 274.2597
+condition number of normalized columns of orthogonalizer*A: 1.0445
+s_min of normalized columns of orthogonalizer*A: 0.97597
+s_min of orthogonalizer*A: 0.40749
+s_max of orthogonalizer*A: 7.3044
+Time to orthogonalize via centroid body: 441.3029
+condition number of normalized columns of orthogonalizer*A: 1.0535
+s_min of normalized columns of orthogonalizer*A: 0.97563
+s_min of orthogonalizer*A: 0.34768
+s_max of orthogonalizer*A: 7.395
+Time to orthogonalize via centroid body: 685.6549
+condition number of normalized columns of orthogonalizer*A: 1.0303
+s_min of normalized columns of orthogonalizer*A: 0.98613
+s_min of orthogonalizer*A: 0.36993
+s_max of orthogonalizer*A: 7.2971
+--------- Starting run 5 --------------
+Smallest angle among columns of A: 59.5964
+condition number of normalized columns of orthogonalizer*A: 1.1697
+s_min of normalized columns of orthogonalizer*A: 0.93356
+s_min of orthogonalizer*A: 0.0014392
+s_max of orthogonalizer*A: 1.8979
+condition number of normalized columns of orthogonalizer*A: 1.1031
+s_min of normalized columns of orthogonalizer*A: 0.95712
+s_min of orthogonalizer*A: 0.022912
+s_max of orthogonalizer*A: 1.7433
+condition number of normalized columns of orthogonalizer*A: 1.0588
+s_min of normalized columns of orthogonalizer*A: 0.9704
+s_min of orthogonalizer*A: 0.0019108
+s_max of orthogonalizer*A: 1.7797
+condition number of normalized columns of orthogonalizer*A: 1.0479
+s_min of normalized columns of orthogonalizer*A: 0.97842
+s_min of orthogonalizer*A: 0.0051679
+s_max of orthogonalizer*A: 1.7179
+condition number of normalized columns of orthogonalizer*A: 1.058
+s_min of normalized columns of orthogonalizer*A: 0.97233
+s_min of orthogonalizer*A: 0.0053866
+s_max of orthogonalizer*A: 1.7213
+condition number of normalized columns of orthogonalizer*A: 1.0498
+s_min of normalized columns of orthogonalizer*A: 0.97878
+s_min of orthogonalizer*A: 0.0073837
+s_max of orthogonalizer*A: 1.7257
+Smallest angle among columns of A: 59.5964
+Time to orthogonalize via centroid body: 5.0686
+condition number of normalized columns of orthogonalizer*A: 1.1738
+s_min of normalized columns of orthogonalizer*A: 0.92765
+s_min of orthogonalizer*A: 0.21213
+s_max of orthogonalizer*A: 8.1421
+Time to orthogonalize via centroid body: 42.0518
+condition number of normalized columns of orthogonalizer*A: 1.1052
+s_min of normalized columns of orthogonalizer*A: 0.95378
+s_min of orthogonalizer*A: 0.47812
+s_max of orthogonalizer*A: 7.6281
+Time to orthogonalize via centroid body: 105.53
+condition number of normalized columns of orthogonalizer*A: 1.0583
+s_min of normalized columns of orthogonalizer*A: 0.97245
+s_min of orthogonalizer*A: 0.32985
+s_max of orthogonalizer*A: 7.4692
+Time to orthogonalize via centroid body: 189.1299
+condition number of normalized columns of orthogonalizer*A: 1.0535
+s_min of normalized columns of orthogonalizer*A: 0.97442
+s_min of orthogonalizer*A: 0.38335
+s_max of orthogonalizer*A: 7.3124
+Time to orthogonalize via centroid body: 379.405
+condition number of normalized columns of orthogonalizer*A: 1.043
+s_min of normalized columns of orthogonalizer*A: 0.98048
+s_min of orthogonalizer*A: 0.39306
+s_max of orthogonalizer*A: 7.3634
+Time to orthogonalize via centroid body: 594.8768
+condition number of normalized columns of orthogonalizer*A: 1.0495
+s_min of normalized columns of orthogonalizer*A: 0.97807
+s_min of orthogonalizer*A: 0.41136
+s_max of orthogonalizer*A: 7.3577
+--------- Starting run 6 --------------
+Smallest angle among columns of A: 44.7476
+condition number of normalized columns of orthogonalizer*A: 1.1894
+s_min of normalized columns of orthogonalizer*A: 0.91602
+s_min of orthogonalizer*A: 0.0046311
+s_max of orthogonalizer*A: 1.8946
+condition number of normalized columns of orthogonalizer*A: 1.0844
+s_min of normalized columns of orthogonalizer*A: 0.95769
+s_min of orthogonalizer*A: 0.0034127
+s_max of orthogonalizer*A: 1.7661
+condition number of normalized columns of orthogonalizer*A: 1.063
+s_min of normalized columns of orthogonalizer*A: 0.96815
+s_min of orthogonalizer*A: 0.0058168
+s_max of orthogonalizer*A: 1.7944
+condition number of normalized columns of orthogonalizer*A: 1.0484
+s_min of normalized columns of orthogonalizer*A: 0.97678
+s_min of orthogonalizer*A: 0.016496
+s_max of orthogonalizer*A: 1.7212
+condition number of normalized columns of orthogonalizer*A: 1.0751
+s_min of normalized columns of orthogonalizer*A: 0.96575
+s_min of orthogonalizer*A: 0.0022181
+s_max of orthogonalizer*A: 1.6827
+condition number of normalized columns of orthogonalizer*A: 1.036
+s_min of normalized columns of orthogonalizer*A: 0.98417
+s_min of orthogonalizer*A: 0.0032174
+s_max of orthogonalizer*A: 1.7002
+Smallest angle among columns of A: 44.7476
+Time to orthogonalize via centroid body: 4.6064
+condition number of normalized columns of orthogonalizer*A: 1.15
+s_min of normalized columns of orthogonalizer*A: 0.93119
+s_min of orthogonalizer*A: 0.33173
+s_max of orthogonalizer*A: 8.0469
+Time to orthogonalize via centroid body: 36.9074
+condition number of normalized columns of orthogonalizer*A: 1.083
+s_min of normalized columns of orthogonalizer*A: 0.9589
+s_min of orthogonalizer*A: 0.35186
+s_max of orthogonalizer*A: 7.4149
+Time to orthogonalize via centroid body: 104.9436
+condition number of normalized columns of orthogonalizer*A: 1.0662
+s_min of normalized columns of orthogonalizer*A: 0.96401
+s_min of orthogonalizer*A: 0.38968
+s_max of orthogonalizer*A: 7.5795
+Time to orthogonalize via centroid body: 242.9518
+condition number of normalized columns of orthogonalizer*A: 1.0663
+s_min of normalized columns of orthogonalizer*A: 0.96553
+s_min of orthogonalizer*A: 0.46717
+s_max of orthogonalizer*A: 7.4139
+Time to orthogonalize via centroid body: 394.8815
+condition number of normalized columns of orthogonalizer*A: 1.0486
+s_min of normalized columns of orthogonalizer*A: 0.97718
+s_min of orthogonalizer*A: 0.32483
+s_max of orthogonalizer*A: 7.2358
+Time to orthogonalize via centroid body: 603.7339
+condition number of normalized columns of orthogonalizer*A: 1.0383
+s_min of normalized columns of orthogonalizer*A: 0.98195
+s_min of orthogonalizer*A: 0.35283
+s_max of orthogonalizer*A: 7.2859
+--------- Starting run 7 --------------
+Smallest angle among columns of A: 49.9278
+condition number of normalized columns of orthogonalizer*A: 1.1402
+s_min of normalized columns of orthogonalizer*A: 0.93403
+s_min of orthogonalizer*A: 0.039883
+s_max of orthogonalizer*A: 1.8218
+condition number of normalized columns of orthogonalizer*A: 1.0803
+s_min of normalized columns of orthogonalizer*A: 0.96286
+s_min of orthogonalizer*A: 0.0046517
+s_max of orthogonalizer*A: 1.7311
+condition number of normalized columns of orthogonalizer*A: 1.0767
+s_min of normalized columns of orthogonalizer*A: 0.96502
+s_min of orthogonalizer*A: 0.011313
+s_max of orthogonalizer*A: 1.7363
+condition number of normalized columns of orthogonalizer*A: 1.0585
+s_min of normalized columns of orthogonalizer*A: 0.97489
+s_min of orthogonalizer*A: 0.0062539
+s_max of orthogonalizer*A: 1.719
+condition number of normalized columns of orthogonalizer*A: 1.043
+s_min of normalized columns of orthogonalizer*A: 0.9796
+s_min of orthogonalizer*A: 0.0041329
+s_max of orthogonalizer*A: 1.6894
+condition number of normalized columns of orthogonalizer*A: 1.052
+s_min of normalized columns of orthogonalizer*A: 0.97296
+s_min of orthogonalizer*A: 0.0093395
+s_max of orthogonalizer*A: 1.6823
+Smallest angle among columns of A: 49.9278
+Time to orthogonalize via centroid body: 4.5755
+condition number of normalized columns of orthogonalizer*A: 1.1221
+s_min of normalized columns of orthogonalizer*A: 0.93829
+s_min of orthogonalizer*A: 0.57432
+s_max of orthogonalizer*A: 8.0095
+Time to orthogonalize via centroid body: 34.2193
+condition number of normalized columns of orthogonalizer*A: 1.0748
+s_min of normalized columns of orthogonalizer*A: 0.95885
+s_min of orthogonalizer*A: 0.36783
+s_max of orthogonalizer*A: 7.4562
+Time to orthogonalize via centroid body: 115.3063
+condition number of normalized columns of orthogonalizer*A: 1.069
+s_min of normalized columns of orthogonalizer*A: 0.96937
+s_min of orthogonalizer*A: 0.4495
+s_max of orthogonalizer*A: 7.4725
+Time to orthogonalize via centroid body: 208.4649
+condition number of normalized columns of orthogonalizer*A: 1.051
+s_min of normalized columns of orthogonalizer*A: 0.97208
+s_min of orthogonalizer*A: 0.41216
+s_max of orthogonalizer*A: 7.3683
+Time to orthogonalize via centroid body: 374.8259
+condition number of normalized columns of orthogonalizer*A: 1.0428
+s_min of normalized columns of orthogonalizer*A: 0.9788
+s_min of orthogonalizer*A: 0.37198
+s_max of orthogonalizer*A: 7.286
+Time to orthogonalize via centroid body: 580.6393
+condition number of normalized columns of orthogonalizer*A: 1.0503
+s_min of normalized columns of orthogonalizer*A: 0.97459
+s_min of orthogonalizer*A: 0.4248
+s_max of orthogonalizer*A: 7.2636
+--------- Starting run 8 --------------
+Smallest angle among columns of A: 50.5905
+condition number of normalized columns of orthogonalizer*A: 1.14
+s_min of normalized columns of orthogonalizer*A: 0.93214
+s_min of orthogonalizer*A: 0.024593
+s_max of orthogonalizer*A: 1.7424
+condition number of normalized columns of orthogonalizer*A: 1.1011
+s_min of normalized columns of orthogonalizer*A: 0.94826
+s_min of orthogonalizer*A: 0.0050082
+s_max of orthogonalizer*A: 1.769
+condition number of normalized columns of orthogonalizer*A: 1.0762
+s_min of normalized columns of orthogonalizer*A: 0.96486
+s_min of orthogonalizer*A: 0.00255
+s_max of orthogonalizer*A: 1.7454
+condition number of normalized columns of orthogonalizer*A: 1.0551
+s_min of normalized columns of orthogonalizer*A: 0.97525
+s_min of orthogonalizer*A: 0.0013563
+s_max of orthogonalizer*A: 1.7353
+condition number of normalized columns of orthogonalizer*A: 1.0968
+s_min of normalized columns of orthogonalizer*A: 0.95427
+s_min of orthogonalizer*A: 0.0089263
+s_max of orthogonalizer*A: 1.7401
+condition number of normalized columns of orthogonalizer*A: 1.0398
+s_min of normalized columns of orthogonalizer*A: 0.97851
+s_min of orthogonalizer*A: 0.0069225
+s_max of orthogonalizer*A: 1.6913
+Smallest angle among columns of A: 50.5905
+Time to orthogonalize via centroid body: 4.6788
+condition number of normalized columns of orthogonalizer*A: 1.1383
+s_min of normalized columns of orthogonalizer*A: 0.93782
+s_min of orthogonalizer*A: 0.44945
+s_max of orthogonalizer*A: 7.6592
+Time to orthogonalize via centroid body: 35.3729
+condition number of normalized columns of orthogonalizer*A: 1.0579
+s_min of normalized columns of orthogonalizer*A: 0.97375
+s_min of orthogonalizer*A: 0.3945
+s_max of orthogonalizer*A: 7.2622
+Time to orthogonalize via centroid body: 105.6964
+condition number of normalized columns of orthogonalizer*A: 1.0691
+s_min of normalized columns of orthogonalizer*A: 0.96364
+s_min of orthogonalizer*A: 0.32232
+s_max of orthogonalizer*A: 7.3816
+Time to orthogonalize via centroid body: 229.8526
+condition number of normalized columns of orthogonalizer*A: 1.0535
+s_min of normalized columns of orthogonalizer*A: 0.97316
+s_min of orthogonalizer*A: 0.29294
+s_max of orthogonalizer*A: 7.3509
+Time to orthogonalize via centroid body: 418.3567
+condition number of normalized columns of orthogonalizer*A: 1.044
+s_min of normalized columns of orthogonalizer*A: 0.97717
+s_min of orthogonalizer*A: 0.43153
+s_max of orthogonalizer*A: 7.3434
+Time to orthogonalize via centroid body: 634.9228
+condition number of normalized columns of orthogonalizer*A: 1.0479
+s_min of normalized columns of orthogonalizer*A: 0.97671
+s_min of orthogonalizer*A: 0.38685
+s_max of orthogonalizer*A: 7.3125
+--------- Starting run 9 --------------
+Smallest angle among columns of A: 51.0073
+condition number of normalized columns of orthogonalizer*A: 1.1494
+s_min of normalized columns of orthogonalizer*A: 0.91699
+s_min of orthogonalizer*A: 0.027862
+s_max of orthogonalizer*A: 1.8459
+condition number of normalized columns of orthogonalizer*A: 1.1149
+s_min of normalized columns of orthogonalizer*A: 0.94618
+s_min of orthogonalizer*A: 0.019352
+s_max of orthogonalizer*A: 1.7393
+condition number of normalized columns of orthogonalizer*A: 1.0594
+s_min of normalized columns of orthogonalizer*A: 0.96751
+s_min of orthogonalizer*A: 0.0016555
+s_max of orthogonalizer*A: 1.7538
+condition number of normalized columns of orthogonalizer*A: 1.0688
+s_min of normalized columns of orthogonalizer*A: 0.96456
+s_min of orthogonalizer*A: 0.0017522
+s_max of orthogonalizer*A: 1.7245
+condition number of normalized columns of orthogonalizer*A: 1.0755
+s_min of normalized columns of orthogonalizer*A: 0.96414
+s_min of orthogonalizer*A: 0.0042956
+s_max of orthogonalizer*A: 1.7038
+condition number of normalized columns of orthogonalizer*A: 1.0544
+s_min of normalized columns of orthogonalizer*A: 0.9736
+s_min of orthogonalizer*A: 0.0092275
+s_max of orthogonalizer*A: 1.672
+Smallest angle among columns of A: 51.0073
+Time to orthogonalize via centroid body: 5.9504
+condition number of normalized columns of orthogonalizer*A: 1.161
+s_min of normalized columns of orthogonalizer*A: 0.92828
+s_min of orthogonalizer*A: 0.5143
+s_max of orthogonalizer*A: 7.8317
+Time to orthogonalize via centroid body: 49.9156
+condition number of normalized columns of orthogonalizer*A: 1.0692
+s_min of normalized columns of orthogonalizer*A: 0.9646
+s_min of orthogonalizer*A: 0.47029
+s_max of orthogonalizer*A: 7.5894
+Time to orthogonalize via centroid body: 129.9358
+condition number of normalized columns of orthogonalizer*A: 1.0675
+s_min of normalized columns of orthogonalizer*A: 0.96334
+s_min of orthogonalizer*A: 0.32214
+s_max of orthogonalizer*A: 7.3944
+Time to orthogonalize via centroid body: 255.1455
+condition number of normalized columns of orthogonalizer*A: 1.0555
+s_min of normalized columns of orthogonalizer*A: 0.97384
+s_min of orthogonalizer*A: 0.34392
+s_max of orthogonalizer*A: 7.3377
+Time to orthogonalize via centroid body: 483.9931
+condition number of normalized columns of orthogonalizer*A: 1.0447
+s_min of normalized columns of orthogonalizer*A: 0.98056
+s_min of orthogonalizer*A: 0.42965
+s_max of orthogonalizer*A: 7.2836
+Time to orthogonalize via centroid body: 751.3138
+condition number of normalized columns of orthogonalizer*A: 1.042
+s_min of normalized columns of orthogonalizer*A: 0.98005
+s_min of orthogonalizer*A: 0.40931
+s_max of orthogonalizer*A: 7.2738
+--------- Starting run 10 --------------
+Smallest angle among columns of A: 42.9777
+condition number of normalized columns of orthogonalizer*A: 1.1558
+s_min of normalized columns of orthogonalizer*A: 0.93659
+s_min of orthogonalizer*A: 0.002522
+s_max of orthogonalizer*A: 1.9389
+condition number of normalized columns of orthogonalizer*A: 1.0915
+s_min of normalized columns of orthogonalizer*A: 0.95321
+s_min of orthogonalizer*A: 0.0027949
+s_max of orthogonalizer*A: 1.7177
+condition number of normalized columns of orthogonalizer*A: 1.0759
+s_min of normalized columns of orthogonalizer*A: 0.96437
+s_min of orthogonalizer*A: 0.0063659
+s_max of orthogonalizer*A: 1.7383
+condition number of normalized columns of orthogonalizer*A: 1.0894
+s_min of normalized columns of orthogonalizer*A: 0.96095
+s_min of orthogonalizer*A: 0.010495
+s_max of orthogonalizer*A: 1.7095
+condition number of normalized columns of orthogonalizer*A: 1.0489
+s_min of normalized columns of orthogonalizer*A: 0.97547
+s_min of orthogonalizer*A: 0.0044126
+s_max of orthogonalizer*A: 1.7106
+condition number of normalized columns of orthogonalizer*A: 1.0567
+s_min of normalized columns of orthogonalizer*A: 0.97325
+s_min of orthogonalizer*A: 0.00485
+s_max of orthogonalizer*A: 1.6976
+Smallest angle among columns of A: 42.9777
+Time to orthogonalize via centroid body: 4.5501
+condition number of normalized columns of orthogonalizer*A: 1.1565
+s_min of normalized columns of orthogonalizer*A: 0.92772
+s_min of orthogonalizer*A: 0.26581
+s_max of orthogonalizer*A: 7.8712
+Time to orthogonalize via centroid body: 37.0702
+condition number of normalized columns of orthogonalizer*A: 1.0781
+s_min of normalized columns of orthogonalizer*A: 0.95998
+s_min of orthogonalizer*A: 0.33434
+s_max of orthogonalizer*A: 7.4001
+Time to orthogonalize via centroid body: 121.3628
+condition number of normalized columns of orthogonalizer*A: 1.0567
+s_min of normalized columns of orthogonalizer*A: 0.97149
+s_min of orthogonalizer*A: 0.37719
+s_max of orthogonalizer*A: 7.3786
+Time to orthogonalize via centroid body: 260.2739
+condition number of normalized columns of orthogonalizer*A: 1.0489
+s_min of normalized columns of orthogonalizer*A: 0.97658
+s_min of orthogonalizer*A: 0.46168
+s_max of orthogonalizer*A: 7.3362
+Time to orthogonalize via centroid body: 470.7733
+condition number of normalized columns of orthogonalizer*A: 1.0401
+s_min of normalized columns of orthogonalizer*A: 0.98298
+s_min of orthogonalizer*A: 0.39983
+s_max of orthogonalizer*A: 7.3292
+Time to orthogonalize via centroid body: 693.4997
+condition number of normalized columns of orthogonalizer*A: 1.0425
+s_min of normalized columns of orthogonalizer*A: 0.97917
+s_min of orthogonalizer*A: 0.41176
+s_max of orthogonalizer*A: 7.2657
+[Warning: Variable 'meandata' of class 'double' cannot be saved to a MATLAB 4 MAT-file because of its class.
+Skipping...] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('main', 'C:\OSU\Research\repo\empirical-cov-experiments\minkowski exp\condition_number-2016-06-30\main.m', 101)" style="font-weight:bold">main</a> (<a href="matlab: opentoline('C:\OSU\Research\repo\empirical-cov-experiments\minkowski exp\condition_number-2016-06-30\main.m',101,0)">line 101</a>)] 
+Elapsed time is 694.909911 seconds.

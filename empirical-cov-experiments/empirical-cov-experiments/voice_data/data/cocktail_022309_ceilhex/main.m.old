@@ -1,0 +1,132 @@
+addpath('../../');
+addpath('../../third_party');
+
+clear variables;
+
+verbose = true;
+orthogonalmix = false;
+maxTries1 = 100;
+maxTries2 = 100;
+
+% fname = 'party3.wav';
+fname = 'soi1.wav';
+[y,Fs] = audioread(fname);
+% sound(y(:, max(y,[],1) == max(max(y,[],1))), Fs)
+
+S = zeros(size(y,1), 6);
+S(:,1) = y(:, max(y,[],1) == max(max(y,[],1)));
+for i = 2:6
+    fname = ['soi' num2str(i) '.wav'];
+    [y,Fs] = audioread(fname);
+    S(:,i) = y(:, max(y,[],1) == max(max(y,[],1)));
+end
+S = S';
+% S = S(:, 1:4000);
+[n, m] = size(S);
+
+% Generate random mixing matrix A from standard gaussian
+A = mvnrnd(zeros(1,n), eye(n), n);
+% Normalize columns of A
+A = A*(inv(diag(rownorm(A'))));
+if orthogonalmix
+    A = orth(A); % Optional, based on whether we want an orthonormal basis
+    % A = eye(n);
+end
+% disp('Mixing matrix:')
+% disp(A)
+
+X = A*S;
+
+numberOfSizes = 10;
+numberOfRuns = 5;
+start = 110000;
+
+% First row: regular
+% Second row: htica
+errors = zeros(2, numberOfSizes, numberOfRuns);
+
+for i = 1:numberOfSizes
+    for j = 1:numberOfRuns
+        disp(['==== STARTING RUN ' num2str(j) ' with ' num2str(i*1000) ' samples ====']);
+        
+        clear Aest1 Aest2 Aestcorrected1 Aestcorrected2 Xslice
+        clear orthogonalizer
+
+        tries1 = 0;
+        tries2 = 0;
+
+        Xslice = X(:,(start+1):(start + i*1000));
+        disp(['Using indexes ' num2str(start) ' to ' num2str(start + i*1000)]);
+
+        [~, Aest1, ~] = fastica(Xslice, 'numOfIC', n, 'verbose', 'off');
+
+        while size(Aest1,2) < n
+            tries1 = tries1 + 1;
+            if tries1 > maxTries1
+                if verbose
+                    disp('Plain ICA failed...')
+                end
+                Aest1 = [Aest1 zeros(6,n-size(Aest1,2))];
+            else
+                [~, Aest1, ~] = fastica(Xslice, 'verbose', 'off', 'numOfIC', n);
+            end
+        end
+
+        disp('Orthogonalizing Data...');
+        orthogonalizer = centroidOrthogonalizer(Xslice, 'scale');
+        % C = (1/m) * (X * X');
+        % orthogonalizer = inv(sqrtm(C));
+        Xslice = orthogonalizer * Xslice;
+
+        R = 4;
+
+        disp('Damping tails...');
+        [Xslice, rate, ~] = damp(Xslice, 14);
+        disp(['Acceptance rate: ' num2str(rate)]);
+        [~, Aest2, ~] = fastica(Xslice, 'verbose', 'off', 'numOfIC', 6);
+        failed = false;
+        while size(Aest2,2) < n
+            tries2 = tries2 + 1;
+            if tries2 > maxTries2
+                if verbose
+                    disp('HTICA failed. Padding with zero...')
+                end
+                Aest2 = [Aest2 zeros(n,n-size(Aest2,2))];
+                Aest2(isnan(Aest2)) = 0;
+                failed = true;
+            else
+                clear Aest2
+                [~, Aest2, ~] = fastica(Xslice, 'verbose', 'off', 'numOfIC', n);
+            end
+        end
+
+        if ~failed
+            Aest2 = inv(orthogonalizer) * Aest2;
+            Aest2 = Aest2*(inv(diag(rownorm(Aest2'))));
+        end
+
+        [~, Aestcorrected1] = basisEvaluation(A,Aest1);
+        [~, Aestcorrected2] = basisEvaluation(A,Aest2);
+
+        errors(1, i, j) = norm(A-Aestcorrected1,'fro');
+    %     disp('Error Regular ICA:')
+    %     disp(num2str(err1))
+
+        errors(2, i, j) = norm(A-Aestcorrected2,'fro');
+    %     disp('Error HTICA:')
+    %     disp(num2str(err2))
+
+        start = start + i*1000;
+    end
+end
+
+avgErrors = mean(errors,3);
+
+figure();hold on;
+plot((1:numberOfSizes)*1000, avgErrors(1,:), 'r-')
+plot((1:numberOfSizes)*1000, avgErrors(2,:), 'b-')
+
+% icasig2T = icasig2';
+% icasig2T = icasig2T ./ repmat(max(icasig2T,[],1),size(icasig2T,1),1);
+
+% audiowrite('track1-htica.wav', icasig2T(:,1), Fs);

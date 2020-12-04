@@ -31,8 +31,8 @@ def powerICA(X, nonlin, n_components):
     #   algorithm has failed to converge.
     ###########################################################################
     [d,n] = np.shape(X)
-    I = np.identity(d)
-    C = X@X.T/n - I
+    I = np.eye(d)
+    C = X.dot(X.T)/n - I
     print(C)
     W = np.zeros((d,d), dtype=X.dtype)
     W0 = scipy.stats.ortho_group.rvs(n_components)
@@ -49,9 +49,9 @@ def powerICA(X, nonlin, n_components):
     ## Serial mode
     for k in range(1,d):  
         ## (1) initialize 
-        w0 = W0[k,:].T
+        w0 = W0[k,:].T.reshape(d,1)
         ## (2) compute the orthogonal operator
-        Orth = (I - W.T@W) 
+        Orth = (I - W.T.dot(W)) 
         ## (3-6) compute Node:1 and Node:2 in series
         w1, gamma1, flg1 = Node1(X, nonlin, w0, Orth) 
         w2, gamma2, flg2 = Node2(X, nonlin, w0, Orth)
@@ -69,7 +69,7 @@ def powerICA(X, nonlin, n_components):
         ## (8) compute the last demixing vector
         print(W0,I,W.T)
         if flg == 1:
-             W[d-1,:] = W0[d-1,:] @ (I - W.T@W)/np.linalg.norm(W0[d-1,:] @ (I - (W.T @ W)))
+             W[d-1,:] = (W0[d-1,:].dot((I - W.T.dot(W)))/np.linalg.norm(W0[d-1,:])).dot((I - (W.T.dot(W))))
     return  W
     ###########################################################################    
    
@@ -118,16 +118,16 @@ def Node2(X, nonlin, w0,Orth):
     s = 0
     gs = 0
     # Compute the upper bound
-    s_max = np.sqrt(np.sum(X**2))
+    s_max = np.sqrt(np.sum(np.power(X,2)))
     gs_max = g(s_max,nonlin)
     c = (s_max*gs_max.T)/n + 0.5
     while i <= MaxIter:
         wOld = w
-        s = w.T@X
+        s = w.T.dot(X)
         gs = g(s,nonlin)
-        m = X@gs.T/n
+        m = X.dot(gs.T)/n
         w = m - np.dot(c,w)    #(4)
-        w = Orth@w     #(5)
+        w = Orth.dot(w)     #(5)
         w = w/np.linalg.norm(w)  #(6)
         if np.linalg.norm(w - wOld) < epsilon or np.linalg.norm(w + wOld) < epsilon:
             break
@@ -135,7 +135,7 @@ def Node2(X, nonlin, w0,Orth):
         #print('IC converged after #d iterations\n',i)
     if i <= MaxIter:
         beta = Edgs(s,nonlin)
-        gamma = np.absolute(s@gs.T/n - beta)
+        gamma = np.absolute(s.dot(gs.T)/n - beta)
     else:
         #print('IC did not converged after #d iterations\n',MaxIter)
         w = []
