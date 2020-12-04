@@ -18,7 +18,7 @@ tutorials address each of these topics in greater detail.
 
 We begin by importing the necessary Python modules:
 """
-
+#%%
 import os
 import numpy as np
 import mne
@@ -101,6 +101,7 @@ ica.fit(raw)
 ica.exclude = [1, 2]  # details on how we picked these are omitted here
 ica.plot_properties(raw, picks=ica.exclude)
 
+#%%
 ###############################################################################
 # Once we're confident about which component(s) we want to remove, we pass them
 # as the ``exclude`` parameter and then apply the ICA to the raw signal. The
