@@ -18,17 +18,23 @@ from utils import *
 # Create arbitrary data
 #%%
 sfreq = 1000  # Sampling frequency
-times = np.arange(0, 10, 0.01)  # Use 10000 samples (10s)
-sin = np.sin(np.pi*times)+np.sin(20*np.pi*times)  # Multiplied by 10 for shorter cycles
-#square = np.random.random(len(times))
-#sawtooth = sig.sawtooth(times*100-50,1)
-cos = np.cos(np.pi*times*10)
+times = np.arange(0, 1000, 0.05)  # Use 10000 samples (10s)
+sig1 = np.sin(np.pi*times)
+sig2 = np.sin(np.pi*times*0.5)
+#sig2 = sig.sawtooth(times*2-50,1)
+#sig3 = sig.square(times*2,1)
+sig3 = np.cos(np.pi*times*4) 
+sig4 = np.cos(np.pi*times*2) 
 
 # Numpy array of size 4(2) X 10000.
-data = np.array([sin, cos])
-
+data = np.array([sig1,sig2,sig3,sig4])
+n_comp,n_samples =np.shape(data)
 # Matrix defining the mixture between the Signals, has a big impact on how well the data can be seperated
-mixingmat = W0 = scipy.stats.ortho_group.rvs(2)
+mixingmat = np.array([[0.4766,    0.5000 ,   0.1724  ,  0.1999],
+    [0.4900 ,  -0.7696  ,  0.4955  ,  1.3449],
+    [0.2058 ,  -1.3669 ,  -1.4839 ,  -1.1978],
+    [0.6802  ,  0.4585  , -0.6467,    0.1311]])
+#np.random.rand(n_comp,n_comp)
 
 mixeddata = mixingmat@data
 print("data:","\n",data,"\n","mixeddata","\n",mixeddata)
@@ -37,7 +43,7 @@ print("data:","\n",data,"\n","mixeddata","\n",mixeddata)
 centered_data, mean_data = center(mixeddata)
 
 # Whiten mixed signals
-whitened_data , whiteM = whiten(centered_data)
+whitened_data  = whiten(centered_data)
 print(np.cov(whitened_data))
 
 
@@ -46,19 +52,19 @@ from PowerICA import *
 m, n = whitened_data.shape
 
 # # Initialize random weights
-W = powerICA(whitened_data,'tanh',n_components = 2)
+W = powerICA(whitened_data,'tanh')
+print(W)
 # W = fastIca(whitened_data)
 #fica = sklearn.decomposition.FastICA(n_components=4,whiten=True)
  #Un-mix signals using 
-unMixed = whitened_data.T.dot(W)
+unMixed = W @ whitened_data
+print(unMixed, np.shape(unMixed))
+# # add mean
+# unMixed = (unMixed.T + mean_data).T
 
-# # Subtract mean
-unMixed = (unMixed.T - mean_data).T
-
-# %%
 # Plot input signals (not mixed)
 fig, ax = plt.subplots(1, 1, figsize=[18, 5])
-ax.plot(data.T, lw=5)
+ax.plot(data.T, lw=3)
 ax.tick_params(labelsize=12)
 ax.set_xticks([])
 ax.set_yticks([-1, 1])
@@ -66,7 +72,7 @@ ax.set_title('Source signals', fontsize=25)
 ax.set_xlim(0, 100)
 
 fig, ax = plt.subplots(1, 1, figsize=[18, 5])
-ax.plot(mixeddata.T, lw=5)
+ax.plot(mixeddata.T, lw=3)
 ax.tick_params(labelsize=12)
 ax.set_xticks([])
 ax.set_yticks([-1, 1])
@@ -74,7 +80,7 @@ ax.set_title('Mixed signals', fontsize=25)
 ax.set_xlim(0, 100)
 
 fig, ax = plt.subplots(1, 1, figsize=[18, 5])
-ax.plot(unMixed, '--', label='Recovered signals', lw=5)
+ax.plot(unMixed.T, label='Recovered signals', lw=3)
 ax.set_xlabel('Sample number', fontsize=20)
 ax.set_title('Recovered signals', fontsize=25)
 ax.set_xlim(0, 100)
@@ -107,16 +113,16 @@ raw_mixed = mne.io.RawArray(mixeddata, info)
 # For actual EEG/MEG data different scaling factors should be used.
 scalings = {'mag': 2, 'grad': 2}
 
-raw.plot(n_channels=4, scalings=scalings, title='Data from arrays',
-         show=True, block=True)
+#raw.plot(n_channels=4, scalings=scalings, title='Data from arrays',
+#         show=True, block=True)
 
 # It is also possible to auto-compute scalings
 #scalings = 'auto'  # Could also pass a dictionary with some value == 'auto'
-raw_mixed.plot(n_channels=4, scalings=scalings, title='Mixed Data from arrays',
+raw_mixed.plot(n_channels=n_comp, scalings=scalings, title='Mixed Data from arrays',
          show=True, block=True)
 
 #%%
-ica2 = mne.preprocessing.ICA(n_components=2, random_state=0, method='infomax')
+ica2 = mne.preprocessing.ICA(n_components=n_comp, random_state=0, method='fastica')
 ica2.fit(raw_mixed)
 ica2.plot_sources(raw_mixed)
 
@@ -131,8 +137,8 @@ events = np.array([[1, 0, event_id]])  # List of three arbitrary events
 # Here a data set of 700 ms epochs from 2 channels is
 # created from sin and cos data.
 # Any data in shape (n_epochs, n_channels, n_times) can be used.
-epochs_data = np.array([[sin,
-                        cos]])
+epochs_data = np.array([[sig1,
+                        sig2]])
 
 ch_types = ['mag', 'grad']
 ch_names = ['sig1', 'sig2']
@@ -155,43 +161,3 @@ ica_data = ica.fit_transform(epochs.get_data())
 ev1 = mne.EvokedArray(np.mean(ica_data, axis=0),
                       info, tmin=0)
 ev1.plot(show=False, window_title='ICA', time_unit='s')
-
-
-#%%
-###############################################################################
-# Create epochs by windowing the raw data.
-
-# The events are spaced evenly every 1 second.
-duration = 1.
-
-# create a fixed size events array
-# start=0 and stop=None by default
-events = mne.make_fixed_length_events(raw, event_id, duration=duration)
-print(events)
-
-# for fixed size events no start time before and after event
-tmin = 0.
-tmax = 0.99  # inclusive tmax, 1 second epochs
-
-# create :class:`Epochs <mne.Epochs>` object
-epochs = mne.Epochs(raw, events=events, event_id=event_id, tmin=tmin,
-                    tmax=tmax, baseline=None, verbose=True)
-epochs.plot(scalings='auto', block=True)
-
-###############################################################################
-# Create overlapping epochs using :func:`mne.make_fixed_length_events` (50 %
-# overlap). This also roughly doubles the amount of events compared to the
-# previous event list.
-
-duration = 0.5
-events = mne.make_fixed_length_events(raw, event_id, duration=duration)
-print(events)
-epochs = mne.Epochs(raw, events=events, tmin=tmin, tmax=tmax, baseline=None,
-                    verbose=True)
-epochs.plot(scalings='auto', block=True)
-
-
-# %%
-
-
-

@@ -3,8 +3,14 @@ import numpy as np
 
 # %%
 def center(x):
-    mean = np.mean(x, axis=1, keepdims=True)
-    centered =  x - mean 
+    #mean = np.mean(x, axis=1, keepdims=True)
+    mean = np.apply_along_axis(np.mean,axis=1,arr=x)
+    centered =  x
+    centered[0,:] = centered[0,:]-mean[0]
+    centered[1,:] = centered[1,:]-mean[1]
+    centered[2,:] = centered[2,:]-mean[2]
+    centered[3,:] = centered[3,:]-mean[3]
+    #print(centered)
     return centered, mean
 
 # %% [markdown]
@@ -16,29 +22,28 @@ def covariance(x):
     n = np.shape(x)[1] - 1
     m = x - mean
 
-    return (m.dot(m.T))/n
+    return (m**2)/n
 
 # %% [markdown]
 # The second pre-processing method is called **whitening**. The goal here is to linearly transform the observed signals X in a way that potential correlations between the signals are removed and their variances equal unity. As a result the covariance matrix of the whitened signals will be equal to the identity matrix
 
 
 def whiten(x):
-     # Calculate the covariance matrix
-     coVarM = covariance(x) 
-   
-     # Single value decoposition
-     U, S, V = np.linalg.svd(coVarM)
-   
-     # Calculate diagonal matrix of eigenvalues
-     d = np.diag(1.0 / np.sqrt(S)) 
-   
-     # Calculate whitening matrix
-     whiteM = np.dot(U, np.dot(d, U.T))
-  
-     # Project onto whitening matrix
-     Xw = np.dot(whiteM, x) 
-   
-     return Xw, whiteM
+    m,n = np.shape(x)
+
+    cov = np.cov(x,bias=True)
+
+    d, E = np.linalg.eigh(cov)
+
+    print(d,E)
+    D_inv = np.diag(1/np.sqrt(d))
+
+    W_whiten =  D_inv @ E.T
+    print(W_whiten)
+    x_whiten = (W_whiten @ x)
+
+    return x_whiten
+    
 
 
 # Calculate Kurtosis

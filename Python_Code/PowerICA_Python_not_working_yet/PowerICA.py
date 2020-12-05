@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.stats
   
-def powerICA(X, nonlin, n_components):
+def powerICA(X, nonlin):
     #
     # This function is implemented based on Algorithm 1 in paper below.
     #   S. Basiri, E. Ollila and V. Koivunen, "Alternative Derivation of 
@@ -32,29 +32,35 @@ def powerICA(X, nonlin, n_components):
     ###########################################################################
     [d,n] = np.shape(X)
     I = np.eye(d)
-    C = X.dot(X.T)/n - I
+    C = (X @ X.T)/n - I
     print(C)
     W = np.zeros((d,d), dtype=X.dtype)
-    W0 = scipy.stats.ortho_group.rvs(n_components)
+    W0 = np.array([[0.4995,    0.3415,    0.5264,    0.5973],
+                    [0.5879,   -0.7635,    0.1708,   -0.2057],
+                    [-0.5648,   -0.2360,    0.7861,   -0.0855],
+                    [0.2930,    0.4947,    0.2753,   -0.7704]])
+
     ### Default settings
     #if d>n:
     #     print('Data should be a d × n array with d < n!')
     #if not np.isreal(X).all():
     #     print('Data is not real!')
-    #if np.max(np.abs(C[:]))>10:#1e-10:
+    #if np.max(np.abs(C[:]))> 1e-10:
     #     print('Data should be whitened!')
     # if max(abs((np.mean(X,2))))>1:#e-10:
     #      print('Data should be centered!')
     ###########################################################################
     ## Serial mode
-    for k in range(1,d):  
+    for k in range(0,d-1):  
         ## (1) initialize 
-        w0 = W0[k,:].T.reshape(d,1)
+        w0 = W0[k,:].reshape(1,d).T
         ## (2) compute the orthogonal operator
-        Orth = (I - W.T.dot(W)) 
+        Orth = (I - W.T.dot(W))
         ## (3-6) compute Node:1 and Node:2 in series
         w1, gamma1, flg1 = Node1(X, nonlin, w0, Orth) 
         w2, gamma2, flg2 = Node2(X, nonlin, w0, Orth)
+
+        print('Orth',Orth,'w1',w1,'w2',w2)
         flg = flg1*flg2
         ## (7) choose the demixing vector with larger gamma
         if flg == 1:
@@ -63,13 +69,12 @@ def powerICA(X, nonlin, n_components):
             else:
                 W[k,:] = w2.T
         else:
-            W[k:d-1,:] = []
+            W[k:d-1,:] = np.zeros((0,d))
             flg = 0
             break
         ## (8) compute the last demixing vector
-        print(W0,I,W.T)
         if flg == 1:
-             W[d-1,:] = (W0[d-1,:].dot((I - W.T.dot(W)))/np.linalg.norm(W0[d-1,:])).dot((I - (W.T.dot(W))))
+            W[d-1,:] = (W0[d-1,:] @ (I - W.T @ W))/np.linalg.norm(W0[d-1,:] @ (I - W.T @ W))
     return  W
     ###########################################################################    
    
@@ -79,7 +84,7 @@ def powerICA(X, nonlin, n_components):
 def Node1(X, nonlin, w0,Orth):
     a, n = np.shape(X)
     ################################
-    MaxIter = 10000
+    MaxIter = 100000
     epsilon = 0.0001
     flg = 1
     i = 1
@@ -88,10 +93,10 @@ def Node1(X, nonlin, w0,Orth):
     gs=0
     while i <= MaxIter:
         wOld = w
-        s = np.dot(w.T,X)
+        s = w.T @ X
         gs = g(s,nonlin)
-        w = np.dot(X,gs.T)/n #(4)
-        w = np.dot(Orth,w) #(5)
+        w = (X @ gs.T)/n #(4)
+        w = Orth @w #(5)
         w = w/np.linalg.norm(w); #(6)   
         if np.linalg.norm(w - wOld) < epsilon or np.linalg.norm(w + wOld) < epsilon:
             break
@@ -99,7 +104,7 @@ def Node1(X, nonlin, w0,Orth):
     #     fprintf('IC converged after #d iterations\n',i);
     if i <= MaxIter:
         beta = Edgs(s,nonlin)
-        gamma = np.absolute(np.dot(s,gs.T)/n - beta)
+        gamma = np.absolute((s @ gs.T)/n - beta)
     else:
         #     fprintf('IC did not converged after #d iterations\n',MaxIter);
         w = []
@@ -118,16 +123,16 @@ def Node2(X, nonlin, w0,Orth):
     s = 0
     gs = 0
     # Compute the upper bound
-    s_max = np.sqrt(np.sum(np.power(X,2)))
+    s_max = np.sqrt(np.sum(X**2,axis=0))
     gs_max = g(s_max,nonlin)
-    c = (s_max*gs_max.T)/n + 0.5
+    c = (s_max @ gs_max.T)/n + 0.5
     while i <= MaxIter:
         wOld = w
-        s = w.T.dot(X)
+        s = w.T @ X
         gs = g(s,nonlin)
-        m = X.dot(gs.T)/n
-        w = m - np.dot(c,w)    #(4)
-        w = Orth.dot(w)     #(5)
+        m = (X @ gs.T)/n
+        w = m - c*w    #(4)
+        w = Orth @ w     #(5)
         w = w/np.linalg.norm(w)  #(6)
         if np.linalg.norm(w - wOld) < epsilon or np.linalg.norm(w + wOld) < epsilon:
             break
@@ -135,7 +140,7 @@ def Node2(X, nonlin, w0,Orth):
         #print('IC converged after #d iterations\n',i)
     if i <= MaxIter:
         beta = Edgs(s,nonlin)
-        gamma = np.absolute(s.dot(gs.T)/n - beta)
+        gamma = np.absolute((s @ gs.T)/n - beta)#gamma is delta and s@gs.T/n is gamma
     else:
         #print('IC did not converged after #d iterations\n',MaxIter)
         w = []
