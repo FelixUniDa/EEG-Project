@@ -30,15 +30,11 @@ sig4 = np.cos(np.pi*times*2)
 data = np.array([sig1,sig2,sig3,sig4])
 n_comp,n_samples =np.shape(data)
 # Matrix defining the mixture between the Signals, has a big impact on how well the data can be seperated
-mixingmat = np.array([[0.4766,    0.5000 ,   0.1724  ,  0.1999],
-    [0.4900 ,  -0.7696  ,  0.4955  ,  1.3449],
-    [0.2058 ,  -1.3669 ,  -1.4839 ,  -1.1978],
-    [0.6802  ,  0.4585  , -0.6467,    0.1311]])
+mixingmat = np.random.rand(n_comp,n_comp)
 #np.random.rand(n_comp,n_comp)
 
 mixeddata = mixingmat@data
-print("data:","\n",data,"\n","mixeddata","\n",mixeddata)
-
+print("data:","\n",data,"\n","mixeddata","\n",np.shape(mixeddata))
 # Center signals
 centered_data, mean_data = center(mixeddata)
 
