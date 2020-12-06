@@ -260,7 +260,7 @@ def jadeR(X, m=None, verbose=True):
                 # print(a.shape)
                 # print(b.shape)
                 # computation of Givens angle
-                g = np.stack((a,b),axis = 1)
+                g = np.stack((a,b))
                 # # added dimension 
                 # g = np.expand_dims(g, axis=1)
                 if(q == 1):
