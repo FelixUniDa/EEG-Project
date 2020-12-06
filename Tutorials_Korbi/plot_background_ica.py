@@ -80,7 +80,7 @@ X = np.dot(S, A.T)  # Generate observations
 ica = FastICA(n_components=3)
 S_ = ica.fit_transform(X)  # Get the estimated sources
 A_ = ica.mixing_  # Get estimated mixing matrix
-print(A_)
+#print(A_)
 
 # compute PCA
 pca = PCA(n_components=3)
@@ -90,7 +90,7 @@ H = pca.fit_transform(X)  # estimate PCA sources
 print((X.T).shape)
 B_jade = jadeR(X.T,m = 3)
 print(B_jade)
-S_jade = B_jade @ X.T
+S_jade = B_jade.T @ X.T
 #print(S_jade)
 A_jade = X.T @ S_jade.T @ np.linalg.pinv(S_jade @ S_jade.T)
 print(A_jade)
@@ -98,20 +98,20 @@ print(A_jade)
 
 plt.figure(figsize=(9, 6))
 
-plt.plot(S_jade[0,:],S_jade[1,:],S_jade[2,:])
-# models = [X, S, S_, H, S_jade]
-# names = ['Observations (mixed signal)',
-#          'True Sources',
-#          'ICA estimated sources',
-#          'PCA estimated sources',
-#          'JADE']
-# colors = ['red', 'steelblue', 'orange']
+# plt.plot(S_jade[0,:],S_jade[1,:],S_jade[2,:])
+models = [X, S, S_, H, S_jade]
+names = ['Observations (mixed signal)',
+         'True Sources',
+         'ICA estimated sources',
+         'PCA estimated sources',
+         'JADE']
+colors = ['red', 'steelblue', 'orange']
 
-# for ii, (model, name) in enumerate(zip(models, names), 1):
-#     plt.subplot(5, 1, ii)
-#     plt.title(name)
-#     for sig, color in zip(model.T, colors):
-#         plt.plot(sig, color=color)
+for ii, (model, name) in enumerate(zip(models, names), 1):
+    plt.subplot(5, 1, ii)
+    plt.title(name)
+    for sig, color in zip(model.T, colors):
+        plt.plot(sig, color=color)
 
 plt.tight_layout()
 plt.show()
