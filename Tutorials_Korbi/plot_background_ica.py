@@ -90,7 +90,7 @@ H = pca.fit_transform(X)  # estimate PCA sources
 print((X.T).shape)
 B_jade = jadeR(X.T,m = 3)
 print(B_jade)
-S_jade = B_jade.T @ X.T
+S_jade = B_jade @ X.T
 #print(S_jade)
 A_jade = X.T @ S_jade.T @ np.linalg.pinv(S_jade @ S_jade.T)
 print(A_jade)
@@ -99,7 +99,7 @@ print(A_jade)
 plt.figure(figsize=(9, 6))
 
 # plt.plot(S_jade[0,:],S_jade[1,:],S_jade[2,:])
-models = [X, S, S_, H, S_jade]
+models = [X, S, S_, H, S_jade.T]
 names = ['Observations (mixed signal)',
          'True Sources',
          'ICA estimated sources',
@@ -110,8 +110,11 @@ colors = ['red', 'steelblue', 'orange']
 for ii, (model, name) in enumerate(zip(models, names), 1):
     plt.subplot(5, 1, ii)
     plt.title(name)
+    print(model.shape)
     for sig, color in zip(model.T, colors):
-        plt.plot(sig, color=color)
+        print(sig.shape)
+
+        plt.plot(sig.T, color=color)
 
 plt.tight_layout()
 plt.show()
