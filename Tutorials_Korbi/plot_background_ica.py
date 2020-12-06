@@ -85,6 +85,8 @@ A_ = ica.mixing_  # Get estimated mixing matrix
 # compute PCA
 pca = PCA(n_components=3)
 H = pca.fit_transform(X)  # estimate PCA sources
+
+
 print((X.T).shape)
 B_jade = jadeR(X.T)
 print(B_jade)
