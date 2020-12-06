@@ -32,6 +32,7 @@ from sys import stdout
 from numpy import abs, append, arange, arctan2, argsort, array, concatenate, \
     cos, diag, dot, eye, float32, float64, matrix, multiply, ndarray, newaxis, \
     sign, sin, sqrt, zeros
+import numpy as np
 from numpy.linalg import eig, pinv
 
 
@@ -103,15 +104,13 @@ def jadeR(X, m=None, verbose=True):
     # variables to avoid messing with the original input. We also require double
     # precision (float64) and a numpy matrix type for X.
     
-    assert isinstance(X, ndarray),\
-        "X (input data matrix) is of the wrong type (%s)" % type(X)
+    assert isinstance(X, ndarray), "X (input data matrix) is of the wrong type (%s)" % type(X)
     origtype = X.dtype # remember to return matrix B of the same type
-    X = matrix(X.astype(float64))
+    X = np.array(X.astype(float64)) # before matrix -> np.array
     assert X.ndim == 2, "X has %d dimensions, should be 2" % X.ndim
-    assert (verbose == True) or (verbose == False), \
-        "verbose parameter should be either True or False"
+    assert (verbose == True) or (verbose == False), "verbose parameter should be either True or False"
 
-    [n,T] = X.shape # GB: n is number of input signals, T is number of samples
+    [n, T] = X.shape # GB: n is number of input signals, T is number of samples
     
     if m==None:
         m=n 	# Number of sources defaults to # of sensors
