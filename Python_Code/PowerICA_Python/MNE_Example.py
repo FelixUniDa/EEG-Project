@@ -18,7 +18,7 @@ sfreq = 1000  # Sampling frequency
 times = np.arange(0, 100, 0.05)
 sig1 = np.sin(np.pi*times)+0.5*np.random.rand(2000)
 sig2 = 0.5*np.random.randn(2000)
-sig3 = sig.sawtooth(times*2)+0.5*np.random.standard_gamma(1,2000)
+sig3 = sig.square(times*2)+0.3*np.random.standard_gamma(1,2000)
 sig4 = np.cos(np.pi*times*2)+0.5*np.random.rand(2000)
 
 data = np.array([sig1,sig2,sig3,sig4])
@@ -51,7 +51,7 @@ raw_mixed = mne.io.RawArray(mixeddata, info_mixed)
 
 mixed_array = raw_mixed.get_data()
 whitened_mixed = whiten(mixed_array)
-W,flg = powerICA(whitened_mixed,'tanh',None, 0.0001, 10000)
+W,flg = powerICA(whitened_mixed,'tanh',None)
 unmixed_array = W @ whitened_mixed
 
 raw_ica = mne.io.RawArray(unmixed_array,info_ica)
