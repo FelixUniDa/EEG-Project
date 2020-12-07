@@ -67,9 +67,17 @@ s3 = signal.sawtooth(2 * np.pi * time)  # Signal 3: sawtooth signal
 S = np.c_[s1, s2, s3]
 S += 0.2 * np.random.normal(size=S.shape)  # Add noise
 
+# plt.figure()
+# plt.hist(np.random.normal(size=S.shape))
+# plt.show()
+#print(S.shape)
+#print(S.std(axis=0))
+#print(S.std(axis=0).shape)
 S /= S.std(axis=0)  # Standardize data
 # Mix data
 A = np.array([[1, 1, 1], [0.5, 2, 1.0], [1.5, 1.0, 2.0]])  # Mixing matrix
+print(S.shape)
+print((A.T).shape)
 X = np.dot(S, A.T)  # Generate observations
 
 ###############################################################################
@@ -87,13 +95,13 @@ pca = PCA(n_components=3)
 H = pca.fit_transform(X)  # estimate PCA sources
 
 
-print((X.T).shape)
+#print((X.T).shape)
 B_jade = jadeR(X.T,m = 3)
-print(B_jade)
+#print(B_jade)
 S_jade = B_jade @ X.T
 #print(S_jade)
 A_jade = X.T @ S_jade.T @ np.linalg.pinv(S_jade @ S_jade.T)
-print(A_jade)
+#print(A_jade)
 # S_jade = B_jade @ X.T
 
 plt.figure(figsize=(9, 6))
@@ -118,6 +126,6 @@ for ii, (model, name) in enumerate(zip(models, names), 1):
 
 plt.tight_layout()
 plt.show()
-###############################################################################
+##############################################################################
 # :math:`\rightarrow` PCA fails at recovering our "instruments" since the
 # related signals reflect non-Gaussian processes.
