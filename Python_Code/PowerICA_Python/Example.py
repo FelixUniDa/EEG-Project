@@ -34,12 +34,17 @@ mixingmat = np.random.rand(n_comp,n_comp)
 #np.random.rand(n_comp,n_comp)
 
 mixeddata = mixingmat@data
+<<<<<<< Updated upstream:Python_Code/PowerICA_Python/Example.py
 print("data:","\n",data,"\n","mixeddata","\n",np.shape(mixeddata))
+=======
+#print("data:","\n",data,"\n","mixeddata","\n",mixeddata)
+
+>>>>>>> Stashed changes:Python_Code/PowerICA_Python_not_working_yet/Example.py
 # Center signals
 centered_data, mean_data = center(mixeddata)
 
 # Whiten mixed signals
-whitened_data  = whiten(centered_data)
+whitened_data = whiten(centered_data)
 print(np.cov(whitened_data))
 
 
@@ -83,6 +88,8 @@ ax.set_xlim(0, 100)
 
 plt.show()
 
+
+'''
 ##############################################################################
 #The following Part deals with the implementation of artificial signals
 #into the mne framework by creating a "raw"-instance and how unsupervised 
@@ -157,3 +164,4 @@ ica_data = ica.fit_transform(epochs.get_data())
 ev1 = mne.EvokedArray(np.mean(ica_data, axis=0),
                       info, tmin=0)
 ev1.plot(show=False, window_title='ICA', time_unit='s')
+'''
