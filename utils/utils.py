@@ -1,33 +1,192 @@
 import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+import scipy
+import neurokit2 as nk
+import robustsp as rsp
 
+from sklearn.decomposition import FastICA, PCA
 
-def create_signal(arg1, arg2):
+def create_signal(x = 2000, c = 'sin', ampl = 1, fs = 2):
     """
-    short description of function
-    :param arg1:
-    :param arg2:
-    :return:
+    creates a certain signal
+    :param x: length of the data vector
+    :param c: type of signal, e.g sin, cos, sawt, rect, ecg
+    :param ampl: amplitude of signal
+    :param fs: sample frequency
+    :return: data signal
+    """
+    #
+    # x is number of samples
+    # sample rate
+    n_samples = x
+    time = np.linspace(0, 10, n_samples)
+
+    def sin1():
+        s1 = np.sin(fs * time)  # Signal 1 : sinusoidal signal
+        return s1
+
+    def cos1():
+        s2 = np.cos(fs * time)  # Signal 2 : cosinus signal
+        return s2
+
+    def sawt():
+        s3 = signal.sawtooth(fs * np.pi * time)  # Signal 3: sawtooth signal
+        return s3
+
+    def rect():
+        s4 = np.sign(np.sin(fs * time))  # Signal 4: square signal
+        return s4
+
+    #def piky():
+    #    s6 = ((np.arange(0,n_samples, 1) % 23)-11/9)**5  #((rem(v, 23) - 11) / 9). ^ 5 # Signal 4: square signal
+    #    return s6
+
+    def ecg():
+        s7 = nk.ecg_simulate(length=n_samples)
+        return s7
+
+    switcher = {
+        'sin': sin1(),
+        'cos': cos1(),
+        'sawt': sawt(),
+        'rect': rect(),
+        'ecg': ecg(),
+        #'piky': piky(),
+        'all': np.stack([sin1(), cos1(), sawt(), rect()], axis=1)
+    }
+
+    def switch_signal(c):
+        signl = switcher.get(c, "Invalid")
+        return ampl * signl
+
+    return switch_signal(c)
+
+
+
+def apply_noise(data, c = 'white', SNR_dB = 20):
+    """
+    :param data: input signal vector
+    :param c: type of noise
+    :param SNR_dB: Difference bewteen signal power and noise power in dB
+    :return: data vector with applied noise
     """
 
-def create_noise(arg1, arg2):
+    np.random.seed(1)  # set seed for reproducible results
+    data_ary = np.c_[data]
+
+    data_power = data_ary ** 2
+    # Set a target SNR
+    target_snr_db = SNR_dB
+    # Calculate signal power and convert to dB
+    sig_avg_watts = np.median(data_power)
+    sig_avg_db = 10 * np.log10(sig_avg_watts)
+    # Calculate noise then convert to watts
+    noise_avg_db = sig_avg_db - target_snr_db
+    noise_avg_watts = 10 ** (noise_avg_db / 10)
+
+    def make_whiteNoisedB(data, target_SNR_dB):
+
+        mean_noise = 0
+        # Generate noise samples
+        noise_dB = np.random.normal(mean_noise, np.sqrt(noise_avg_watts), size=data_ary.shape)
+
+        # Noise up the original signal (again) and plot
+        data_noise = data_ary + noise_dB
+
+        return data_noise
+
+    def make_laplaceNoisedB(data, target_SNR_dB):
+
+        mean_noise = 0
+        noise_dB = np.random.laplace(mean_noise, np.sqrt(noise_avg_watts), size=data_ary.shape)
+
+        # Noise up the original signal (again) and plot
+        data_noise = data_ary + noise_dB
+
+        return data_noise
+
+    def make_gammaNoisedB(data, target_SNR_dB):
+
+        noise_dB = np.random.gamma(shape=1, scale=np.sqrt(noise_avg_watts), size=data_ary.shape)
+
+        plt.plot(noise_dB)
+        plt.show()
+        # Noise up the original signal (again) and plot
+        data_noise = data_ary + noise_dB
+
+        return data_noise
+
+    def make_uniformNoisedB(data, target_SNR_dB):
+
+        noise_dB = np.random.uniform(-np.sqrt(noise_avg_watts), np.sqrt(noise_avg_watts), size=data_ary.shape)
+
+        # Noise up the original signal (again) and plot
+        data_noise = data_ary + noise_dB
+
+        return data_noise
+
+    def make_expNoisedB(data, target_SNR_dB):
+
+        noise_dB = np.random.exponential(np.sqrt(noise_avg_watts), size=data_ary.shape)
+
+        # Noise up the original signal (again) and plot
+        data_noise = data_ary + noise_dB
+
+        return data_noise
+
+    switcher = {
+        'white': make_whiteNoisedB(data, SNR_dB),
+        'laplace': make_laplaceNoisedB(data, SNR_dB),
+        'gamma': make_gammaNoisedB(data, SNR_dB),
+        'uniform': make_uniformNoisedB(data, SNR_dB),
+        'exp': make_expNoisedB(data, SNR_dB),
+    }
+
+    def switch_signal(c):
+        signl_noise = switcher.get(c, "Invalid")
+        return signl_noise
+
+    return switch_signal(c)
+
+
+#apply_noise(np.linspace(0, 10, 2000), c = 'gamma', SNR_dB = 50)
+
+def create_outlier(data, prop = 0.01, std = 3, type = 'impulse', seed = 1):
     """
-
-    :param arg1:
-    :param arg2:
-    :return:
+    :param data: input data
+    :param prop: percentage of outlier dependent on datalength
+    :param std: max value of outlier
+    :param type: patchy or impulsive outlier
+    :return: signal vector with replacement oulier
     """
+    c = len(data)
+    n_outl = int(prop*c)
+    sigma_data = np.std(data)
+    max_value = sigma_data*std
+
+    np.random.seed(seed)
+    outlier = np.random.uniform(-max_value, max_value, n_outl)
+
+    if(type == 'impulse'):
+        outlier_index = np.random.choice(a=np.arange(0,c,1), size=n_outl)
+        data[outlier_index] = outlier
+
+    elif(type == 'patch'):
+        outlier_index = np.random.choice(a=np.arange(0, c-n_outl, 1))
+        data[outlier_index:outlier_index+n_outl] = outlier
+    else:
+        print("invalid type")
+
+    return data
+
+#data = np.sin(np.arange(0,200, 0.1) * 0.25 )
+#data_out = create_outlier(data, prop=0.1, std=5, type='impulse')
+#plt.plot(data_out)
+#plt.show()
 
 
-def create_outlier(arg1, arg2):
-    """
-
-    :param arg1:
-    :param arg2:
-    :return:
-    """
-
-
-def covariance(x):
+def covariance(x, type='sample', loss=None):
     """Calculate Covariance matrix for the rowvectors of the input data x.
 
     Args:
@@ -36,10 +195,25 @@ def covariance(x):
     Returns:
         cov [array]: Covariance Matrix of the signals represented by the rowvectors of x.
     """
+
+    cov_signcm = rsp.Covariance.signcm(x)
+    cov_spatmed = rsp.Covariance.spatmed(x)
+    cov_Mscat = rsp.Covariance.Mscat(x, loss=loss)
+
     mean = np.mean(x, axis=1, keepdims=True)
     n = np.shape(x)[1] - 1
     m = x - mean
-    cov = (m**2)/n
+    cov_sample = (m**2)/n
+
+    if(type == 'sample'):
+        cov = cov_sample
+    elif(type == 'signcm'):
+        cov = cov_signcm
+    elif (type == 'spatmed'):
+        cov = cov_spatmed
+    else:
+        [cov, _, _, _] = cov_Mscat
+
     return cov
 
 
