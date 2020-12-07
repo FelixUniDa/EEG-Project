@@ -54,7 +54,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath( __file__ )))
 sys.path.append(os.path.join(BASE_DIR,'Python_Code','JADE'))
 #print(sys.path)
 
-from jade import jadeR
+from jade_old import jadeR
 
 np.random.seed(0)  # set seed for reproducible results
 n_samples = 2000

@@ -119,14 +119,14 @@ def jadeR(X, m=None, verbose=True):
         "jade -> Do not ask more sources (%d) than sensors (%d )here!!!" % (m,n)
 
     if verbose:
-        print >> stdout, "jade -> Looking for %d sources" % m
-        print >> stdout, "jade -> Removing the mean value"
+        print("jade -> Looking for %d sources" % m)
+        print("jade -> Removing the mean value")
     X -= X.mean(1)
     
     # whitening & projection onto signal subspace
     # ===========================================
     if verbose:
-        print >> stdout, "jade -> Whitening the data"
+        print("jade -> Whitening the data")
     [D,U] = eig((X * X.T) / float(T)) # An eigen basis for the sample covariance matrix
     k = D.argsort()
     Ds = D[k] # Sort by increasing variances
@@ -160,12 +160,12 @@ def jadeR(X, m=None, verbose=True):
     # Estimation of the cumulant matrices.
     # ====================================
     if verbose:
-        print >> stdout, "jade -> Estimating cumulant matrices"
+        print("jade -> Estimating cumulant matrices")
     
     # Reshaping of the data, hoping to speed up things a little bit...
     X = X.T
     dimsymm = (m * ( m + 1)) / 2	# Dim. of the space of real symm matrices
-    nbcm = dimsymm  # number of cumulant matrices
+    nbcm = int(dimsymm)  # number of cumulant matrices
     CM = matrix(zeros([m,m*nbcm], dtype=float64)) # Storage for cumulant matrices
     R = matrix(eye(m, dtype=float64))
     Qij = matrix(zeros([m,m], dtype=float64)) # Temp for a cum. matrix
@@ -225,12 +225,12 @@ def jadeR(X, m=None, verbose=True):
     # Joint diagonalization proper
     
     if verbose:
-        print >> stdout, "jade -> Contrast optimization by joint diagonalization"
+        print("jade -> Contrast optimization by joint diagonalization")
     
     while encore:
         encore = False
         if verbose:
-            print >> stdout, "jade -> Sweep #%3d" % sweep ,
+            print("jade -> Sweep #%3d" % sweep) ,
         sweep = sweep + 1
         upds  = 0
         Vkeep = V
@@ -266,10 +266,10 @@ def jadeR(X, m=None, verbose=True):
                     Off = Off - Gain
                     
         if verbose:
-            print >> stdout, "completed in %d rotations" % upds
+            print("completed in %d rotations" % upds)
         updates = updates + upds
     if verbose:
-        print >> stdout, "jade -> Total of %d Givens rotations" % updates
+        print("jade -> Total of %d Givens rotations" % updates)
     
     # A separating matrix
     # ===================
@@ -281,7 +281,7 @@ def jadeR(X, m=None, verbose=True):
     # according to the norm of the columns of A = pinv(B)
 
     if verbose:
-        print >> stdout, "jade -> Sorting the components"
+        print("jade -> Sorting the components")
     
     A = pinv(B)
     keys =  array(argsort(multiply(A,A).sum(axis=0)[0]))[0]
@@ -290,7 +290,7 @@ def jadeR(X, m=None, verbose=True):
     
     
     if verbose:
-        print >> stdout, "jade -> Fixing the signs"
+        print("jade -> Fixing the signs")
     b	= B[:,0]
     signs = array(sign(sign(b)+0.1).T)[0] # just a trick to deal with sign=0
     B = diag(signs) * B
