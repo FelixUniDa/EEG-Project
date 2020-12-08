@@ -164,11 +164,11 @@ while encore, encore=0;
  	Ip = p:m:m*nbcm ;
 	Iq = q:m:m*nbcm ;
 
-	%%% computation of Givens angle
- 	g	= [ CM(p,Ip)-CM(q,Iq) ; CM(p,Iq)+CM(q,Ip) ];
- 	gg	= g*g';
- 	ton 	= gg(1,1)-gg(2,2); 
- 	toff 	= gg(1,2)+gg(2,1);
+	%%% computation of Givens angle - according to jacobian
+ 	g	= [ CM(p,Ip)-CM(q,Iq) ; CM(p,Iq)+CM(q,Ip) ]; % for 1st loop Ip = [1,4,7,10,13,16], Iq = Ip+1 -> difference of diagonal elements
+ 	gg	= g*g'; % 2x2 quadration of entries
+ 	ton 	= gg(1,1)-gg(2,2); % on diagonal ?
+ 	toff 	= gg(1,2)+gg(2,1); % off diagonal ?
  	theta	= 0.5*atan2( toff , ton+sqrt(ton*ton+toff*toff) );
 
  	%%% Givens update
