@@ -24,3 +24,11 @@ X = S*A';  % Generate observations
 B = jader(X',3);
 %%
 S_ = B*X';
+
+figure();
+subplot(2,1,1);
+title('True Signals')
+plot(S);
+subplot(2,1,2);
+title('JADE');
+plot(S_');

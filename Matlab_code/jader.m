@@ -66,6 +66,7 @@ if verbose, fprintf('jade -> Looking for %d sources\n',m); end ;
 % Self-commenting code
 %=====================
 if verbose, fprintf('jade -> Removing the mean value\n'); end 
+% centering of matrix
 X	= X - mean(X')' * ones(1,T);
 
 
@@ -73,12 +74,13 @@ X	= X - mean(X')' * ones(1,T);
 %   ===========================================
 if verbose, fprintf('jade -> Whitening the data\n'); end
  [U,D] 		= eig((X*X')/T)	; 
+ % puiss = eigenvalues, k = indices
  [puiss,k]	= sort(diag(D))	;
  rangeW		= n-m+1:n			; % indices to the m  most significant directions
  scales		= sqrt(puiss(rangeW))		; % scales
-  W  		= diag(1./scales)  * U(1:n,k(rangeW))'	;	% whitener
+  W  		= diag(1./scales)  * U(1:n,k(rangeW))'	;	% whitener = D^(-1/2)*E^T 
  iW  		= U(1:n,k(rangeW)) * diag(scales) 	;	% its pseudo-inverse
- X		= W*X;  
+ X		= W*X;  % new X = X_w ( whitened version)
 
 
 %%% Estimation of the cumulant matrices.
@@ -87,9 +89,9 @@ if verbose, fprintf('jade -> Estimating cumulant matrices\n'); end
 
 dimsymm 	= (m*(m+1))/2;	% Dim. of the space of real symm matrices
 nbcm 		= dimsymm  ; 	% number of cumulant matrices
-CM 		= zeros(m,m*nbcm);  % Storage for cumulant matrices
+CM 		= zeros(m,m*nbcm);  % Storage for cumulant matrices -> cross cumulants
 R 		= eye(m);  	%% 
-Qij 		= zeros(m);	% Temp for a cum. matrix
+Qij 		= zeros(m);	% Temp for a cum. matrix -> auto cumulants 
 Xim		= zeros(1,m);	% Temp
 Xjm		= zeros(1,m);	% Temp
 scale		= ones(m,1)/T ; % for convenience
@@ -99,14 +101,17 @@ scale		= ones(m,1)/T ; % for convenience
 %% I am using a symmetry trick to save storage.  I should write a
 %% short note one of these days explaining what is going on here.
 %%
+% calculate not all 81 cumulants -> use symmetry trick
 Range 		= 1:m ; % will index the columns of CM where to store the cum. mats.
 for im = 1:m
-	Xim = X(im,:) ;
-	Qij = ((scale* (Xim.*Xim)) .* X ) * X' 	- R - 2 * R(:,im)*R(:,im)' ;
+	Xim = X(im,:) ; % load each signals separatly in Xim 
+    %calculate mxm cumulants
+	Qij = ((scale* (Xim.*Xim)) .* X ) * X' 	- R - 2 * R(:,im)*R(:,im)' ; % eq. 15 in og paper, eq.7 in 2013 paper
 	CM(:,Range)	= Qij ; 
 	Range 		= Range + m ; 
    for jm = 1:im-1
 	Xjm = X(jm,:) ;
+    %calculate mxm cumulants
 	Qij = ((scale * (Xim.*Xjm) ) .*X ) * X' - R(:,im)*R(:,jm)' - R(:,jm)*R(:,im)' ;
 	CM(:,Range)	= sqrt(2)*Qij ;  
 	Range 		= Range + m ;
@@ -136,7 +141,7 @@ seuil	= 1/sqrt(T)/100; % A statistically significant threshold
 encore	= 1;
 sweep	= 0;
 updates = 0;
-g	= zeros(2,nbcm);
+g	= zeros(2,nbcm); % 2x6
 gg	= zeros(2,2);
 G	= zeros(2,2);
 c	= 0 ;
@@ -153,8 +158,8 @@ while encore, encore=0;
   if verbose, fprintf('jade -> Sweep #%d\n',sweep); end
   sweep=sweep+1;
 
- for p=1:m-1,
-  for q=p+1:m,
+ for p=1:m-1, % von 1:2
+  for q=p+1:m, % von 2:3
 
  	Ip = p:m:m*nbcm ;
 	Iq = q:m:m*nbcm ;
@@ -174,6 +179,7 @@ while encore, encore=0;
  		G	= [ c -s ; s c ] ;
 
 		pair 		= [p;q] ;
+        % V init with eye or eigenvectors
 		V(:,pair) 	= V(:,pair)*G ;
 	 	CM(pair,:)	= G' * CM(pair,:) ;
 		CM(:,[Ip Iq]) 	= [ c*CM(:,Ip)+s*CM(:,Iq) -s*CM(:,Ip)+c*CM(:,Iq) ] ;
