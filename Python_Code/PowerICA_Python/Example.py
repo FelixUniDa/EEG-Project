@@ -3,9 +3,9 @@ import numpy as np
 import scipy
 import scipy.signal as sig
 from sklearn.decomposition import FastICA
-from mne.decoding import UnsupervisedSpatialFilter
+#from mne.decoding import UnsupervisedSpatialFilter
 import matplotlib.pyplot as plt
-import mne
+#import mne
 from utils import *
 
 ###############################################################################
@@ -34,12 +34,7 @@ mixingmat = np.random.rand(n_comp,n_comp)
 #np.random.rand(n_comp,n_comp)
 
 mixeddata = mixingmat@data
-<<<<<<< Updated upstream:Python_Code/PowerICA_Python/Example.py
-print("data:","\n",data,"\n","mixeddata","\n",np.shape(mixeddata))
-=======
-#print("data:","\n",data,"\n","mixeddata","\n",mixeddata)
 
->>>>>>> Stashed changes:Python_Code/PowerICA_Python_not_working_yet/Example.py
 # Center signals
 centered_data, mean_data = center(mixeddata)
 
@@ -53,7 +48,7 @@ from PowerICA import *
 m, n = whitened_data.shape
 
 # # Initialize random weights
-W = powerICA(whitened_data,'tanh')
+W, _ = powerICA(whitened_data,'tanh', seed=1)
 print(W)
 # W = fastIca(whitened_data)
 #fica = sklearn.decomposition.FastICA(n_components=4,whiten=True)
