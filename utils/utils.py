@@ -16,9 +16,6 @@ def create_signal(x = 2000, c = 'sin', ampl = 1, fs = 2):
     :param fs: sample frequency
     :return: data signal
     """
-    #
-    # x is number of samples
-    # sample rate
     n_samples = x
     time = np.linspace(0, 10, n_samples)
 
