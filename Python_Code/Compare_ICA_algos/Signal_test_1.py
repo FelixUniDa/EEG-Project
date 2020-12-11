@@ -85,6 +85,7 @@ while(i<r):
 
 plt.show()
 
+print(" The Minimum Distance %s " % md(MM,W))
 '''
 ax1 = fig1.add_subplot(1, i, figsize=[18, 5])
 ax.plot(data, lw=3)

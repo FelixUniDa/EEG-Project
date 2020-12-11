@@ -6,6 +6,7 @@ import neurokit2 as nk
 import robustsp as rsp
 
 from sklearn.decomposition import FastICA, PCA
+from scipy.optimize import linear_sum_assignment
 
 def create_signal(x = 2000, c = 'sin', ampl = 1, fs = 2):
     """
@@ -280,3 +281,31 @@ def covariance(x, type='sample', loss=None):
         [cov, _, _, _] = cov_Mscat
 
     return cov
+
+
+def md(A, Vhat):
+    """Minimum distance index as defined in
+    P. Ilmonen, K. Nordhausen, H. Oja, and E. Ollila.
+    A new performance index for ICA: Properties, computation and asymptotic
+    analysis.
+    In Latent Variable Analysis and Signal Separation, pages 229–236. Springer,
+    2010.
+
+    This Code is from the coroICA package which implements the coroICA algorithm presented in 
+    "Robustifying Independent Component Analysis by Adjusting for Group-Wise Stationary Noise" 
+    by N Pfister*, S Weichwald*, P Bühlmann, B Schölkopf.
+    - https://github.com/sweichwald/coroICA-python"""
+    # first dimensions of A (true Mixing Matrix)
+    d = np.shape(A)[0]
+    #calculate Gain Marix
+    G = Vhat.dot(A)
+    # transform into maximization problem and calculate new gain
+    Gsq = np.abs(G)**2
+    Gtilde = Gsq / (Gsq.sum(axis=1)).reshape((d, 1))
+    # Define the maximization problem
+    costmat = 1 - 2 * Gtilde + np.tile((Gtilde**2).sum(axis=0), d).reshape((d, d))
+
+    row_ind, col_ind = linear_sum_assignment(costmat)
+    md = np.sqrt(d - np.sum(np.diag(Gtilde[row_ind, col_ind]))) / \
+        np.sqrt(d - 1)
+    return md
