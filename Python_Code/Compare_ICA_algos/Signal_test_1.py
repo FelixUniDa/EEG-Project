@@ -9,6 +9,9 @@ import mne
 from utils import *
 import PowerICA
 import jade
+from coroica import CoroICA
+
+
 
 # create example signals:
 data = np.stack([create_signal(ampl=4, c='ecg'),
@@ -49,43 +52,53 @@ unMixed = W @ X_data
 unMixed_jade = W_jade @ X_data
 unMixed_fast= W_fast @ X_data
 
+# c = CoroICA()
+# c.fit(mixdata_noise, group_index=groups, partition_index=partition)
+# W_coro = c.V_ #holds the unmixing matrix
+
+# recovered_sources = c.transform(mixdata_noise)
+
 # Plot input signals (not mixed)
-i = 0
-fig1, axs1 = plt.subplots(r, sharex=True)
-fig2, axs2 = plt.subplots(r, sharex=True)
-fig3, axs3 = plt.subplots(r, sharex=True)
-fig4, axs4 = plt.subplots(r, sharex=True)
-fig5, axs5 = plt.subplots(r, sharex=True)
+# i = 0
+# fig1, axs1 = plt.subplots(r, sharex=True)
+# fig2, axs2 = plt.subplots(r, sharex=True)
+# fig3, axs3 = plt.subplots(r, sharex=True)
+# fig4, axs4 = plt.subplots(r, sharex=True)
+# fig5, axs5 = plt.subplots(r, sharex=True)
 
-while(i<r):
-    # input signals
-    axs1[i].plot(data[:, i], lw=3)
-    axs1[i].set_ylabel('sig: ' + str(i))
-    fig1.suptitle('Input Signals')
-
-
-    axs2[i].plot(mixdata.T[:, i], lw=3)
-    axs2[i].set_ylabel('sig: ' + str(i))
-    fig2.suptitle('Mixed signals')
+# while(i<r):
+#     # input signals
+#     axs1[i].plot(data[:, i], lw=3)
+#     axs1[i].set_ylabel('sig: ' + str(i))
+#     fig1.suptitle('Input Signals')
 
 
-    axs3[i].plot(unMixed.T[:, i], lw=3)
-    axs3[i].set_ylabel('sig: ' + str(i))
-    fig3.suptitle('Recovered signals PowerICA')
+#     axs2[i].plot(mixdata.T[:, i], lw=3)
+#     axs2[i].set_ylabel('sig: ' + str(i))
+#     fig2.suptitle('Mixed signals')
 
-    axs4[i].plot(unMixed_jade.T[:, i], lw=3)
-    axs4[i].set_ylabel('sig: ' + str(i))
-    fig4.suptitle('Recovered signals JADE')
 
-    axs5[i].plot(unMixed_fast.T[:, i], lw=3)
-    axs5[i].set_ylabel('sig: ' + str(i))
-    fig5.suptitle('Recovered signals FastICA')
+#     axs3[i].plot(unMixed.T[:, i], lw=3)
+#     axs3[i].set_ylabel('sig: ' + str(i))
+#     fig3.suptitle('Recovered signals PowerICA')
 
-    i = i+1
+#     axs4[i].plot(unMixed_jade.T[:, i], lw=3)
+#     axs4[i].set_ylabel('sig: ' + str(i))
+#     fig4.suptitle('Recovered signals JADE')
 
-plt.show()
+#     axs5[i].plot(unMixed_fast.T[:, i], lw=3)
+#     axs5[i].set_ylabel('sig: ' + str(i))
+#     fig5.suptitle('Recovered signals FastICA')
 
-print(" The Minimum Distance %s " % md(MM,W))
+#     i = i+1
+
+# plt.show()
+test = MM
+test[1,1] = test[1,1]*0.99
+print(" The Minimum Distance %s " % md(MM,W.T))
+print(" The Minimum Distance %s " % md(MM,W_jade))
+print(" The Minimum Distance %s " % md(MM,W_fast.T))
+#print(" The Minimum Distance %s " % md(MM,W_coro))
 '''
 ax1 = fig1.add_subplot(1, i, figsize=[18, 5])
 ax.plot(data, lw=3)

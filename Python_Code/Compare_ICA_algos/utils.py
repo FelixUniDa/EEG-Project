@@ -298,14 +298,17 @@ def md(A, Vhat):
     # first dimensions of A (true Mixing Matrix)
     d = np.shape(A)[0]
     #calculate Gain Marix
-    G = Vhat.dot(A)
+    G = (Vhat).dot(A)
     # transform into maximization problem and calculate new gain
     Gsq = np.abs(G)**2
-    Gtilde = Gsq / (Gsq.sum(axis=1)).reshape((d, 1))
+    temp = Gsq.sum(axis=1)
+    # reshape that calculation works
+    temp = temp.reshape((d, 1))
+    Gtilde = Gsq / temp                #(Gsq.sum(axis=1)).reshape((d, 1))
     # Define the maximization problem
-    costmat = 1 - 2 * Gtilde + np.tile((Gtilde**2).sum(axis=0), d).reshape((d, d))
+    costmat = 1 - 2 * Gtilde + np.tile((Gtilde**2).sum(axis=1), d).reshape((d, d))
 
     row_ind, col_ind = linear_sum_assignment(costmat)
-    md = np.sqrt(d - np.sum(np.diag(Gtilde[row_ind, col_ind]))) / \
-        np.sqrt(d - 1)
+    P = Gtilde[row_ind, col_ind]
+    md = np.sqrt(d - np.sum(np.diag(P))) / np.sqrt(d - 1)
     return md

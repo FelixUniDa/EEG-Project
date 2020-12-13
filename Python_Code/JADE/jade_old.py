@@ -183,14 +183,12 @@ def jadeR(X, m=None, verbose=True):
         Xijm = multiply(Xim, Xim)
         # Note to myself: the -R on next line can be removed: it does not affect
         # the joint diagonalization criterion
-        Qij = multiply(Xijm, X).T * X / float(T)\
-            - R - 2 * dot(R[:,im], R[:,im].T)
+        Qij = multiply(Xijm, X).T * X / float(T) - R - 2 * dot(R[:,im], R[:,im].T)
         CM[:,Range] = Qij 
         Range = Range  + m 
         for jm in range(im):
             Xijm = multiply(Xim, X[:,jm])
-            Qij = sqrt(2) * multiply(Xijm, X).T * X / float(T) \
-                - R[:,im] * R[:,jm].T - R[:,jm] * R[:,im].T
+            Qij = sqrt(2) * multiply(Xijm, X).T * X / float(T) - R[:,im] * R[:,jm].T - R[:,jm] * R[:,im].T
             CM[:,Range]	= Qij
             Range = Range + m
 
