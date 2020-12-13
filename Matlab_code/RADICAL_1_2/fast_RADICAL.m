@@ -84,8 +84,8 @@ m=floor(sqrt(N));      % m for use in m-spacing estimator.
 % ****************
 % Whiten the data. Store the whitening operation to combine with
 % rotation matrix for total solution.
-
-[u,s,v]=svd(cov(X'));
+cov1 = cov(X');
+[u,s,v]=svd(cov1);
 Whitening_mat=v*s^(-.5)*u';
 X_white=Whitening_mat*X;
 

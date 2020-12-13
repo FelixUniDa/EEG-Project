@@ -37,11 +37,11 @@ X_data = whitening(mixdata_noise, type='sample')
 W, _ = PowerICA.powerICA(X_data, 'tanh')
 
 # perform Jade
-W_jade = jade.jadeR(mixdata_noise)
+W_jade = jade.jadeR(X_data)
 W_jade = np.squeeze(np.asarray(W_jade))
 
 #Perform fastICA
-K, W_fast, S = fastica(mixdata_noise)
+K, W_fast, S = fastica(X_data)
 #W_fast = sklearn.decomposition.FastICA(n_components=4,whiten=True)
 
 # Un-mix signals using

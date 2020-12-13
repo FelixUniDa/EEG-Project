@@ -1,3 +1,4 @@
+
 % *****************************************************************
 % Copyright (c) Erik G. Learned-Miller, 2003.
 % ********************************************************
@@ -17,9 +18,8 @@
 % ********************************************************
 % The program plots the original independent samples, the mixed
 % samples, and RADICAL_2D's attempt at unmixing the samples.
-
 load examples/data_2d_ind -ASCII
-load examples/data_2d_mixed -ASCII
+load examples/data_2d_mixed.csv -ASCII
 load examples/A_2d -ASCII
 
 [Yopt,Wopt]=RADICAL_2D(data_2d_mixed);
