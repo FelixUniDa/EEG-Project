@@ -22,3 +22,9 @@ Python_Code/.DS_Store
 .vscode/launch.json
 
 Python_Code/Compare_ICA_algos/__pycache__/
+
+Python_Code/Compare_ICA_algos/.idea/
+
+Python_Code/PowerICA_Python/.idea/inspectionProfiles/
+
+Python_Code/PowerICA_Python/.idea/
