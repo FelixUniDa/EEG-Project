@@ -35,8 +35,16 @@ from numpy import abs, append, arange, arctan2, argsort, array, concatenate, \
 from numpy.linalg import eig, pinv
 
 
-def jadeR(X, m=None, verbose=True):
+def jadeR(X, m=None, verbose=True, is_whitened=False):
+
+
     """
+    :param X: data in form of row = signals, col = features
+    :param m: count of signals to be recovered = sources
+    :param verbose: paramter of extenisve printing
+    :param is_whitened: bool, if True jadeR expects pre-whitened data
+    :return: W = unmixing matrix
+
     Blind separation of real signals with JADE.
     
     jadeR implements JADE, an Independent Component Analysis (ICA) algorithm
@@ -52,7 +60,7 @@ def jadeR(X, m=None, verbose=True):
         X -- an nxT data matrix (n sensors, T samples). May be a numpy array or
              matrix.
     
-        m -- output matrix B has size mxn so that only m sources are
+        m -- output matrix W has size mxn so that only m sources are
              extracted.  This is done by restricting the operation of jadeR
              to the m first principal components. Defaults to None, in which
              case m=n.
@@ -61,7 +69,7 @@ def jadeR(X, m=None, verbose=True):
     
     Returns:
     
-        An m*n matrix B (NumPy matrix type), such that Y=B*X are separated
+        An m*n matrix W (NumPy matrix type), such that Y=B*X are separated
         sources extracted from the n*T data matrix X. If m is omitted, B is a
         square n*n matrix (as many sources as sensors). The rows of B are
         ordered such that the columns of pinv(B) are in order of decreasing
@@ -111,38 +119,40 @@ def jadeR(X, m=None, verbose=True):
     assert (verbose == True) or (verbose == False), \
         "verbose parameter should be either True or False"
 
-    [n,T] = X.shape # GB: n is number of input signals, T is number of samples
+    [n, T] = X.shape # GB: n is number of input signals, T is number of samples
     
-    if m==None:
+    if m == None:
         m=n 	# Number of sources defaults to # of sensors
-    assert m<=n,\
+    assert m <= n,\
         "jade -> Do not ask more sources (%d) than sensors (%d )here!!!" % (m,n)
 
-    if verbose:
-        print("jade -> Looking for %d sources" % m)
-        print("jade -> Removing the mean value")
-    X -= X.mean(1)
-    
     # whitening & projection onto signal subspace
     # ===========================================
-    if verbose:
-        print("jade -> Whitening the data")
-    [D,U] = eig((X * X.T) / float(T)) # An eigen basis for the sample covariance matrix
-    k = D.argsort()
-    Ds = D[k] # Sort by increasing variances
-    PCs = arange(n-1, n-m-1, -1)    # The m most significant princip. comp. by decreasing variance
+    if is_whitened == False:
 
-    # --- PCA  ----------------------------------------------------------
-    B = U[:,k[PCs]].T    # % At this stage, B does the PCA on m components
-    
-    # --- Scaling  ------------------------------------------------------
-    scales = sqrt(Ds[PCs]) # The scales of the principal components .
-    B = diag(1./scales) * B  # Now, B does PCA followed by a rescaling = sphering
-    #B[-1,:] = -B[-1,:] # GB: to make it compatible with octave
-    # --- Sphering ------------------------------------------------------
-    X = B * X # %% We have done the easy part: B is a whitening matrix and X is white.
-    
-    del U, D, Ds, k, PCs, scales 
+        if verbose:
+            print("jade -> Looking for %d sources" % m)
+            print("jade -> Removing the mean value")
+
+        X -= X.mean(1)
+        if verbose:
+            print("jade -> Whitening the data")
+        [D, U] = eig((X * X.T) / float(T)) # An eigen basis for the sample covariance matrix
+        k = D.argsort()
+        Ds = D[k] # Sort by increasing variances
+        PCs = arange(n-1, n-m-1, -1)    # The m most significant princip. comp. by decreasing variance
+
+        # --- PCA  ----------------------------------------------------------
+        B = U[:, k[PCs]].T    # % At this stage, B does the PCA on m components
+
+        # --- Scaling  ------------------------------------------------------
+        scales = sqrt(Ds[PCs]) # The scales of the principal components .
+        B = diag(1./scales) * B  # Now, B does PCA followed by a rescaling = sphering
+        # B[-1,:] = -B[-1,:] # GB: to make it compatible with octave
+        # --- Sphering ------------------------------------------------------
+        X = B * X # %% We have done the easy part: B is a whitening matrix and X is white.
+
+        del U, D, Ds, k, PCs, scales
     
     # NOTE: At this stage, X is a PCA analysis in m components of the real data, except that
     # all its entries now have unit variance.  Any further rotation of X will preserve the
@@ -171,7 +181,7 @@ def jadeR(X, m=None, verbose=True):
     Qij = matrix(zeros([m,m], dtype=float64)) # Temp for a cum. matrix
     Xim	= zeros(m, dtype=float64) # Temp
     Xijm = zeros(m, dtype=float64) # Temp
-    #Uns = numpy.ones([1,m], dtype=numpy.uint32)    # for convenience
+    # Uns = numpy.ones([1,m], dtype=numpy.uint32)    # for convenience
     # GB: we don't translate that one because NumPy doesn't need Tony's rule
     
     # I am using a symmetry trick to save storage.  I should write a short note one of these
@@ -187,16 +197,17 @@ def jadeR(X, m=None, verbose=True):
         # the joint diagonalization criterion
         # R = identidy matrix
         # directly compute e.g. auto cumulant of first signal and several cross cumulants (3x3)
-        # first row: (0,0,0,0) (0,0,0,1) (0,0,0,2) second row: (0,0,1,0), (0,0,1,1), (0,0,1,2) third row (0,0,2,0) (0,0,2,1)(0,0,2,2)first round)
+        # first row: (0,0,0,0) (0,0,0,1) (0,0,0,2) second row: (0,0,1,0), (0,0,1,1),
+        # (0,0,1,2) third row (0,0,2,0) (0,0,2,1)(0,0,2,2)first round)
         Qij = multiply(Xijm, X).T * X / float(T) - R - 2 * dot(R[:,im], R[:,im].T)
-        CM[:,Range] = Qij 
-        Range = Range  + m 
+        CM[:, Range] = Qij
+        Range = Range + m
         for jm in range(im):
             # compute odd cross cumulants e.g. second round im = 1, 3x3 matrix
             # -> (1,0,0,0),(1,0,0,1),(1,0,0,2) | (1,0,1,0),(1,0,1,1),(1,0,1,2) | (1,0,2,0),(1,0,2,1),(1,0,2,2)
-            Xijm = multiply(Xim, X[:,jm])
-            Qij = sqrt(2) * multiply(Xijm, X).T * X / float(T) - R[:,im] * R[:,jm].T - R[:,jm] * R[:,im].T
-            CM[:,Range]	= Qij
+            Xijm = multiply(Xim, X[:, jm])
+            Qij = sqrt(2) * multiply(Xijm, X).T * X / float(T) - R[:,im] * R[:, jm].T - R[:, jm] * R[:, im].T
+            CM[:, Range]	= Qij
             Range = Range + m
 
     # if Symmetry isn't taken into account : nbcm = m(m+1)/2 cumulants matrices stored in a big m x m*nbcm array.
@@ -207,19 +218,19 @@ def jadeR(X, m=None, verbose=True):
     On = 0.0
     Range = arange(m)
     for im in range(nbcm):
-        Diag = diag(CM[:,Range])
+        Diag = diag(CM[:, Range])
         On = On + (Diag*Diag).sum(axis=0)
         Range = Range + m
-    Off = (multiply(CM,CM).sum(axis=0)).sum(axis=0) - On
+    Off = (multiply(CM, CM).sum(axis=0)).sum(axis=0) - On
     
     seuil = 1.0e-6 / sqrt(T) # % A statistically scaled threshold on `small" angles
     encore = True
     sweep = 0 # % sweep number
     updates = 0 # % Total number of rotations
     upds = 0 # % Number of rotations in a given seep
-    g = zeros([2,nbcm], dtype=float64)
-    gg = zeros([2,2], dtype=float64)
-    G = zeros([2,2], dtype=float64)
+    g = zeros([2, nbcm], dtype=float64)
+    gg = zeros([2, 2], dtype=float64)
+    G = zeros([2, 2], dtype=float64)
     c = 0
     s = 0
     ton	= 0
@@ -248,29 +259,30 @@ def jadeR(X, m=None, verbose=True):
                 Iq = arange(q, m*nbcm, m)
                 
                 # computation of Givens angle
-                g = concatenate([CM[p,Ip] - CM[q,Iq], CM[p,Iq] + CM[q,Ip]])
-                # g = (2x2) its like all cumulant diagonals (+/-) summend 
+                # g = (2x2) its like all cumulant diagonals (+/-) summed
+                g = concatenate([CM[p, Ip] - CM[q, Iq], CM[p, Iq] + CM[q, Ip]])
                 gg = dot(g, g.T)
-                ton = gg[0,0] - gg[1,1] 
-                toff = gg[0,1] + gg[1,0]
+                ton = gg[0, 0] - gg[1, 1]
+                toff = gg[0, 1] + gg[1, 0]
                 # one angle representative for all angles
                 theta = 0.5 * arctan2(toff, ton + sqrt(ton * ton + toff * toff))
                 Gain = (sqrt(ton * ton + toff * toff) - ton) / 4.0
                 
                 # Givens update
+                # Press et al. suggest 6-10 passes are needed for the general case of diagonalizing a matrix
+                # taken from: http://sepwww.stanford.edu/public/docs/sep70/steve2/paper_html/node2.html
                 if abs(theta) > seuil:
                     encore = True
                     upds = upds + 1
                     c = cos(theta) 
                     s = sin(theta)
-                    G = matrix([[c, -s] , [s, c] ])
-                    pair = array([p,q])
-                    V[:,pair] = V[:,pair] * G # store all rotations in V(3x3), ((3,2) * (2,2) -> (3,2))
-                    CM[pair,:] = G.T * CM[pair,:] # multiplicate all values in rows p & q with rotaion matrix G.T (first mul)
-                    # multiplication for second roation according to G.T * CM * G for each 2x2 part of CM
-                    CM[:,concatenate([Ip,Iq])] = \
-                        append( c*CM[:,Ip]+s*CM[:,Iq], -s*CM[:,Ip]+c*CM[:,Iq], \
-                               axis=1)
+                    G = matrix([[c, -s], [s, c]])
+                    pair = array([p, q])
+                    V[:, pair] = V[:, pair] * G # store all rotations in V(3x3), ((3,2) * (2,2) -> (3,2))
+                    CM[pair, :] = G.T * CM[pair, :] # multiplicate all values in rows p & q with rotaion matrix G.T (first mul)
+                    # multiplication for second rotation according to G.T * CM * G for each 2x2 part of CM
+                    # fromula 8.4.1 from the matrix computations book
+                    CM[:, concatenate([Ip, Iq])] = append(c*CM[:, Ip] + s*CM[:, Iq], -s*CM[:, Ip]+c*CM[:, Iq], axis=1)
                     On = On + Gain
                     Off = Off - Gain
                     
@@ -283,30 +295,32 @@ def jadeR(X, m=None, verbose=True):
     # A separating matrix
     # ===================
     
-    # mulitplicate the final rotaion Matrix V.T with the whitening matrix
-    B = V.T * B
-    
-    # Permute the rows of the separating matrix B to get the most energetic components first.
-    # Here the **signals** are normalized to unit variance.  Therefore, the sort is
-    # according to the norm of the columns of A = pinv(B)
+    # multiply the final rotation Matrix V.T with the whitening matrix
+    # Dewhiten
+    if is_whitened == False:
+        W = V.T * B
+    else:
+        W = V.T
+        # Permute the rows of the separating matrix B to get the most energetic components first.
+        # Here the **signals** are normalized to unit variance.  Therefore, the sort is
+        # according to the norm of the columns of A = pinv(B)
 
     if verbose:
         print("jade -> Sorting the components")
-    
-    A = pinv(B)
-    keys =  array(argsort(multiply(A,A).sum(axis=0)[0]))[0]
-    B = B[keys,:]
-    B = B[::-1,:]     # % Is this smart ?
-    
-    
+
+    A = pinv(W)
+    keys = array(argsort(multiply(A, A).sum(axis=0)[0]))[0]
+    W = W[keys, :]
+    W = W[::-1, :]     # % Is this smart ?
+
     if verbose:
         print("jade -> Fixing the signs")
-    b	= B[:,0]
-    signs = array(sign(sign(b)+0.1).T)[0] # just a trick to deal with sign=0
-    B = diag(signs) * B
-    
-    return B.astype(origtype)
-    
+    b = W[:, 0]
+    signs = array(sign(sign(b)+0.1).T)[0]  # just a trick to deal with sign=0
+    W = diag(signs) * W
+
+    return W.astype(origtype)
+
     
     # Revision history of MATLAB code:
     #
