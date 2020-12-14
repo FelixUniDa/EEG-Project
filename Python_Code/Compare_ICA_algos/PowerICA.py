@@ -1,7 +1,7 @@
 import numpy as np
 import scipy
   
-def powerICA(X, nonlin, seed=None):
+def powerICA(X, nonlin, seed=None,Huber_param=1.345,lp_param=1.5,fair_param=1.3998):
     """This function is implemented based on Algorithm 1 in paper below.
        S. Basiri, E. Ollila and V. Koivunen, "Alternative Derivation of 
        FastICA With Novel Power Iteration Algorithm," in IEEE Signal 
@@ -46,8 +46,8 @@ def powerICA(X, nonlin, seed=None):
         ## (2) Compute the orthogonal operator
         Orth = (I - W.T.dot(W))
         ## (3-6) compute Node:1 and Node:2 in series
-        w1, delta1, flg1 = Node1(X, nonlin, w0, Orth) 
-        w2, delta2, flg2 = Node2(X, nonlin, w0, Orth)
+        w1, delta1, flg1 = Node1(X, nonlin, w0, Orth, Huber_param,lp_param,fair_param) 
+        w2, delta2, flg2 = Node2(X, nonlin, w0, Orth, Huber_param,lp_param,fair_param)
 
         #print('Orth',Orth,'W',W)
         flg = flg1*flg2
@@ -68,7 +68,7 @@ def powerICA(X, nonlin, seed=None):
     return W,flg
 
 
-def Node1(X, nonlin, w0,Orth):
+def Node1(X, nonlin, w0,Orth,Huber_param,lp_param,fair_param):
     """Computes largest value of non-Gaussianity measure delta = |gamma-beta| for
        a rowvector of the estimated unmixing matrix that is a local maximizer 
        of the eigenvalue gamma with largest Euclidean distance to to the bulk of 
@@ -100,7 +100,7 @@ def Node1(X, nonlin, w0,Orth):
     while i <= MaxIter:
         wOld = w
         s = w.T @ X
-        gs = g(s,nonlin)
+        gs = g(s,nonlin,Huber_param,lp_param,fair_param)
         w = (X @ gs.T)/n #(4)
         w = Orth @w #(5)
         w = w/np.linalg.norm(w); #(6)   
@@ -109,7 +109,7 @@ def Node1(X, nonlin, w0,Orth):
             break
         i = i + 1 #(3)
     if i <= MaxIter:
-        beta = Edgs(s,nonlin)
+        beta = Edgs(s,nonlin,Huber_param,lp_param,fair_param)
         delta = np.absolute((s @ gs.T)/n - beta)
     else:
         print('Node1 did not converge after',MaxIter,'iterations\n')
@@ -120,7 +120,7 @@ def Node1(X, nonlin, w0,Orth):
     ###########################################################################
 
 
-def Node2(X, nonlin, w0,Orth):
+def Node2(X, nonlin, w0,Orth,Huber_param,lp_param,fair_param):
     """Computes largest value of non-Gaussianity measure delta = |gamma-beta| for
        a rowvector of the estimated unmixing matrix that is a local minimizer 
        of the eigenvalue gamma with largest Euclidean distance to to the bulk of 
@@ -151,12 +151,12 @@ def Node2(X, nonlin, w0,Orth):
     gs = 0
     # Compute the upper bound
     s_max = np.sqrt(np.sum(X**2,axis=0))
-    gs_max = g(s_max,nonlin)
+    gs_max = g(s_max,nonlin,Huber_param,lp_param,fair_param)
     c = (s_max @ gs_max.T)/n + 0.5
     while i <= MaxIter:
         wOld = w
         s = w.T @ X
-        gs = g(s,nonlin)
+        gs = g(s,nonlin,Huber_param,lp_param,fair_param)
         m = (X @ gs.T)/n
         w = m - c*w    #(4)
         w = Orth @ w     #(5)
@@ -166,7 +166,7 @@ def Node2(X, nonlin, w0,Orth):
             break
         i = i + 1  #(3)
     if i <= MaxIter:
-        beta = Edgs(s,nonlin)
+        beta = Edgs(s,nonlin,Huber_param,lp_param,fair_param)
         delta = np.absolute((s @ gs.T)/n - beta)#gamma is delta and s@gs.T/n is gamma
     else:
         print('Node2 did not converge after',MaxIter,'iterations\n')
@@ -177,7 +177,7 @@ def Node2(X, nonlin, w0,Orth):
     ###########################################################################
 
 
-def g(s,nonlin):
+def g(s,nonlin,Huber_param,lp_param,fair_param):
     """ This function computes the ICA nonlinearity for a given input s = w.T @ x.
    
 
@@ -188,7 +188,7 @@ def g(s,nonlin):
     Returns:
         g: Nonlinearity function for used in PowerICA algorithm.
     """
-    g=0
+    g=np.empty(np.shape(s))
     if nonlin == 'tanh':
         g = np.tanh(s)
     elif nonlin =='pow3':
@@ -197,16 +197,22 @@ def g(s,nonlin):
         g = s*np.exp(-(1/2)*s**2)
     elif nonlin =='skew':
         g = s**2
-    elif nonlin =='rt06':
-        g = np.max(0,s-0.6)**2
-    elif nonlin =='lt06':
-        g = np.min(0,s+0.6)**2
-    elif nonlin =='bt00':
-        g = np.max(0,s)**2 - np.min(0,s)**2
-    elif nonlin =='bt02':
-        g = np.max(0,s-0.2)**2 - np.min(0,s+0.2)**2
+    elif nonlin =='fair':## pretty shitty?! probably sth wrong maybe sweep over different A's
+        fair_param = 1.3998
+        g = fair_param*s/(np.absolute(s)+fair_param)
+    elif nonlin =='Pseudo-Huber':
+        g = np.divide(s,np.sqrt(1+s**2/2))
+    elif nonlin =='lp':
+        lp_param=1.5
+        g = np.sign(s)*np.absolute(s)**(lp_param-1)
+    elif nonlin =='Huber':
+        Huber_param = 1.345
+        if np.linalg.norm(s) <= Huber_param:
+            g = s
+        elif np.linalg.norm(s) > Huber_param:
+            g = Huber_param*np.sign(s)
     elif nonlin =='bt06':
-        g = np.max(0,s-0.6)**2 - np.min(0,s+0.6)**2
+        g = np.maximum(0,s-0.6)**2 - np.minimum(0,s+0.6)**2
     elif nonlin =='bt10':
         g = np.max(0,s-1.0)**2 - np.min(0,s+1.0)**2
     elif nonlin =='bt12':
@@ -236,7 +242,7 @@ def g(s,nonlin):
     ##########################################################################
 
 
-def Edgs(s,nonlin):
+def Edgs(s,nonlin,Huber_param,lp_param,fair_param):
     """This function computes E[g'(w^t*x)]for a given input s = w.T @ x.
 
     Args:
@@ -246,7 +252,7 @@ def Edgs(s,nonlin):
     Returns:
         dg: Derivative of the nonlinearity used in PowerICA algorithm.
     """
-    dg = 0
+    dg = np.empty(len(s))
     if nonlin =='tanh':
         dg = 1-np.tanh(s)**2
     elif nonlin =='pow3':
@@ -254,25 +260,28 @@ def Edgs(s,nonlin):
     elif nonlin =='gaus':
         dg = (1 - s**2) * np.exp(- (1/2)*s**2)
     elif nonlin =='skew':
-        dg =  0 
-    elif nonlin =='rt06':
-        dg =  2*np.max(0,s-0.6)
-    elif nonlin =='lt06':
-        dg = 2*np.min(0,s+0.6)
-    elif nonlin =='bt00':
-        dg = 2*np.max(0,s) - 2*np.min(0,s)
-    elif nonlin =='bt02':
-        dg = 2*np.max(0,s-0.2) - 2*np.min(0,s+0.2)
-    elif nonlin =='bt06':
-        dg = 2*np.max(0,s-0.6) - 2*np.min(0,s+0.6)
+        dg =  0.5*s 
+    elif nonlin =='fair':
+        dg = fair_param**2/((s+fair_param)**2)
+    elif nonlin =='Pseudo-Huber':
+        dg = np.divide(1,(1+s**2/2)**(3/2))
+    elif nonlin =='lp':
+        dg = (lp_param-1)*s*np.sign(s)*np.absolute(s)**(lp_param-3)
+    elif nonlin =='Huber':
+        if np.linalg.norm(s) <= Huber_param:
+            dg = 1
+        elif np.linalg.norm(s) > Huber_param:
+            dg = Huber_param
+    elif nonlin =='bt06':#pseudo Huber
+        dg = 2*np.maximum(0,s-0.6) - 2*np.minimum(0,s+0.6)
     elif nonlin =='bt10':
-        dg =  2*np.max(0,s-1.0) - 2*np.min(0,s+1.0)
+        dg =  2*np.maximum(0,s-1.0) - 2*np.minimum(0,s+1.0)
     elif nonlin =='bt12':
-        dg = 2*np.max(0,s-1.2) - 2*np.min(0,s+1.2)
+        dg = 2*np.maximum(0,s-1.2) - 2*np.minimum(0,s+1.2)
     elif nonlin =='bt14':
-        dg = 2*np.max(0,s-1.4) - 2*np.min(0,s+1.4)
+        dg = 2*np.maximum(0,s-1.4) - 2*np.minimum(0,s+1.4)
     elif nonlin =='bt16':
-        dg = 2*np.max(0,s-1.6) - 2*np.min(0,s+1.6)
+        dg = 2*np.maximum(0,s-1.6) - 2*np.minimum(0,s+1.6)
     elif nonlin =='tan1':
         dg = 1.25*(1-np.tanh(1.25*s)**2)
     elif nonlin =='tan2':

@@ -4,11 +4,10 @@ from scipy import signal
 import scipy
 import neurokit2 as nk
 import robustsp as rsp
-
+from Mscat import *
 from sklearn.decomposition import FastICA, PCA
-from scipy.optimize import linear_sum_assignment
 
-def create_signal(x = 2000, c = 'sin', ampl = 1, fs = 2):
+def create_signal(x = 10000, c = 'sin', ampl = 1, fs = 2):
     """
     creates a certain signal
     :param x: length of the data vector
@@ -203,7 +202,7 @@ def mixing_matrix(n_components,seed = 1):
     return mixingmat
 
 
-def whitening(x, type='sample'):
+def whitening(x, type='sample', loss = 'Huber'):
     """linearly transform the observed signals X in a way that potential 
        correlations between the signals are removed and their variances equal unity. 
        As a result the covariance matrix of the whitened signals will be equal to the identity matrix
@@ -217,7 +216,7 @@ def whitening(x, type='sample'):
     """
     centered_X, _ = centering(x)
 
-    cov = np.cov(centered_X, bias=True) # covariance(centered_X) #calculate Covariance matrix between signals
+    cov = covariance(centered_X,type,loss) # covariance(centered_X) #calculate Covariance matrix between signals
 
     d, E = np.linalg.eig(cov) #Eigenvalue decomposition (alternatively one can use SVD for whitening)
     idx = d.argsort()[::-1]   
@@ -227,9 +226,10 @@ def whitening(x, type='sample'):
     D_inv = np.diag(1/np.sqrt(d))   #Calculate D^(-0.5)
 
     W_whiten =  D_inv @ E.T         #Calculate Whitening matrix W_whiten 
+    W_dewhiten = E @ np.diag(np.sqrt(d))
     x_whitened = (W_whiten @ centered_X)
 
-    return x_whitened
+    return x_whitened, W_whiten, W_dewhiten
 
 
 def centering(x):
@@ -251,7 +251,7 @@ def centering(x):
     #print(centered)
     return centered, mean
 
-def covariance(x, type='sample', loss=None):
+def covariance(x, type='sample', loss='Huber'):
     """Calculate Covariance matrix for the rowvectors of the input data x.
 
     Args:
@@ -264,12 +264,10 @@ def covariance(x, type='sample', loss=None):
 
     cov_signcm = 1 #rsp.Covariance.signcm(x)
     cov_spatmed = 1 #rsp.Covariance.spatmed(x)
-    cov_Mscat = 1 #rsp.Covariance.Mscat(x, loss=loss)
+    cov_Mscat = Mscat(x.T, loss=loss,losspar=0.4)
 
-    mean = np.mean(x, axis=1, keepdims=True)
-    n = np.shape(x)[1] - 1
-    m = x - mean
-    cov_sample = m@m.T/n
+    
+    cov_sample = np.cov(x,bias=True)
 
     if(type == 'sample'):
         cov = cov_sample
@@ -277,38 +275,9 @@ def covariance(x, type='sample', loss=None):
         cov = cov_signcm
     elif (type == 'spatmed'):
         cov = cov_spatmed
-    else:
+    elif (type =='Mscat'):
         [cov, _, _, _] = cov_Mscat
+    else: 
+        cov =None
 
     return cov
-
-
-def md(A, Vhat):
-    """Minimum distance index as defined in
-    P. Ilmonen, K. Nordhausen, H. Oja, and E. Ollila.
-    A new performance index for ICA: Properties, computation and asymptotic
-    analysis.
-    In Latent Variable Analysis and Signal Separation, pages 229–236. Springer,
-    2010.
-
-    This Code is from the coroICA package which implements the coroICA algorithm presented in 
-    "Robustifying Independent Component Analysis by Adjusting for Group-Wise Stationary Noise" 
-    by N Pfister*, S Weichwald*, P Bühlmann, B Schölkopf.
-    - https://github.com/sweichwald/coroICA-python"""
-    # first dimensions of A (true Mixing Matrix)
-    d = np.shape(A)[0]
-    #calculate Gain Marix
-    G = (Vhat).dot(A)
-    # transform into maximization problem and calculate new gain
-    Gsq = np.abs(G)**2
-    temp = Gsq.sum(axis=1)
-    # reshape that calculation works
-    temp = temp.reshape((d, 1))
-    Gtilde = Gsq / temp                #(Gsq.sum(axis=1)).reshape((d, 1))
-    # Define the maximization problem
-    costmat = 1 - 2 * Gtilde + np.tile((Gtilde**2).sum(axis=1), d).reshape((d, d))
-
-    row_ind, col_ind = linear_sum_assignment(costmat)
-    P = Gtilde[row_ind, col_ind]
-    md = np.sqrt(d - np.sum(np.diag(P))) / np.sqrt(d - 1)
-    return md

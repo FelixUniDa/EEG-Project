@@ -89,10 +89,8 @@ def RADICAL(X, seed=None):
     # ****************
     # Whiten the data. Store the whitening operation to combine with
     # rotation matrix for total solution.
-    cov = covariance(X)
-    u, s, v = np.linalg.svd(cov)
-    Whitening_mat = v * s**(-.5) * u.T
-    X_white = Whitening_mat @ X
+
+    X_white = X
 
     sweeps = dim-1
     oldTotalRot = np.identity(dim)
@@ -156,10 +154,10 @@ def RADICAL(X, seed=None):
 
         oldTotalRot = totalRot
 
-    Wopt = totalRot @ Whitening_mat
+    Wopt = totalRot
     Yopt = Wopt @ X
 
-    return Yopt,Wopt
+    return Wopt
 
 
 def radicalOptTheta(x,stdev,m,reps,K,range1):
