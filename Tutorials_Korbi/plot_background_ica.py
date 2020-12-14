@@ -50,11 +50,16 @@ import os
 
 import sys
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath( __file__ )))
+sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR,'Python_Code','JADE'))
+
+#import Python_Code.JADE.jade
+#import Python_Code.PowerICA_Python.PowerICA as PICA
 #print(sys.path)
 
-from jade_old import jadeR
+from jade import jadeR
 
 np.random.seed(0)  # set seed for reproducible results
 n_samples = 2000
@@ -100,7 +105,7 @@ B_jade = jadeR(X.T,m = 3)
 #print(B_jade)
 S_jade = B_jade @ X.T
 #print(S_jade)
-A_jade = X.T @ S_jade.T @ np.linalg.pinv(S_jade @ S_jade.T)
+#A_jade = X.T @ S_jade.T @ np.linalg.pinv(S_jade @ S_jade.T)
 #print(A_jade)
 # S_jade = B_jade @ X.T
 
