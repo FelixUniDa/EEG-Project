@@ -3,9 +3,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utils import *
 import PowerICA
-import jade_old
+
 from distances import *
 from fast_Radical import *
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath( __file__ )))
+sys.path.append(BASE_DIR)
+sys.path.append(os.path.join(BASE_DIR,'Python_Code','JADE'))
+sys.path.append(os.path.join(BASE_DIR,'utils'))
+
+from jade import jadeR
+from monte_carlo_random_walk import monte_carlo_run
 
 # create example signals:
 data = np.stack([create_signal(c='ecg'),
@@ -37,7 +45,7 @@ W_power, _ = PowerICA.powerICA(white_data, 'pow3')
 #W_radical = RADICAL(X_data)
 
 # perform Jade
-W_jade = jade_old.jadeR(white_data)
+W_jade = jadeR(white_data)
 W_jade = np.squeeze(np.asarray(W_jade))
 
 #Perform fastICA
