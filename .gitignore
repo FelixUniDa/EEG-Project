@@ -36,3 +36,9 @@ Python_Code/PowerICA_Python/.idea/
 *.iml
 
 Python_Code/PowerICA_Python/__pycache__/
+
+Python_Code/JADE/__pycache__/
+
+utils/__pycache__/
+
+utils/experiments/Icon
