@@ -4,10 +4,10 @@ from scipy import signal
 import scipy
 import neurokit2 as nk
 import robustsp as rsp
-from Mscat import *
+
 from sklearn.decomposition import FastICA, PCA
 
-def create_signal(x = 10000, c = 'sin', ampl = 1, fs = 2):
+def create_signal(x = 2000, c = 'sin', ampl = 1, fs = 2):
     """
     creates a certain signal
     :param x: length of the data vector
@@ -16,9 +16,6 @@ def create_signal(x = 10000, c = 'sin', ampl = 1, fs = 2):
     :param fs: sample frequency
     :return: data signal
     """
-    #
-    # x is number of samples
-    # sample rate
     n_samples = x
     time = np.linspace(0, 10, n_samples)
 
@@ -53,7 +50,7 @@ def create_signal(x = 10000, c = 'sin', ampl = 1, fs = 2):
         'rect': rect(),
         'ecg': ecg(),
         #'piky': piky(),
-        'all': np.stack([sin1(), cos1(), sawt(), rect(), ecg()], axis=1) #
+        'all': np.stack([sin1(), cos1(), sawt(), rect()], axis=1)
     }
 
     def switch_signal(c):
@@ -73,7 +70,7 @@ def apply_noise(data, c = 'white', SNR_dB = 20):
     """
 
     np.random.seed(1)  # set seed for reproducible results
-    data_ary = data    #np.c_()
+    data_ary = np.c_[data]
 
     data_power = data_ary ** 2
     # Set a target SNR
@@ -110,8 +107,8 @@ def apply_noise(data, c = 'white', SNR_dB = 20):
 
         noise_dB = np.random.gamma(shape=1, scale=np.sqrt(noise_avg_watts), size=data_ary.shape)
 
-        #plt.plot(noise_dB)
-        #plt.show()
+        plt.plot(noise_dB)
+        plt.show()
         # Noise up the original signal (again) and plot
         data_noise = data_ary + noise_dB
 
@@ -185,7 +182,39 @@ def create_outlier(data, prop = 0.01, std = 3, type = 'impulse', seed = 1):
 #plt.plot(data_out)
 #plt.show()
 
-def mixing_matrix(n_components,seed = 1):
+
+def covariance(x, type='sample', loss=None):
+    """Calculate Covariance matrix for the rowvectors of the input data x.
+
+    Args:
+        x (array): Mixed input data.
+
+    Returns:
+        cov [array]: Covariance Matrix of the signals represented by the rowvectors of x.
+    """
+
+    cov_signcm = rsp.Covariance.signcm(x)
+    cov_spatmed = rsp.Covariance.spatmed(x)
+    cov_Mscat = rsp.Covariance.Mscat(x, loss=loss)
+
+    mean = np.mean(x, axis=1, keepdims=True)
+    n = np.shape(x)[1] - 1
+    m = x - mean
+    cov_sample = (m**2)/n
+
+    if(type == 'sample'):
+        cov = cov_sample
+    elif(type == 'signcm'):
+        cov = cov_signcm
+    elif (type == 'spatmed'):
+        cov = cov_spatmed
+    else:
+        [cov, _, _, _] = cov_Mscat
+
+    return cov
+
+
+def mixing_matrix(n_components,seed):
     """Creates random mixing Ma
 
     Args:
@@ -197,26 +226,25 @@ def mixing_matrix(n_components,seed = 1):
     """
     if seed is not None:
         np.random.seed(seed)
-    mixingmat = np.random.rand(n_components, n_components)
+    mixingmat = np.random.rand(n_components,n_components)
 
     return mixingmat
 
 
-def whitening(x, type='sample', loss = 'Huber'):
+def whitening(x):
     """linearly transform the observed signals X in a way that potential 
        correlations between the signals are removed and their variances equal unity. 
        As a result the covariance matrix of the whitened signals will be equal to the identity matrix
 
     Args:
         x (array): Centered input data.
-        type (string): type of covariance estimation
 
     Returns:
         x_whitened: Whitened Data with covariance matrix that is equal to identity matrix.
     """
     centered_X, _ = centering(x)
 
-    cov = covariance(centered_X,type,loss) # covariance(centered_X) #calculate Covariance matrix between signals
+    cov = np.cov(centered_X,bias=True) #calculate Covariance matrix between signals
 
     d, E = np.linalg.eig(cov) #Eigenvalue decomposition (alternatively one can use SVD for whitening)
     idx = d.argsort()[::-1]   
@@ -226,10 +254,9 @@ def whitening(x, type='sample', loss = 'Huber'):
     D_inv = np.diag(1/np.sqrt(d))   #Calculate D^(-0.5)
 
     W_whiten =  D_inv @ E.T         #Calculate Whitening matrix W_whiten 
-    W_dewhiten = E @ np.diag(np.sqrt(d))
     x_whitened = (W_whiten @ centered_X)
 
-    return x_whitened, W_whiten, W_dewhiten
+    return x_whitened
 
 
 def centering(x):
@@ -244,40 +271,9 @@ def centering(x):
     """
     #mean = np.mean(x, axis=1, keepdims=True)
     mean = np.apply_along_axis(np.mean,axis=1,arr=x)
-    centered = x
+    centered =  x
     n,m = np.shape(x)
     for i in range(0,n,1):
         centered[i,:] = centered[i,:]-mean[i]
     #print(centered)
     return centered, mean
-
-def covariance(x, type='sample', loss='Huber'):
-    """Calculate Covariance matrix for the rowvectors of the input data x.
-
-    Args:
-        x (array): Mixed input data.
-        type: type of cov estimation
-
-    Returns:
-        cov [array]: Covariance Matrix of the signals represented by the rowvectors of x.
-    """
-
-    cov_signcm = 1 #rsp.Covariance.signcm(x)
-    cov_spatmed = 1 #rsp.Covariance.spatmed(x)
-    cov_Mscat = Mscat(x.T, loss=loss,losspar=0.4)
-
-    
-    cov_sample = np.cov(x,bias=True)
-
-    if(type == 'sample'):
-        cov = cov_sample
-    elif(type == 'signcm'):
-        cov = cov_signcm
-    elif (type == 'spatmed'):
-        cov = cov_spatmed
-    elif (type =='Mscat'):
-        [cov, _, _, _] = cov_Mscat
-    else: 
-        cov =None
-
-    return cov

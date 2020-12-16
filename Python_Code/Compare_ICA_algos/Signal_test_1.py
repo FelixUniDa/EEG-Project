@@ -3,17 +3,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utils import *
 import PowerICA
+import os
+import sys
 
-from distances import *
+
 from fast_Radical import *
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath( __file__ )))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath( __file__ ))))
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR,'Python_Code','JADE'))
 sys.path.append(os.path.join(BASE_DIR,'utils'))
 
 from jade import jadeR
-from monte_carlo_random_walk import monte_carlo_run
+#from monte_carlo_random_walk import monte_carlo_run
+from distances import *
 
 # create example signals:
 data = np.stack([create_signal(c='ecg'),
