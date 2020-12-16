@@ -241,7 +241,7 @@ def centering(x):
     #print(centered)
     return centered, mean
 
-def covariance(x, type='sample', loss='Huber'):
+def covariance(x, type='sample', loss=None):
     """Calculate Covariance matrix for the rowvectors of the input data x.
 
     Args:
@@ -252,22 +252,161 @@ def covariance(x, type='sample', loss='Huber'):
         cov [array]: Covariance Matrix of the signals represented by the rowvectors of x.
     """
 
-    cov_signcm = 1 #rsp.Covariance.signcm(x)
-    cov_spatmed = 1 #rsp.Covariance.spatmed(x)
-    cov_Mscat = Mscat(x.T, loss=loss,losspar=0.4)
+    cov_signcm = 1
+    cov_Mscat = Mscat(x.T, loss='Huber')
+    n = np.shape(x)[1] - 1
 
-    
-    cov_sample = np.cov(x,bias=True)
-
-    if(type == 'sample'):
+    if (type == 'sample'):
+        mean = np.mean(x, axis=1, keepdims=True)
+        m = x - mean
+        cov_sample = m @ m.T / n
         cov = cov_sample
-    elif(type == 'signcm'):
+    elif (type == 'signcm'):
         cov = cov_signcm
     elif (type == 'spatmed'):
+        spatmed1 = spatmed(x.T)
+        m = x - np.expand_dims(spatmed1, axis=1)
+        cov_spatmed = m @ m.T / n
         cov = cov_spatmed
-    elif (type =='Mscat'):
+    elif(type == 'Mscat'):
         [cov, _, _, _] = cov_Mscat
-    else: 
-        cov =None
 
     return cov
+
+
+"""
+[C,invC,iter,flag] = Mscat(X,loss,...)
+computes M-estimator of scatter matrix for the n x p data matrix X  
+using the loss function 'Huber' or 't-loss' and for a given parameter of
+the loss function (i.e., q for Huber's or degrees of freedom v for 
+the t-distribution). 
+
+Data is assumed to be centered (or the symmetry center parameter = 0)
+
+INPUT:
+       X: the data matrix with n rows (observations) and p columns.
+    loss: either 'Huber' or 't-loss' or 'Tyler'
+ losspar: parameter of the loss function: q in [0,1) for Huber and 
+          d.o.f. v >= 0 for t-loss. For Tyler you do not need to specify
+          this value. Parameter q determines the treshold 
+          c^2 as the qth quantile of chi-squared distribution with p 
+          degrees of freedom distribution (Default q = 0.8). Parameter v 
+          is the def.freedom of t-distribution (Default v = 3)
+          if v = 0, then one computes Tyler's M-estimator
+    invC: initial estimate is the inverse scatter matrix (default = 
+          inverse of the sample covariance matrix) 
+printitn: print iteration number (default = 0, no printing)
+OUTPUT:
+       C: the M-estimate of scatter using Huber's weights
+    invC: the inverse of C
+    iter: nr of iterations
+    flag: flag (true/false) for convergence
+"""
+
+from scipy.stats.distributions import chi2
+import scipy as sp
+
+
+def Mscat(X, loss, losspar=None, invCx=None, printitn=0, MAX_ITER=1000, EPS=1.0e-5):
+    def tloss_consistency_factor(p, v):
+        '''
+        computes the concistency factor b = (1/p) E[|| x ||^2 u_v( ||x||^2)] when
+        x ~N_p(0,I).
+        '''
+        sfun = lambda x: (x ** (p / 2) / (v + x) * np.exp(-x / 2))
+        c = 2 ** (p / 2) * sp.special.gamma(p / 2)
+        q = (1 / c) * \
+            sp.integrate.quad(sfun, 0, np.inf)[0]
+        return ((v + p) / p) * q  # consistency factor
+
+    X = np.asarray(X);
+    n, p = X.shape
+    realdata = np.isrealobj(X)
+
+    # SCM initial start
+    invC = np.linalg.pinv(X.conj().T @ X / n) if invCx == None else np.copy(invCx)
+
+    if loss == 'Huber':
+        ufun = lambda t, c: ((t <= c) + (c / t) * (t > c))  # weight function u(t)
+        q = 0.9 if losspar == None else losspar
+        if np.isreal(q) and np.isfinite(q) and 0 < q and q < 1:
+            if realdata:
+                upar = chi2.ppf(q, df=p)  # threshold for Huber's weight u(t;.)
+                b = chi2.cdf(upar, p + 2) + (upar / p) * (1 - q)  # consistency factor
+            else:
+                upar = chi2.ppf(q, 2 * p) / 2
+                b = chi2.cdf(2 * upar, 2 * (p + 1)) + (upar / p) * (1 - q)
+        else:
+            raise ValueError('losspar is a real number in [0,1] and not %s for Huber-loss' % q)
+        const = 1 / (b * n)
+    if loss == 't-loss':
+        # d.o.f v=3 is used as the default parameter for t-loss
+        # otherwise use d.o.f. v that was given
+        upar = 3 if losspar == None else losspar
+        if not np.isreal(upar) or not np.isfinite(upar) or upar < 0:
+            raise ValueError('losspar should be a real number greater 0 and not %s for t-loss' % q)
+        if realdata and upar != 0:
+            # this is for real data
+            ufun = lambda t, v: 1 / (v + t)  # weight function
+            b = tloss_consistency_factor(p, upar)
+            const = (upar + p) / (b * n)
+        if not realdata and upar != 0:
+            # this is for complex data
+            ufun = lambda t, v: 1 / (v + 2 * t)  # weight function
+            b = tloss_consistency_factor(2 * p, upar)
+            const = (upar + 2 * p) / (b * n)
+        if upar == 0:
+            # Tylers M-estimator
+            ufun = lambda t, v: 1 / t
+            const = p / n
+
+    for i in range(MAX_ITER):
+        t = np.real(np.sum((X @ invC) * np.conj(X), axis=1))  # norms
+        C = const * X.conj().T @ (X * ufun(t, upar)[:, None])
+        d = np.max(np.sum(np.abs(np.eye(p) - invC @ C), axis=1))
+
+        if printitn > 0 and (i + 1) % printitn == 0:
+            print("At iter = %d, dis=%.6f\n" % (i, d))
+        invC = np.linalg.pinv(C)
+        if d <= EPS: break
+
+    if i == MAX_ITER: print("WARNING! Slow convergence: the error of the solution is %f\n'" % d)
+    return C, invC, i, i == MAX_ITER - 1
+
+
+'''
+  Computes the spatial median based on (real or complex) data matrix X.
+  INPUT:
+         X: Numeric data matrix of size N x p. Each row represents one 
+           observation, and each column represents one variable 
+ printitn : print iteration number (default = 0, no printing)
+
+ OUTPUT
+      smed: Spatial median estimate
+'''
+
+def spatmed(X, printitn=0, iterMAX=500, EPS=1e-6, TOL=1e-5):
+    l = np.sum(X * np.conj(X), axis=1)
+    X = X[l != 0, :]
+    n = len(X)
+
+    smed0 = np.median(X) if np.isrealobj(X) else np.mean(X)
+    norm0 = np.linalg.norm(smed0)
+
+
+    for it in range(iterMAX):
+        Xc = X - smed0
+        l = np.sqrt(np.sum(Xc * np.conj(Xc), axis=1, keepdims=1))
+        l[l < EPS] = EPS
+        Xpsi = np.divide(Xc, l)  # np.expand_dims(l, axis=1) Xc / l
+        update = np.sum(Xpsi, axis=0) / sum(1 / l)
+        smed = smed0 + update
+
+        dis = np.linalg.norm(update, ord=2) / norm0
+
+        if printitn > 0 and (it + 1) % printitn == 0: print('At iter = %.3d, dis =%.7f \n' % (it, dis))
+
+        if dis <= TOL: break
+        smed0 = smed
+        norm0 = np.linalg.norm(smed, ord=2)
+    return smed
