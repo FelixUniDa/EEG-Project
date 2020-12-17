@@ -6,6 +6,7 @@ import pandas as pd
 from sklearn.neighbors import KernelDensity
 from sklearn.decomposition import FastICA, PCA
 import neurokit2
+import time
 
 import os
 import sys
@@ -36,7 +37,7 @@ sns.set_theme(style="darkgrid")
 # ToDo: write experiment results to csv
 
 
-def monte_carlo_run(n_samples,ica_method,mixing_mat,W_whiten,signals):
+def monte_carlo_run(n_samples,ica_method,seed = None):
     """
     Do a Monte Carlo simulation of n_samples, plot a histogram, mean and standard deviation
     and write results to csv
@@ -47,50 +48,86 @@ def monte_carlo_run(n_samples,ica_method,mixing_mat,W_whiten,signals):
 
     :return: 
     """
-    # assert callable(ica_method), \
-    #     " The given measure is not callable"
-  
-    # assert (isinstance(mixing_mat, type(np.array) ) & isinstance(signals, type(np.ndarray))),\
-    #     "A is of type (%s) and B is of type (%s), should be (%s)" % (type(mixing_mat),type(signals), "np.array")
+    methods = ["jade","power_ica","fast_ica","radical"]
     
+    assert (ica_method in methods), \
+        "Can't choose  '%s' as ICA - method, possible optiions: %s" %(ica_method, methods)
+  
+    
+    # create example signals:
+    data = np.stack([create_signal(c='ecg'),
+            create_signal(ampl=4,c='cos'),
+            create_signal(c='rect'),
+            create_signal(c='sawt')]).T
 
-    data_storage = np.empty((1,n_samples))
+    # create mixing matrix and mixed signals
+    c, r = data.shape
 
+    data_storage = np.empty(n_samples)
+
+    new_MM = True
+    
+    #time tracking
+    t0= time.time()
+
+    #start Monte-Carlo run
     for i in range(n_samples):
-        # TODO: assert if ica_method in names
+        
+        if(new_MM):
+            MM = mixing_matrix(r,seed)
+            mixdata = MM@data.T
+            #apply noise
+            mixdata_noise = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=20),prop=0.001,std=5) for dat in mixdata])
+            # centering the data and whitening the data:
+            white_data,W_whiten,W_dewhiten = whitening(mixdata_noise, type='sample')
+            if(seed is not None):
+                new_MM = False
+
         if(ica_method == "jade"):
-            # perform Jade
+            # Perform JADE
             W = jadeR(white_data,is_whitened=True, verbose = False)
             W = np.squeeze(np.asarray(W))
         elif (ica_method == "power_ica"):
-            # perform PowerICA
+            # Perform PowerICA
             W, _ = PowerICA.powerICA(white_data, 'pow3')
         elif (ica_method == "fast_ica"):
-            # compute ICA
+            # Perform FastICA
             ica = FastICA(n_components=4)
             S_ = ica.fit_transform(white_data)  # Get the estimated sources
             W = ica._unmixing
         elif (ica_method == "radical"):
-            #Perform fastICA
+            # Perform Radical
             W = RADICAL(white_data)
         else:
             return
-        #print(i)
-        data_storage[0,i] = md(W_whiten @ mixing_mat,W)
-        #print(data_storage[0,i])
         
+        data_storage[i] = md(W_whiten @ MM,W)
+        print(data_storage[i])
 
-    mu = float(np.mean(data_storage,axis = 1))
-    sigma = np.std(data_storage, axis = 1)
+    # elapsed time for Monte-Carlo Run
+    t1 = time.time() - t0
+    print("Time elapsed: ", t1) # CPU seconds elapsed (floating point)   
+        
+    mu = np.mean(data_storage)
+    sigma = np.std(data_storage)
 
     plt.figure()
-    #sns.distplot(data_storage[1,:])
-    plt.hist(data_storage[0], density=True)  # `density=False` would make counts
-    plt.ylabel('Probability')
+    plt.hist(data_storage,bins = 1000,density = False )  # `density=False` would make counts
+    plt.ylabel('count')
     plt.xlabel('Minimum Distance: %s ' % ica_method)
+    plt.show()
+
+    # plt.figure()
+    # sns.distplot(data_storage[0,:])
+
     print('Mean %s: %f ' % (ica_method,mu))
     print('Standard deviation %s: %f' %(ica_method,sigma))
-    
+
+
+if __name__ == "__main__":
+
+    # do a monte-carlo run
+    monte_carlo_run(1000,'radical', seed = None)
 
 
 
@@ -133,27 +170,3 @@ def monte_carlo_run(n_samples,ica_method,mixing_mat,W_whiten,signals):
 # # trial prints
 # print(' Mean displacement:', x.mean())
 # print('Standard deviation:', x.std())
-
-
-if __name__ == "__main__":
-    # create example signals:
-    data = np.stack([create_signal(c='ecg'),
-            create_signal(ampl=4,c='cos'),
-            create_signal(c='rect'),
-            create_signal(c='sawt')]).T
-
-    # create mixing matrix and mixed signals
-    c, r = data.shape
-    MM = mixing_matrix(r,seed=1)
-    mixdata = MM@data.T
-
-    #apply noise
-    mixdata_noise = np.stack([create_outlier(apply_noise(dat,c='white', SNR_dB=20),prop=0.001,std=5) for dat in mixdata])
-
-    # centering the data and whitening the data:
-    white_data,W_whiten,W_dewhiten = whitening(mixdata_noise, type='sample')
-    
-    monte_carlo_run(10,'radical',MM,W_whiten,mixdata_noise)
-
-
-
