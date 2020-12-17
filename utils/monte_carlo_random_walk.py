@@ -21,6 +21,10 @@ from fast_Radical import *
 from jade import jadeR
 from distances import *
 
+import pandas as pd
+
+
+
 
 """ Monte Carlo Simulation Experminets"""
 # inspired by:
@@ -77,7 +81,8 @@ def monte_carlo_run(n_samples,ica_method,seed = None):
             MM = mixing_matrix(r,seed)
             mixdata = MM@data.T
             #apply noise
-            mixdata_noise = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=20),prop=0.001,std=5) for dat in mixdata])
+            noise_lvl = 20
+            mixdata_noise = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=noise_lvl),prop=0.001,std=5) for dat in mixdata])
             # centering the data and whitening the data:
             white_data,W_whiten,W_dewhiten = whitening(mixdata_noise, type='sample')
             if(seed is not None):
@@ -112,7 +117,7 @@ def monte_carlo_run(n_samples,ica_method,seed = None):
     sigma = np.std(data_storage)
 
     plt.figure()
-    plt.hist(data_storage,bins = 1000,density = False )  # `density=False` would make counts
+    plt.hist(data_storage,density = False )  # `density=False` would make counts
     plt.ylabel('count')
     plt.xlabel('Minimum Distance: %s ' % ica_method)
     plt.show()
@@ -124,10 +129,16 @@ def monte_carlo_run(n_samples,ica_method,seed = None):
     print('Standard deviation %s: %f' %(ica_method,sigma))
 
 
+    mc_data = { 'Method': [ica_method], '# Runs' : [n_samples], 'Noise-level': [noise_lvl], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Time elapsed' : [t1]}
+    df = pd.DataFrame(mc_data, columns= ['Method', '# Runs','Noise-level', 'Seed','Mean','Std','Time elapsed'])
+    df.to_csv(os.path.join(BASE_DIR,'utils','Monte_Carlo_runs.csv'), index = False, header=True, mode = 'a')
+
+
+
 if __name__ == "__main__":
 
     # do a monte-carlo run
-    monte_carlo_run(1000,'radical', seed = None)
+    monte_carlo_run(100,'jade', seed = None)
 
 
 
