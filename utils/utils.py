@@ -4,7 +4,7 @@ from scipy import signal
 import scipy
 import neurokit2 as nk
 import robustsp as rsp
-from Mscat import *
+#from Mscat import *
 from sklearn.decomposition import FastICA, PCA
 
 def create_signal(x = 10000, c = 'sin', ampl = 1, fs = 2):
@@ -175,7 +175,7 @@ def create_outlier(data, prop=0.01, std=3, type='impulse', seed=1):
     return data
 
 
-def mixing_matrix(n_components,seed = 1):
+def mixing_matrix(n_components, seed=None):
     """Creates random mixing Ma
 
     Args:
@@ -185,8 +185,9 @@ def mixing_matrix(n_components,seed = 1):
     Returns:
         mixingmat[array]: Matrix for linear mixing of n source signals.
     """
-    if seed is not None:
-        np.random.seed(seed)
+    np.random.seed(seed)
+    #if seed is not None:
+    #   np.random.seed(seed)
     mixingmat = np.random.rand(n_components, n_components)
 
     return mixingmat

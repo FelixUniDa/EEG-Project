@@ -10,6 +10,10 @@ import time
 
 import os
 import sys
+
+from Python_Code.Compare_ICA_algos.fast_Radical import RADICAL
+from utils import mixing_matrix, create_signal, create_outlier, apply_noise, whitening
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath( __file__ )))
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR,'Python_Code','JADE'))
@@ -41,7 +45,7 @@ sns.set_theme(style="darkgrid")
 # ToDo: write experiment results to csv
 
 
-def monte_carlo_run(n_samples,ica_method,seed = None):
+def monte_carlo_run(n_samples, ica_method, seed=None):
     """
     Do a Monte Carlo simulation of n_samples, plot a histogram, mean and standard deviation
     and write results to csv
@@ -78,13 +82,13 @@ def monte_carlo_run(n_samples,ica_method,seed = None):
     for i in range(n_samples):
         
         if(new_MM):
-            MM = mixing_matrix(r,seed)
+            MM = mixing_matrix(r, seed)
             mixdata = MM@data.T
             #apply noise
             noise_lvl = 20
             mixdata_noise = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=noise_lvl),prop=0.001,std=5) for dat in mixdata])
             # centering the data and whitening the data:
-            white_data,W_whiten,W_dewhiten = whitening(mixdata_noise, type='sample')
+            white_data, W_whiten, W_dewhiten = whitening(mixdata_noise, type='sample')
             if(seed is not None):
                 new_MM = False
 
@@ -138,7 +142,7 @@ def monte_carlo_run(n_samples,ica_method,seed = None):
 if __name__ == "__main__":
 
     # do a monte-carlo run
-    monte_carlo_run(100,'jade', seed = None)
+    monte_carlo_run(100, 'jade', seed = None)
 
 
 
