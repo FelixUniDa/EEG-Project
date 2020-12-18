@@ -49,6 +49,7 @@ from os.path import dirname, realpath, sep, pardir
 import os
 
 import sys
+from coroica import CoroICA
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath( __file__ )))
@@ -110,19 +111,28 @@ S_jade = B_jade @ X.T
 #print(A_jade)
 # S_jade = B_jade @ X.T
 
-plt.figure(figsize=(9, 6))
+
+c = CoroICA(partitionsize = 100,groupsize= 2000)
+# groups = np.zeros(X.shape[0])
+# partition = np.array([2000])
+c.fit(X)
+# c.V_ holds the unmixing matrix
+
+recovered_sources = c.transform(X)
+
+plt.figure(figsize=(10, 6))
 
 # plt.plot(S_jade[0,:],S_jade[1,:],S_jade[2,:])
-models = [X, S, S_, H, S_jade.T]
+models = [X, S, S_, H, S_jade.T, recovered_sources]
 names = ['Observations (mixed signal)',
          'True Sources',
          'ICA estimated sources',
          'PCA estimated sources',
-         'JADE']
+         'JADE','CoroICA']
 colors = ['red', 'steelblue', 'orange']
 
 for ii, (model, name) in enumerate(zip(models, names), 1):
-    plt.subplot(5, 1, ii)
+    plt.subplot(6, 1, ii)
     plt.title(name)
     print(model.shape)
     for sig, color in zip(model.T, colors):

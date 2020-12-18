@@ -11,7 +11,7 @@ import time
 import os
 import sys
 
-from Python_Code.Compare_ICA_algos.fast_Radical import RADICAL
+#from Python_Code.Compare_ICA_algos.fast_Radical import RADICAL
 from utils import mixing_matrix, create_signal, create_outlier, apply_noise, whitening
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath( __file__ )))
@@ -26,6 +26,7 @@ from jade import jadeR
 from distances import *
 
 import pandas as pd
+from coroica import CoroICA
 
 
 
@@ -56,7 +57,7 @@ def monte_carlo_run(n_samples,ica_method,seed = None, noise_lvl = 20):
 
     :return: 
     """
-    methods = ["jade","power_ica","fast_ica","radical"]
+    methods = ["jade","power_ica","fast_ica","radical","coro_ica"]
     
     assert (ica_method in methods), \
         "Can't choose  '%s' as ICA - method, possible optiions: %s" %(ica_method, methods)
@@ -83,7 +84,7 @@ def monte_carlo_run(n_samples,ica_method,seed = None, noise_lvl = 20):
         
         if(new_MM):
             MM = mixing_matrix(r,None)
-            print(MM)
+            #print(MM)
             mixdata = MM@data.T
             #apply noise
             mixdata_noise = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=noise_lvl),prop=0.001,std=5) for dat in mixdata])
@@ -92,6 +93,8 @@ def monte_carlo_run(n_samples,ica_method,seed = None, noise_lvl = 20):
             if(seed is not None):
                 new_MM = False
 
+        print(mixdata_noise.shape)
+        print(white_data.shape)
         if(ica_method == "jade"):
             # Perform JADE
             W = jadeR(white_data,is_whitened=True, verbose = False)
@@ -107,6 +110,11 @@ def monte_carlo_run(n_samples,ica_method,seed = None, noise_lvl = 20):
         elif (ica_method == "radical"):
             # Perform Radical
             W = RADICAL(white_data)
+        elif (ica_method == 'coro_ica'):
+            #print(r)
+            c = CoroICA(partitionsize = 100,groupsize= 10000)
+            c.fit(white_data.T)
+            W = c.V_
         else:
             return
         
@@ -141,7 +149,7 @@ def monte_carlo_run(n_samples,ica_method,seed = None, noise_lvl = 20):
 if __name__ == "__main__":
 
     # do a monte-carlo run
-    monte_carlo_run(100,'jade', seed = None, noise_lvl=20)
+    monte_carlo_run(100,'coro_ica', seed = None, noise_lvl=20)
 
 
 

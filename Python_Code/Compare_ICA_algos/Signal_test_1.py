@@ -5,7 +5,7 @@ from utils import *
 import PowerICA
 import os
 import sys
-
+from coroica import CoroICA
 
 from fast_Radical import *
 
@@ -54,11 +54,16 @@ W_jade = np.squeeze(np.asarray(W_jade))
 #Perform fastICA
 W_radical = RADICAL(white_data)
 #W_fast = sklearn.decomposition.FastICA(n_components=4,whiten=True)
+
+c = CoroICA(partitionsize = 100,groupsize= 10000)
+c.fit(white_data.T)
+W_coro = c.V_
 #%%
 # Un-mix signals using
 unMixed_power = W_power @ white_data
 unMixed_jade = W_jade @ white_data
 unMixed_radical = W_radical @ white_data
+unMixed_coro = W_coro @ white_data
 
 #Compute Minimum Distance Index of different ICA algorithms
 
@@ -83,6 +88,7 @@ fig3, axs3 = plt.subplots(r, sharex=True)
 fig4, axs4 = plt.subplots(r, sharex=True)
 fig5, axs5 = plt.subplots(r, sharex=True)
 fig6, axs6 = plt.subplots(r, sharex=True)
+fig7, axs7 = plt.subplots(r, sharex=True)
 
 while(i<r):
     # input signals
@@ -110,6 +116,10 @@ while(i<r):
     axs6[i].plot(unMixed_radical.T[:, i], lw=3)
     axs6[i].set_ylabel('sig: ' + str(i))
     fig6.suptitle('Recovered signals RADICAL')
+
+    axs7[i].plot(unMixed_coro.T[:, i], lw=3)
+    axs7[i].set_ylabel('sig: ' + str(i))
+    fig7.suptitle('Recovered signals CoroICA')
 
     i = i+1
 
