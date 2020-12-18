@@ -45,7 +45,7 @@ sns.set_theme(style="darkgrid")
 # ToDo: write experiment results to csv
 
 
-def monte_carlo_run(n_samples, ica_method, seed=None):
+def monte_carlo_run(n_samples,ica_method,seed = None, noise_lvl = 20):
     """
     Do a Monte Carlo simulation of n_samples, plot a histogram, mean and standard deviation
     and write results to csv
@@ -82,10 +82,10 @@ def monte_carlo_run(n_samples, ica_method, seed=None):
     for i in range(n_samples):
         
         if(new_MM):
-            MM = mixing_matrix(r, seed)
+            MM = mixing_matrix(r,None)
+            print(MM)
             mixdata = MM@data.T
             #apply noise
-            noise_lvl = 20
             mixdata_noise = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=noise_lvl),prop=0.001,std=5) for dat in mixdata])
             # centering the data and whitening the data:
             white_data, W_whiten, W_dewhiten = whitening(mixdata_noise, type='sample')
@@ -111,7 +111,7 @@ def monte_carlo_run(n_samples, ica_method, seed=None):
             return
         
         data_storage[i] = md(W_whiten @ MM,W)
-        print(data_storage[i])
+        #print(data_storage[i])
 
     # elapsed time for Monte-Carlo Run
     t1 = time.time() - t0
@@ -120,29 +120,28 @@ def monte_carlo_run(n_samples, ica_method, seed=None):
     mu = np.mean(data_storage)
     sigma = np.std(data_storage)
 
-    plt.figure()
-    plt.hist(data_storage,density = False )  # `density=False` would make counts
+    # FRESH SEABORN PLOT
+    x = pd.Series(data_storage, name=('Minimum Distance: %s ' % ica_method))
+    sns.displot(x, kde=True)
     plt.ylabel('count')
-    plt.xlabel('Minimum Distance: %s ' % ica_method)
+    file_name = ica_method + '_' + str(n_samples) + '_' + str(noise_lvl) +'dB_' + '.jpg'
+    plt.savefig(os.path.join('results_Monte_Carlo',file_name), dpi=300)  
     plt.show()
-
-    # plt.figure()
-    # sns.distplot(data_storage[0,:])
 
     print('Mean %s: %f ' % (ica_method,mu))
     print('Standard deviation %s: %f' %(ica_method,sigma))
 
 
-    mc_data = { 'Method': [ica_method], '# Runs' : [n_samples], 'Noise-level': [noise_lvl], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Time elapsed' : [t1]}
-    df = pd.DataFrame(mc_data, columns= ['Method', '# Runs','Noise-level', 'Seed','Mean','Std','Time elapsed'])
-    df.to_csv(os.path.join(BASE_DIR,'utils','Monte_Carlo_runs.csv'), index = False, header=True, mode = 'a')
+    mc_data = { 'Method': [ica_method], '# Runs' : [n_samples], 'Noise-level [dB]': [noise_lvl], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Time elapsed [s]' : [t1]}
+    df = pd.DataFrame(mc_data, columns= ['Method', '# Runs','Noise-level [dB]', 'Seed','Mean','Std','Time elapsed [s]'])
+    df.to_csv(os.path.join(BASE_DIR,'utils','results_Monte_Carlo','Monte_Carlo_runs.csv'), index = False, header=False, mode = 'a')
 
 
 
 if __name__ == "__main__":
 
     # do a monte-carlo run
-    monte_carlo_run(100, 'jade', seed = None)
+    monte_carlo_run(100,'jade', seed = None, noise_lvl=20)
 
 
 
