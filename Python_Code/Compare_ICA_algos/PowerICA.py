@@ -35,10 +35,10 @@ def powerICA(X, nonlin, seed=None,Huber_param=1.345,lp_param=1.5,fair_param=1.39
         print('Data has invalid shape! Should be d × n array with d < n!')
     if not np.isreal(X).all():
         print('Data is not real!')
-    if np.max(np.abs(C[:]))> 1e-10:
-        print('Data is not whitened!')
-    if np.max(np.abs((np.mean(X,axis=1))))>1e-10:
-        print('Data is not centered!')
+    # if np.max(np.abs(C[:]))> 1e-10:
+    #     print('Data is not whitened!')
+    # if np.max(np.abs((np.mean(X,axis=1))))>1e-10:
+    #     print('Data is not centered!')
 
     for k in range(0,d-1):  
         ## (1) Initialization
@@ -105,7 +105,7 @@ def Node1(X, nonlin, w0,Orth,Huber_param,lp_param,fair_param):
         w = Orth @w #(5)
         w = w/np.linalg.norm(w); #(6)   
         if np.linalg.norm(w - wOld) < epsilon or np.linalg.norm(w + wOld) < epsilon:
-            print('Node1 converged after',i,'iterations\n')
+            #print('Node1 converged after',i,'iterations\n')
             break
         i = i + 1 #(3)
     if i <= MaxIter:
@@ -162,7 +162,7 @@ def Node2(X, nonlin, w0,Orth,Huber_param,lp_param,fair_param):
         w = Orth @ w     #(5)
         w = w/np.linalg.norm(w)  #(6)
         if np.linalg.norm(w - wOld) < epsilon or np.linalg.norm(w + wOld) < epsilon:
-            print('Node2 converged after',i,'iterations\n')
+            #print('Node2 converged after',i,'iterations\n')
             break
         i = i + 1  #(3)
     if i <= MaxIter:

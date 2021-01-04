@@ -205,7 +205,7 @@ def whitening(x, type='sample', loss = 'Huber'):
     Returns:
         x_whitened: Whitened Data with covariance matrix that is equal to identity matrix.
     """
-    centered_X, _ = centering(x)
+    centered_X, _ = centering(x, 'sample')
 
     cov = covariance(centered_X,type,loss) # covariance(centered_X) #calculate Covariance matrix between signals
 
@@ -223,24 +223,28 @@ def whitening(x, type='sample', loss = 'Huber'):
     return x_whitened, W_whiten, W_dewhiten
 
 
-def centering(x):
+def centering(x, type = 'sample'):
     """Centers input data x by subtracting the mean of each Signal represented by the row vectors of x.
 
     Args:
         x ([type]): [description]
-
+        type: sample mean or spatial median
     Returns:
         centered [array]: Centered data array.
         mean [array]: Vector containing the mean of each signal.
     """
-    #mean = np.mean(x, axis=1, keepdims=True)
-    mean = np.apply_along_axis(np.mean,axis=1,arr=x)
+    # mean = np.mean(x, axis=1, keepdims=True)
+    if(type == 'sample'):
+        mean = np.apply_along_axis(np.mean, axis=1, arr=x)
+    if(type == 'spatmed'):
+        mean = spatmed(x.T)
     centered = x
-    n,m = np.shape(x)
-    for i in range(0,n,1):
-        centered[i,:] = centered[i,:]-mean[i]
-    #print(centered)
+    n, m = np.shape(x)
+    for i in range(0, n, 1):
+        centered[i, :] = centered[i, :] - mean[i]
+    # print(centered)
     return centered, mean
+
 
 def covariance(x, type='sample', loss=None):
     """Calculate Covariance matrix for the rowvectors of the input data x.

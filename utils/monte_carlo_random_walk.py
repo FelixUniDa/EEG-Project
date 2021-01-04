@@ -65,7 +65,7 @@ def monte_carlo_run(n_samples,ica_method,seed = None, noise_lvl = 20):
     
     # create example signals:
     data = np.stack([create_signal(c='ecg'),
-            create_signal(ampl=4,c='cos'),
+            create_signal(ampl=1,c='cos'),
             create_signal(c='rect'),
             create_signal(c='sawt')]).T
 

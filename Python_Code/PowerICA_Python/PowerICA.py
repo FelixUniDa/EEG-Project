@@ -105,7 +105,7 @@ def Node1(X, nonlin, w0,Orth):
         w = Orth @w #(5)
         w = w/np.linalg.norm(w); #(6)   
         if np.linalg.norm(w - wOld) < epsilon or np.linalg.norm(w + wOld) < epsilon:
-            print('Node1 converged after',i,'iterations\n')
+            #print('Node1 converged after',i,'iterations\n')
             break
         i = i + 1 #(3)
     if i <= MaxIter:
@@ -162,7 +162,7 @@ def Node2(X, nonlin, w0,Orth):
         w = Orth @ w     #(5)
         w = w/np.linalg.norm(w)  #(6)
         if np.linalg.norm(w - wOld) < epsilon or np.linalg.norm(w + wOld) < epsilon:
-            print('Node2 converged after',i,'iterations\n')
+            #print('Node2 converged after',i,'iterations\n')
             break
         i = i + 1  #(3)
     if i <= MaxIter:
