@@ -71,7 +71,7 @@ def apply_noise(data, type='white', SNR_dB=20):
     :return: data vector with applied noise
     """
 
-    np.random.seed(1)  # set seed for reproducible results
+    np.random.seed(None)  # set seed for reproducible results
     data_ary = data    #np.c_()
 
     data_power = data_ary ** 2
@@ -173,6 +173,11 @@ def create_outlier(data, prop=0.01, std=3, type='impulse', seed=1):
         print("invalid type")
 
     return data
+
+def create_artifact():
+
+    #TODO
+    return 0
 
 
 def mixing_matrix(n_components, seed=None):

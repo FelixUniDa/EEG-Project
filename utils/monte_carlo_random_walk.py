@@ -87,7 +87,7 @@ def monte_carlo_run(n_samples,ica_method,seed = None, noise_lvl = 20):
             #print(MM)
             mixdata = MM@data.T
             #apply noise
-            mixdata_noise = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=noise_lvl),prop=0.001,std=5) for dat in mixdata])
+            mixdata_noise = np.stack([apply_noise(dat,type='white', SNR_dB=noise_lvl) for dat in mixdata])#[create_outlier(apply_noise(dat,type='white', SNR_dB=noise_lvl),prop=0.001,std=5) for dat in mixdata])
             # centering the data and whitening the data:
             white_data, W_whiten, W_dewhiten = whitening(mixdata_noise, type='sample')
             if(seed is not None):
@@ -149,7 +149,7 @@ def monte_carlo_run(n_samples,ica_method,seed = None, noise_lvl = 20):
 if __name__ == "__main__":
 
     # do a monte-carlo run
-    monte_carlo_run(100,'coro_ica', seed = None, noise_lvl=20)
+    monte_carlo_run(3,'coro_ica', seed = None, noise_lvl=3)
 
 
 
