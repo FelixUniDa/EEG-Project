@@ -91,7 +91,7 @@ def monte_carlo_run(n_runs,data_size,ica_method,seed = None, noise_lvl = 20, p_o
             mixdata_noise = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=noise_lvl),prop=p_outlier,std=3) for dat in mixdata])
 
             # centering the data and whitening the data:
-            white_data, W_whiten, W_dewhiten = whitening(mixdata_noise, type='sample')
+            white_data, W_whiten, W_dewhiten,_ = whitening(mixdata_noise, type='sample')
             if(seed is not None):
                 new_MM = False
 
