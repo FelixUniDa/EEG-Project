@@ -193,9 +193,30 @@ def create_outlier(data, prop=0.01, std=3, type='impulse', seed=1):
 
     return data
 
-def create_artifact():
+def create_artifact(data, prop=0.01, std=3, number=3, type='eye', seed=None):
+
+
+
 
     #TODO
+    '''if (type == 'eye'):
+        outlier_index = np.random.choice(a=np.arange(0, c, 1), size=n_outl)
+        data[outlier_index] = outlier
+    elif (type == 'muscle'):
+        outlier_index = np.random.choice(a=np.arange(0, c - n_outl, 1))
+        data[outlier_index:outlier_index + n_outl] = outlier
+    elif (type == 'electic'):
+        outlier_index = np.random.choice(a=np.arange(0, c - n_outl, 1))
+        data[outlier_index:outlier_index + n_outl] = outlier
+    elif (type == 'high_noise'):
+        outlier_index = np.random.choice(a=np.arange(0, c - n_outl, 1))
+        data[outlier_index:outlier_index + n_outl] = outlier
+    elif (type == 'linear'):
+        outlier_index = np.random.choice(a=np.arange(0, c - n_outl, 1))
+        data[outlier_index:outlier_index + n_outl] = outlier
+    else:
+        print("invalid type")
+    '''
     return 0
 
 

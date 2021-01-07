@@ -1,0 +1,7 @@
+
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,100,500,20,0.0,None,0.518814127554333,0.1556164377905699,0.5056216337161461,0.14839082595495853,30.020687103271484
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,100,1000,20,0.0,None,0.48286296439066845,0.15457726119334098,0.4552943964856627,0.17270387793981778,41.57571482658386
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,100,2500,20,0.0,None,0.5031583320278429,0.18268348902944975,0.49032386326898625,0.22246344633082635,91.9940333366394

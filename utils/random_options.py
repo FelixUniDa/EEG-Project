@@ -40,7 +40,7 @@ np.random.shuffle(x)
 np.random.shuffle(x.T)
 # numpy.random.permutation does the same thing but returns a copy
 np.random.permutation(x)
-# When given an integre n, permutation treats is as the array arange(n)
+# When given an integer n, permutation treats is as the array arange(n)
 np.random.permutation(10)
 # Use indices if you needed to shuffle collections of arrays in synchrony
 x = np.arange(12).reshape(4,3)

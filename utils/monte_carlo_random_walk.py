@@ -47,7 +47,7 @@ sns.set_theme(style="darkgrid")
 # ToDo: write experiment results to csv
 
 
-def monte_carlo_run(n_runs,data_size,ica_method,seed = None, noise_lvl = 20, p_outlier = 0.0):
+def monte_carlo_run(n_runs, data_size, ica_method,seed = None, noise_lvl = 20, p_outlier = 0.0):
     """
     Do a Monte Carlo simulation of n_runs, plot a histogram, mean and standard deviation
     and write results to csv
@@ -60,8 +60,7 @@ def monte_carlo_run(n_runs,data_size,ica_method,seed = None, noise_lvl = 20, p_o
     """
     methods = ["jade","power_ica","fast_ica","radical","coro_ica"]
     
-    assert (ica_method in methods), \
-        "Can't choose  '%s' as ICA - method, possible optiions: %s" %(ica_method, methods)
+    assert (ica_method in methods), "Can't choose  '%s' as ICA - method, possible optiions: %s" %(ica_method, methods)
   
     
     # create example signals:
@@ -148,7 +147,7 @@ def monte_carlo_run(n_runs,data_size,ica_method,seed = None, noise_lvl = 20, p_o
 
     mc_data = { 'Method': [ica_method], '# Runs' : [n_runs], 'Sample Size' : [data_size], 'Noise-level [dB]': [noise_lvl],'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med],'nMAD': [nMAD], 'Time elapsed [s]' : [t1]}
     df = pd.DataFrame(mc_data, columns= ['Method', '# Runs','Sample Size','Noise-level [dB]','Percentage Outliers (3Std)', 'Seed','Mean','Std','Median','nMAD','Time elapsed [s]'])
-    df.to_csv(os.path.join(BASE_DIR,'utils','results_Monte_Carlo_CoroICA','Monte_Carlo_runs_CoroICA.csv'), index = True, header=True, mode = 'a')
+    df.to_csv(os.path.join(BASE_DIR,'utils','results_Monte_Carlo_RADICAL','Monte_Carlo_runs_RADICAL.csv'), index = True, header=True, mode = 'a')
 
     # return minimum distances stored in data_storage
     return data_storage
@@ -161,20 +160,21 @@ if __name__ == "__main__":
     sample_size = np.array([500,1000,2500]) #1000,2500,5000,10000,15000
     #init DataFrame
     df = pd.DataFrame()
-    ica_method = 'coro_ica'
+    ica_method = 'radical'
     noise = 40
     p = 0.0
     for s in sample_size:
         # do a monte-carlo run
-        mds = monte_carlo_run(n_runs,s,ica_method, seed = None, p_outlier = p)
+        mds = monte_carlo_run(n_runs, s, ica_method, seed = None, p_outlier = p)
         
         d = {'Minimum Distance': mds, 'Sample Size': np.repeat(s,n_runs), '# MC Runs': np.repeat(n_runs,n_runs) }
         temp = pd.DataFrame(data=d)
         df = df.append(temp)
+        print("Ready samplesize %s" %s)
 
     sns.boxplot(x='Sample Size', y='Minimum Distance', data=df)
     file_name = ica_method + '_' + str(n_runs)+ 'Runs' + '_' + str(noise) +'dB_'+'p_outliers_'+ str(p) + '.jpg'
-    plt.savefig(os.path.join('results_Monte_Carlo_CoroICA',file_name), dpi=300)  
+    plt.savefig(os.path.join('results_Monte_Carlo_RADICAL',file_name), dpi=300)
     plt.show()
 
 # def random_walk_1d(n_steps):

@@ -108,7 +108,7 @@ def RADICAL(X, seed=None):
     newKfloat = startKfloat
 
     for sweepNum in range(0, sweeps):
-        print(1, 'Sweep # ', sweepNum,'of', sweeps)
+        #print(1, 'Sweep # ', sweepNum,'of', sweeps)
         range1 = np.pi / 2
 
         # Compute number of angle samples for this sweep.
@@ -127,7 +127,7 @@ def RADICAL(X, seed=None):
         for i in range(0, dim-1):
             for j in range(i+1, dim):
 
-                print(1, 'Unmixing dimensions', i, ' and', j)
+                #print(1, 'Unmixing dimensions', i, ' and', j)
                 # ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **
                 # Extract dimensions(i, j) from the current data.
                 # ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **
@@ -196,7 +196,7 @@ def radicalOptTheta(x,stdev,m,reps,K,range1):
 
     ind = np.argsort(ent)
     thetaStar = (ind[0, 1] - 1)/(K - 1) * np.pi/2 - np.pi/4
-    print(1, 'rotated', thetaStar / (2 * np.pi) * 360 ,'degrees.\n')
+    #print(1, 'rotated', thetaStar / (2 * np.pi) * 360 ,'degrees.\n')
     rotStar = np.array([[np.cos(thetaStar), -np.sin(thetaStar)], [np.sin(thetaStar), np.cos(thetaStar)]])
 
     return thetaStar, rotStar
