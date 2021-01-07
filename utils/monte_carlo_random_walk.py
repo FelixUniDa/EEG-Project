@@ -7,6 +7,7 @@ from sklearn.neighbors import KernelDensity
 from sklearn.decomposition import FastICA, PCA
 import neurokit2
 import time
+from scipy.stats import median_abs_deviation
 
 import os
 import sys
@@ -46,11 +47,11 @@ sns.set_theme(style="darkgrid")
 # ToDo: write experiment results to csv
 
 
-def monte_carlo_run(n_samples,ica_method,seed = None, noise_lvl = 20):
+def monte_carlo_run(n_runs,data_size,ica_method,seed = None, noise_lvl = 20, p_outlier = 0.0):
     """
-    Do a Monte Carlo simulation of n_samples, plot a histogram, mean and standard deviation
+    Do a Monte Carlo simulation of n_runs, plot a histogram, mean and standard deviation
     and write results to csv
-    :param n_samples: number of runs
+    :param n_runs: number of runs
     :param measure(): The evalutation measure has to be method
     :param matrix1: np.array of first parameters used in method,
     :param matrix12: np.array of second parameters used in method
@@ -64,15 +65,15 @@ def monte_carlo_run(n_samples,ica_method,seed = None, noise_lvl = 20):
   
     
     # create example signals:
-    data = np.stack([create_signal(c='ecg'),
-            create_signal(ampl=1,c='cos'),
-            create_signal(c='rect'),
-            create_signal(c='sawt')]).T
+    data = np.stack([create_signal(x = data_size,c='ecg'),
+            create_signal(x = data_size,ampl=1,c='cos'),
+            create_signal(x = data_size,c='rect'),
+            create_signal(x = data_size,c='sawt')]).T
 
     # create mixing matrix and mixed signals
     c, r = data.shape
 
-    data_storage = np.empty(n_samples)
+    data_storage = np.empty(n_runs)
 
     new_MM = True
     
@@ -80,21 +81,22 @@ def monte_carlo_run(n_samples,ica_method,seed = None, noise_lvl = 20):
     t0= time.time()
 
     #start Monte-Carlo run
-    for i in range(n_samples):
+    for i in range(n_runs):
         
         if(new_MM):
             MM = mixing_matrix(r,None)
             #print(MM)
             mixdata = MM@data.T
-            #apply noise
-            mixdata_noise = np.stack([apply_noise(dat,type='white', SNR_dB=noise_lvl) for dat in mixdata])#[create_outlier(apply_noise(dat,type='white', SNR_dB=noise_lvl),prop=0.001,std=5) for dat in mixdata])
+            #apply noise and/or create outlier
+            mixdata_noise = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=noise_lvl),prop=p_outlier,std=3) for dat in mixdata])
+
             # centering the data and whitening the data:
             white_data, W_whiten, W_dewhiten = whitening(mixdata_noise, type='sample')
             if(seed is not None):
                 new_MM = False
 
-        print(mixdata_noise.shape)
-        print(white_data.shape)
+        # print(mixdata_noise.shape)
+        # print(white_data.shape)
         if(ica_method == "jade"):
             # Perform JADE
             W = jadeR(white_data,is_whitened=True, verbose = False)
@@ -127,31 +129,53 @@ def monte_carlo_run(n_samples,ica_method,seed = None, noise_lvl = 20):
         
     mu = np.mean(data_storage)
     sigma = np.std(data_storage)
+    med = np.median(data_storage)
+    nMAD = scipy.stats.median_abs_deviation(data_storage, scale=1/1.4826)
 
-    # FRESH SEABORN PLOT
-    x = pd.Series(data_storage, name=('Minimum Distance: %s ' % ica_method))
-    sns.displot(x, kde=True)
-    plt.ylabel('count')
-    file_name = ica_method + '_' + str(n_samples) + '_' + str(noise_lvl) +'dB_' + '.jpg'
-    plt.savefig(os.path.join('results_Monte_Carlo',file_name), dpi=300)  
-    plt.show()
+    # # FRESH SEABORN PLOT - Histogram 
+    # x = pd.Series(data_storage, name=('Minimum Distance: %s ' % ica_method))
+    # sns.displot(x, kde=True)
+    # plt.ylabel('count')
+    # file_name = ica_method + '_' + str(n_runs) + '_' + str(noise_lvl) +'dB_' + '.jpg'
+    # plt.savefig(os.path.join('results_Monte_Carlo',file_name), dpi=300)  
+    # plt.show()
 
     print('Mean %s: %f ' % (ica_method,mu))
     print('Standard deviation %s: %f' %(ica_method,sigma))
 
+    if seed == None:
+        seed = 'None'
 
-    mc_data = { 'Method': [ica_method], '# Runs' : [n_samples], 'Noise-level [dB]': [noise_lvl], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Time elapsed [s]' : [t1]}
-    df = pd.DataFrame(mc_data, columns= ['Method', '# Runs','Noise-level [dB]', 'Seed','Mean','Std','Time elapsed [s]'])
-    df.to_csv(os.path.join(BASE_DIR,'utils','results_Monte_Carlo','Monte_Carlo_runs.csv'), index = False, header=False, mode = 'a')
+    mc_data = { 'Method': [ica_method], '# Runs' : [n_runs], 'Sample Size' : [data_size], 'Noise-level [dB]': [noise_lvl],'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med],'nMAD': [nMAD], 'Time elapsed [s]' : [t1]}
+    df = pd.DataFrame(mc_data, columns= ['Method', '# Runs','Sample Size','Noise-level [dB]','Percentage Outliers (3Std)', 'Seed','Mean','Std','Median','nMAD','Time elapsed [s]'])
+    df.to_csv(os.path.join(BASE_DIR,'utils','results_Monte_Carlo_CoroICA','Monte_Carlo_runs_CoroICA.csv'), index = True, header=True, mode = 'a')
 
-
+    # return minimum distances stored in data_storage
+    return data_storage
 
 if __name__ == "__main__":
 
-    # do a monte-carlo run
-    monte_carlo_run(3,'coro_ica', seed = None, noise_lvl=3)
+    # steps of sample_size
+    #steps = 
+    n_runs = 100
+    sample_size = np.array([500,1000,2500]) #1000,2500,5000,10000,15000
+    #init DataFrame
+    df = pd.DataFrame()
+    ica_method = 'coro_ica'
+    noise = 40
+    p = 0.0
+    for s in sample_size:
+        # do a monte-carlo run
+        mds = monte_carlo_run(n_runs,s,ica_method, seed = None, p_outlier = p)
+        
+        d = {'Minimum Distance': mds, 'Sample Size': np.repeat(s,n_runs), '# MC Runs': np.repeat(n_runs,n_runs) }
+        temp = pd.DataFrame(data=d)
+        df = df.append(temp)
 
-
+    sns.boxplot(x='Sample Size', y='Minimum Distance', data=df)
+    file_name = ica_method + '_' + str(n_runs)+ 'Runs' + '_' + str(noise) +'dB_'+'p_outliers_'+ str(p) + '.jpg'
+    plt.savefig(os.path.join('results_Monte_Carlo_CoroICA',file_name), dpi=300)  
+    plt.show()
 
 # def random_walk_1d(n_steps):
 #     """

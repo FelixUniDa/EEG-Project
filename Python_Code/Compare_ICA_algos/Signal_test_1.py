@@ -74,10 +74,11 @@ unMixed_coro = W_coro @ white_data
 md_radical = md(W_whiten@MM,W_radical)
 md_powerica = md(W_whiten@MM,W_power)
 md_jade = md(W_whiten@MM,W_jade)
+md_coro = md(W_whiten@MM,W_coro)
 np.random.seed(20)
 md_random = md(MM, np.random.randn(r,r))
 
-print('Minimum Distances Index\n Jade:',md_jade,'\n','Radical:',md_radical,'\n','PowerICA:',md_powerica,'\n','Random:',md_random)
+print('Minimum Distances Index\n Jade:',md_jade,'\n','Radical:',md_radical,'\n','PowerICA:',md_powerica,'\n', 'CoroICA:',md_coro,'\n''Random:',md_random)
 
 #unMixed_fast= W_fast @ X_data
 # Plot input signals (not mixed)

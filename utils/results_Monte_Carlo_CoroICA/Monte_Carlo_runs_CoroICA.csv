@@ -1,0 +1,18 @@
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,coro_ica,100,500,40,0.0,None,0.8189180513823804,0.015104283535010987,0.8154296020816645,0.0055302382102253534,32.49000787734985
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,coro_ica,100,1000,40,0.0,None,0.7408797199643746,0.014289558884574644,0.7391838241553446,0.0018889228756535528,3.3051328659057617
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,coro_ica,100,2500,40,0.0,None,0.2928908955934639,0.05094293198815933,0.28330552292793443,0.004644414628625438,3.5844638347625732
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,coro_ica,100,500,40,0.0,None,0.8139073060491389,0.012253028127823556,0.813095079162347,0.0034829141611040955,29.273961305618286
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,coro_ica,100,1000,40,0.0,None,0.7768709161663567,0.015661495715010427,0.779284937522225,0.001483353963602914,3.3638598918914795
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,coro_ica,100,2500,40,0.0,None,0.28399535570283296,0.05580821824049169,0.2740439060382407,0.004633940838540929,3.533237934112549
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,coro_ica,100,500,20,0.0,None,0.8285704753475395,0.03444450593718358,0.8276980563132426,0.023294151869922595,91.85574889183044
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,coro_ica,100,1000,20,0.0,None,0.7643316113712807,0.04803302179433147,0.7507209541479368,0.01905778420230822,37.529083013534546
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,coro_ica,100,2500,20,0.0,None,0.33225694806471573,0.13626326884694667,0.27850542916906507,0.06977449888740186,4.919340133666992
