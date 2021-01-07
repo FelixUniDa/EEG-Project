@@ -2,12 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
 import scipy
+import mne
+import os
 import neurokit2 as nk
 import robustsp as rsp
 #from Mscat import *
 from sklearn.decomposition import FastICA, PCA
 
-def create_signal(x = 10000, c = 'sin', ampl = 1, fs = 2):
+def create_signal(x = 10000, c = 'sin', ampl = 1, fs = 2,eeg_components=1):
     """
     creates a certain signal
     :param x: length of the data vector
@@ -46,21 +48,38 @@ def create_signal(x = 10000, c = 'sin', ampl = 1, fs = 2):
         s7 = nk.ecg_simulate(length=n_samples)
         return s7
 
+    def eeg():
+        if c=='eeg':
+            #load sample visually/auditory evoked eeg data from mne, the whole data has 60 EEG channels 
+            sample_data_folder = mne.datasets.sample.data_path()
+            sample_data_raw_file = os.path.join(sample_data_folder, 'MEG', 'sample',
+                                        'sample_audvis_filt-0-40_raw.fif')
+            raw = mne.io.read_raw_fif(sample_data_raw_file)
+            eeg = np.array(raw.get_data(picks='eeg')) # pick only eeg channels
+            s8 = eeg[eeg_components,0:n_samples]   #return the number of channels, and samplesize as wanted
+            if s8.shape[0] == 1:
+                s8 = s8.reshape(n_samples,)
+            else:
+                s8 = s8.T
+            return s8
+
     switcher = {
         'sin': sin1(),
         'cos': cos1(),
         'sawt': sawt(),
         'rect': rect(),
         'ecg': ecg(),
+        'eeg': eeg(),
         #'piky': piky(),
         'all': np.stack([sin1(), cos1(), sawt(), rect(), ecg()], axis=1) #
     }
 
     def switch_signal(c):
         signl = switcher.get(c, "Invalid")
-        return ampl * signl
+        return ampl * signl/np.max(signl)
 
     return switch_signal(c)
+
 
 
 def apply_noise(data, type='white', SNR_dB=20):
@@ -198,7 +217,7 @@ def mixing_matrix(n_components, seed=None):
     return mixingmat
 
 
-def whitening(x, type='sample', loss = 'Huber'):
+def whitening(x, type='sample', loss = 'Huber',percentile=1):
     """linearly transform the observed signals X in a way that potential 
        correlations between the signals are removed and their variances equal unity. 
        As a result the covariance matrix of the whitened signals will be equal to the identity matrix
@@ -206,26 +225,44 @@ def whitening(x, type='sample', loss = 'Huber'):
     Args:
         x (array): Centered input data.
         type (string): type of covariance estimation
+        loss (string): type of M-estimator for loss in Mscat
+        percentile: percentile of total variance to be represented by the components (if 1 returns all principal components)
 
     Returns:
         x_whitened: Whitened Data with covariance matrix that is equal to identity matrix.
     """
-    centered_X, _ = centering(x, 'sample')
+    centered_X, _ = centering(x)
 
     cov = covariance(centered_X,type,loss) # covariance(centered_X) #calculate Covariance matrix between signals
+    d, E = np.linalg.eig(cov) #Eigenvalue decomposition (alternatively one can use SVD for faster computation)
+    print(d)
+    idx = d.argsort()[::-1]     
+    #Sort eigenvalues  
+    cumul_var = np.cumsum(d)
+    N = len(d)
+    n_components=N
+    if percentile < 1:
+        for i in range(len(cumul_var)):
+            if cumul_var[i]/cumul_var[N-1] > percentile: # check at what index the cumulated variance contains p (percentile) of the total variance 
+                n_components = i+1
+                break
 
-    d, E = np.linalg.eig(cov)  # Eigenvalue decomposition (alternatively one can use SVD for whitening)
-    idx = d.argsort()[::-1]
-    d = d[idx]  # Sort eigenvalues
-    E = E[:, idx]  # Sort eigenvectors
+        print(n_components)   
+        d = d[idx[0:n_components]]                #Sort eigenvalues
+        E = E[:,idx[0:n_components]]              #Sort eigenvectors
 
-    D_inv = np.diag(1 / np.sqrt(d))  # Calculate D^(-0.5)
+        D_inv = np.diag(1/np.sqrt(d))   #Calculate D^(-0.5)
+        W_whiten =  D_inv @ E.T         #Calculate Whitening matrix W_whiten 
+        #W_dewhiten = E @ np.diag(np.sqrt(d))
+        x_whitened = (W_whiten @ centered_X)
+        return x_whitened, W_whiten, n_components
 
-    W_whiten =  D_inv @ E.T         #Calculate Whitening matrix W_whiten 
-    W_dewhiten = E @ np.diag(np.sqrt(d))
-    x_whitened = (W_whiten @ centered_X)
-
-    return x_whitened, W_whiten, W_dewhiten
+    elif percentile==1:   
+        D_inv = np.diag(1/np.sqrt(d))   #Calculate D^(-0.5)
+        W_whiten =  D_inv @ E.T         #Calculate Whitening matrix W_whiten 
+        W_dewhiten = E @ np.diag(np.sqrt(d))
+        x_whitened = (W_whiten @ centered_X)
+        return x_whitened, W_whiten,W_dewhiten, n_components
 
 
 def centering(x, type = 'sample'):
