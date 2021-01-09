@@ -83,10 +83,10 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
             #print(MM)
             mixdata = MM@data.T
             #apply noise and/or create outlier
-            mixdata_noise = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=noise_lvl),prop=p_outlier,std=3) for dat in mixdata])
+            mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl), prop=p_outlier, std=3) for dat in mixdata])
 
             # centering the data and whitening the data:
-            white_data, W_whiten, W_dewhiten,_ = whitening(mixdata_noise, type='sample')
+            white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='sample')
             if(seed is not None):
                 new_MM = False
 
@@ -94,7 +94,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
         # print(white_data.shape)
         if (ica_method == "jade"):
             # Perform JADE
-            W = jadeR(white_data,is_whitened=True, verbose = False)
+            W = jadeR(white_data, is_whitened=True, verbose=False)
             W = np.squeeze(np.asarray(W))
         elif (ica_method == "power_ica"):
             # Perform PowerICA
@@ -152,25 +152,38 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
 
 
 if __name__ == "__main__":
+
+    # def of types to test
+    sample_size_full = np.array([1000, 2500, 5000, 10000, 15000])  # 1000, 2500, 5000, 10000, 15000
+
+    type_dict = dict()
+    type_dict.update({"Type 1": [1000, 0, 10000, sample_size_full]})  # no noise, no outlier, runs, samples
+    type_dict.update({"Type 2": [40, 0, 10000, sample_size_full]})  # 40db noise, no outlier, runs, samples
+    type_dict.update({"Type 3": [1000, 0.01, 10000, sample_size_full]})  # no noise, 0.1 % outlier, runs, samples
+    type_dict.update({"Type 4": [40, 0.01, 10000, sample_size_full]})  # 40 db noise, 0.1 % outlier, runs, samples
+
     # track time for how long this old endures
     start_time = time.time()
-    # steps of sample_size
-    #steps = 
-    n_runs = 10000
-    sample_size = np.array([1000, 2500, 5000, 10000, 15000]) #1000, 2500, 5000, 10000, 15000
+
     # init DataFrame
     df = pd.DataFrame()
     ica_method = 'jade'
-    noise = 40
-    p = 0.0
-    for s in sample_size:
-        # do a monte-carlo run
-        mds = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=noise, p_outlier=p)
-        
-        d = {'Minimum Distance': mds, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
-        temp = pd.DataFrame(data=d)
-        df = df.append(temp)
-        print("Ready samplesize %s" %s)
+    type_list_to_test = ["Type 1", "Type 2", "Type 3", "Type 4"]
+    for name in type_list_to_test:
+        # parameter for each type to test
+        noise = type_dict.get(name)[0]
+        p = type_dict.get(name)[1]
+        n_runs = type_dict.get(name)[3]
+        sample_size = type_dict.get(name)[3]
+
+        for s in sample_size:
+            # do a monte-carlo run
+            mds = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=noise, p_outlier=p)
+
+            d = {'Minimum Distance': mds, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+            temp = pd.DataFrame(data=d)
+            df = df.append(temp)
+            print("Ready samplesize %s" %s)
 
     title = ica_method + ',  ' + 'runs: ' + str(n_runs) + ', ' + str(noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
     file_name = ica_method + '_' + str(n_runs) + 'Runs' + '_' + str(noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
