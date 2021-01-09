@@ -8,6 +8,7 @@ from sklearn.decomposition import FastICA, PCA
 import neurokit2
 import time
 from scipy.stats import median_abs_deviation
+import scipy
 
 import os
 import sys
@@ -17,20 +18,16 @@ from utils import mixing_matrix, create_signal, create_outlier, apply_noise, whi
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath( __file__ )))
 sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR,'Python_Code','JADE'))
-sys.path.append(os.path.join(BASE_DIR,'utils'))
-sys.path.append(os.path.join(BASE_DIR,'Python_Code','Compare_ICA_algos'))
+sys.path.append(os.path.join(BASE_DIR, 'Python_Code', 'JADE'))
+sys.path.append(os.path.join(BASE_DIR, 'utils'))
+sys.path.append(os.path.join(BASE_DIR, 'Python_Code', 'Compare_ICA_algos'))
 
 import PowerICA
 from fast_Radical import *
 from jade import jadeR
-from distances import *
-
+# from distances import *
 import pandas as pd
 from coroica import CoroICA
-
-
-
 
 """ Monte Carlo Simulation Experminets"""
 # inspired by:
@@ -47,7 +44,7 @@ sns.set_theme(style="darkgrid")
 # ToDo: write experiment results to csv
 
 
-def monte_carlo_run(n_runs, data_size, ica_method,seed = None, noise_lvl = 20, p_outlier = 0.0):
+def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_outlier = 0.0):
     """
     Do a Monte Carlo simulation of n_runs, plot a histogram, mean and standard deviation
     and write results to csv
@@ -58,16 +55,15 @@ def monte_carlo_run(n_runs, data_size, ica_method,seed = None, noise_lvl = 20, p
 
     :return: 
     """
-    methods = ["jade","power_ica","fast_ica","radical","coro_ica"]
+    methods = ["jade", "power_ica", "fast_ica", "radical", "coro_ica"]
     
     assert (ica_method in methods), "Can't choose  '%s' as ICA - method, possible optiions: %s" %(ica_method, methods)
-  
-    
+
     # create example signals:
-    data = np.stack([create_signal(x = data_size,c='ecg'),
-            create_signal(x = data_size,ampl=1,c='cos'),
-            create_signal(x = data_size,c='rect'),
-            create_signal(x = data_size,c='sawt')]).T
+    data = np.stack([create_signal(x=data_size, c='ecg'),
+            create_signal(x=data_size, ampl=1, c='cos'),
+            create_signal(x=data_size, c='rect'),
+            create_signal(x=data_size, c='sawt')]).T
 
     # create mixing matrix and mixed signals
     c, r = data.shape
@@ -77,13 +73,13 @@ def monte_carlo_run(n_runs, data_size, ica_method,seed = None, noise_lvl = 20, p
     new_MM = True
     
     #time tracking
-    t0= time.time()
+    t0 = time.time()
 
     #start Monte-Carlo run
     for i in range(n_runs):
         
         if(new_MM):
-            MM = mixing_matrix(r,None)
+            MM = mixing_matrix(r, None)
             #print(MM)
             mixdata = MM@data.T
             #apply noise and/or create outlier
@@ -96,7 +92,7 @@ def monte_carlo_run(n_runs, data_size, ica_method,seed = None, noise_lvl = 20, p
 
         # print(mixdata_noise.shape)
         # print(white_data.shape)
-        if(ica_method == "jade"):
+        if (ica_method == "jade"):
             # Perform JADE
             W = jadeR(white_data,is_whitened=True, verbose = False)
             W = np.squeeze(np.asarray(W))
@@ -113,7 +109,7 @@ def monte_carlo_run(n_runs, data_size, ica_method,seed = None, noise_lvl = 20, p
             W = RADICAL(white_data)
         elif (ica_method == 'coro_ica'):
             #print(r)
-            c = CoroICA(partitionsize = 100,groupsize= 10000)
+            c = CoroICA(partitionsize=100, groupsize=10000)
             c.fit(white_data.T)
             W = c.V_
         else:
@@ -139,43 +135,49 @@ def monte_carlo_run(n_runs, data_size, ica_method,seed = None, noise_lvl = 20, p
     # plt.savefig(os.path.join('results_Monte_Carlo',file_name), dpi=300)  
     # plt.show()
 
-    print('Mean %s: %f ' % (ica_method,mu))
-    print('Standard deviation %s: %f' %(ica_method,sigma))
+    print('Mean %s: %f ' % (ica_method, mu))
+    print('Standard deviation %s: %f' %(ica_method, sigma))
 
     if seed == None:
         seed = 'None'
 
-    mc_data = { 'Method': [ica_method], '# Runs' : [n_runs], 'Sample Size' : [data_size], 'Noise-level [dB]': [noise_lvl],'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med],'nMAD': [nMAD], 'Time elapsed [s]' : [t1]}
-    df = pd.DataFrame(mc_data, columns= ['Method', '# Runs','Sample Size','Noise-level [dB]','Percentage Outliers (3Std)', 'Seed','Mean','Std','Median','nMAD','Time elapsed [s]'])
-    df.to_csv(os.path.join(BASE_DIR,'utils','results_Monte_Carlo_RADICAL','Monte_Carlo_runs_RADICAL.csv'), index = True, header=True, mode = 'a')
+
+
+    mc_data = {'Method': [ica_method], '# Runs' : [n_runs], 'Sample Size' : [data_size], 'Noise-level [dB]': [noise_lvl],'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med],'nMAD': [nMAD], 'Time elapsed [s]' : [t1]}
+    df = pd.DataFrame(mc_data, columns= ['Method', '# Runs', 'Sample Size', 'Noise-level [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean', 'Std', 'Median', 'nMAD', 'Time elapsed [s]'])
+    df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_JADE', 'Monte_Carlo_runs_JADE.csv'), index=True, header=True, mode='a')
 
     # return minimum distances stored in data_storage
     return data_storage
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
+    # track time for how long this old endures
+    start_time = time.time()
     # steps of sample_size
     #steps = 
-    n_runs = 100
-    sample_size = np.array([500,1000,2500]) #1000,2500,5000,10000,15000
-    #init DataFrame
+    n_runs = 10000
+    sample_size = np.array([1000, 2500, 5000, 10000, 15000]) #1000, 2500, 5000, 10000, 15000
+    # init DataFrame
     df = pd.DataFrame()
-    ica_method = 'radical'
+    ica_method = 'jade'
     noise = 40
     p = 0.0
     for s in sample_size:
         # do a monte-carlo run
-        mds = monte_carlo_run(n_runs, s, ica_method, seed = None, p_outlier = p)
+        mds = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=noise, p_outlier=p)
         
-        d = {'Minimum Distance': mds, 'Sample Size': np.repeat(s,n_runs), '# MC Runs': np.repeat(n_runs,n_runs) }
+        d = {'Minimum Distance': mds, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
         temp = pd.DataFrame(data=d)
         df = df.append(temp)
         print("Ready samplesize %s" %s)
 
-    sns.boxplot(x='Sample Size', y='Minimum Distance', data=df)
-    file_name = ica_method + '_' + str(n_runs)+ 'Runs' + '_' + str(noise) +'dB_'+'p_outliers_'+ str(p) + '.jpg'
-    plt.savefig(os.path.join('results_Monte_Carlo_RADICAL',file_name), dpi=300)
-    plt.show()
+    title = ica_method + ',  ' + 'runs: ' + str(n_runs) + ', ' + str(noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
+    file_name = ica_method + '_' + str(n_runs) + 'Runs' + '_' + str(noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
+    sns.boxplot(x='Sample Size', y='Minimum Distance', data=df).set_title(title)
+    plt.savefig(os.path.join('results_Monte_Carlo_JADE', file_name), dpi=300)
+    # plt.show()
+    print("--- Success after %s seconds ---" % (time.time() - start_time))
 
 # def random_walk_1d(n_steps):
 #     """

@@ -1,0 +1,10 @@
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,jade,10000,1000,0,0.0,None,0.8204556706684145,0.061047513237633536,0.8280320339774045,0.059780287554758164,172.5218870639801
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,jade,10000,2500,0,0.0,None,0.8216947893255249,0.06042369680771788,0.8287600886083875,0.05809202698420542,228.0134789943695
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,jade,10000,5000,0,0.0,None,0.8259500708653,0.06034556099232452,0.8330207236704974,0.05797453237313552,271.97319984436035
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,jade,10000,10000,0,0.0,None,0.8280482955692813,0.060041373248868934,0.8357034382378005,0.05765248774047015,322.3466422557831
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,jade,10000,15000,0,0.0,None,0.8291621879642426,0.0599310247966436,0.837262353227161,0.05674289393803297,369.64092803001404
