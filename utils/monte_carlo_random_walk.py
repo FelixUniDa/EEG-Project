@@ -181,7 +181,7 @@ if __name__ == "__main__":
         sample_size = type_dict.get(name)[3]
 
         if name == "Type 1" or name == "Type 2" or name == "Type 3" or name == "Type 4":
-            outlier_type = type_dict.get(name)[4]
+            outlier_type = "impulse"
             for s in sample_size:
                 # do a monte-carlo run
                 mds = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type)
@@ -200,6 +200,7 @@ if __name__ == "__main__":
             plt.show()
 
         if name == "Type 5":
+            outlier_type = "impulse"
             for snr in noise:
                 # do a monte-carlo run
                 s = sample_size
