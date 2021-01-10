@@ -191,11 +191,11 @@ if __name__ == "__main__":
             df = df.append(temp)
             print("Ready samplesize %s" %s)
 
-    title = ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
-    file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
-    sns.boxplot(x='Sample Size', y='Minimum Distance', data=df).set_title(title)
-    plt.savefig(os.path.join('results_Monte_Carlo_JADE', file_name), dpi=300)
-    # plt.show()
+        title = ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
+        file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
+        sns.boxplot(x='Sample Size', y='Minimum Distance', data=df).set_title(title)
+        plt.savefig(os.path.join('results_Monte_Carlo_JADE', file_name), dpi=300)
+        plt.show()
 
     print("--- Success after %s seconds ---" % (time.time() - start_time))
 
