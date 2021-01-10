@@ -44,7 +44,7 @@ sns.set_theme(style="darkgrid")
 # ToDo: write experiment results to csv
 
 
-def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_outlier = 0.0):
+def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_outlier = 0.0, outlier_type='impulse'):
     """
     Do a Monte Carlo simulation of n_runs, plot a histogram, mean and standard deviation
     and write results to csv
@@ -83,7 +83,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
             #print(MM)
             mixdata = MM@data.T
             #apply noise and/or create outlier
-            mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl), prop=p_outlier, std=3) for dat in mixdata])
+            mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl), prop=p_outlier, std=3, type=outlier_type) for dat in mixdata])
 
             # centering the data and whitening the data:
             white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='sample')
@@ -162,8 +162,8 @@ if __name__ == "__main__":
     type_dict.update({"Type 3": [1000, 0.01, 10000, sample_size_full]})  # no noise, 0.1 % outlier, runs, samples
     type_dict.update({"Type 4": [40, 0.01, 10000, sample_size_full]})  # 40 db noise, 0.1 % outlier, runs, samples
     type_dict.update({"Type 5": [noise_list, 0, 10000, 10000]})
-    type_dict.update({"Type 6": [1000, outlier_list, 10000, 10000, 'patchy']})
-    type_dict.update({"Type 7": [1000, outlier_list, 10000, 10000, 'impulsive']})
+    type_dict.update({"Type 6": [1000, outlier_list, 10000, 10000, 'patch']})
+    type_dict.update({"Type 7": [1000, outlier_list, 10000, 10000, 'impulse']})
 
     # track time for how long this run takes
     start_time = time.time()
@@ -171,7 +171,8 @@ if __name__ == "__main__":
     # init DataFrame
     df = pd.DataFrame()
     ica_method = 'jade'  # further changes need to be made in plt.savefig & df.to_csv
-    type_list_to_test = ["Type 1", "Type 2", "Type 3", "Type 4"]
+    folder_to_save = 'results_Monte_Carlo_JADE'
+    type_list_to_test = ["Type 6", "Type 7"]  # "Type 1", "Type 2", "Type 3", "Type 4"
     for name in type_list_to_test:
         # parameter for each type to test
         noise = type_dict.get(name)[0]
@@ -179,23 +180,66 @@ if __name__ == "__main__":
         n_runs = type_dict.get(name)[2]
         sample_size = type_dict.get(name)[3]
 
+        if name == "Type 1" or name == "Type 2" or name == "Type 3" or name == "Type 4":
+            outlier_type = type_dict.get(name)[4]
+            for s in sample_size:
+                # do a monte-carlo run
+                mds = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type)
+
+                d = {'Minimum Distance': mds, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                temp = pd.DataFrame(data=d)
+                df = df.append(temp)
+                print("Ready samplesize {}".format(s))
+
+            title = ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
+                noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
+            file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
+                noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
+            sns.boxplot(x='Sample Size', y='Minimum Distance', data=df).set_title(title)
+            plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
+            plt.show()
+
+        if name == "Type 5":
+            for snr in noise:
+                # do a monte-carlo run
+                s = sample_size
+                mds = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=snr, p_outlier=p)
+
+                d = {'Minimum Distance': mds, 'Noise Level': np.repeat(snr, n_runs),
+                     '# MC Runs': np.repeat(n_runs, n_runs)}
+                temp = pd.DataFrame(data=d)
+                df = df.append(temp)
+                print("Ready noise level {} with sample size {}".format(snr, s))
+
+            title = ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + 'sample size:' + str(
+                sample_size) + ', ' + str(p) + ' % outliers'
+            file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
+                noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
+            sns.boxplot(x='Noise Level', y='Minimum Distance', data=df).set_title(title)
+            plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
+            plt.show()
+
         if name == "Type 6" or name == "Type 7":
             outlier_type = type_dict.get(name)[4]
+            for percentage in p:
+                # do a monte-carlo run
+                s = sample_size
+                mds = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=noise, p_outlier=percentage, )
 
-        for s in sample_size:
-            # do a monte-carlo run
-            mds = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=noise, p_outlier=p)
+                d = {'Minimum Distance': mds, 'Outlier Percentage': np.repeat(percentage, n_runs),
+                     '# MC Runs': np.repeat(n_runs, n_runs)}
+                temp = pd.DataFrame(data=d)
+                df = df.append(temp)
+                print("Ready outlier percentage {} with sample size {}".format(percentage, s))
 
-            d = {'Minimum Distance': mds, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
-            temp = pd.DataFrame(data=d)
-            df = df.append(temp)
-            print("Ready samplesize %s" %s)
-
-        title = ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
-        file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
-        sns.boxplot(x='Sample Size', y='Minimum Distance', data=df).set_title(title)
-        plt.savefig(os.path.join('results_Monte_Carlo_JADE', file_name), dpi=300)
-        plt.show()
+            title = ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + 'sample size:' + str(
+                sample_size) + ', ' + str(
+                noise) + 'dB noise' + ', ' + str(outlier_type) + ' outlier type'
+            file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
+                noise) + 'dB_' + 'type_outlier_' + str(outlier_type) + '.jpg'
+            sns.boxplot(x='Outlier Percentage', y='Minimum Distance', data=df).set_title(title)
+            plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
+            plt.show()
 
     print("--- Success after %s seconds ---" % (time.time() - start_time))
 
