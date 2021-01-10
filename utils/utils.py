@@ -6,8 +6,11 @@ import mne
 import os
 import neurokit2 as nk
 import robustsp as rsp
-#from Mscat import *
+# from Mscat import *
 from sklearn.decomposition import FastICA, PCA
+from scipy.stats.distributions import chi2
+import scipy as sp
+from scipy.optimize import linear_sum_assignment
 
 def create_signal(x = 10000, c = 'sin', ampl = 1, fs = 2,eeg_components=1):
     """
@@ -91,7 +94,7 @@ def apply_noise(data, type='white', SNR_dB=20):
     """
 
     np.random.seed(None)  # set seed for reproducible results
-    data_ary = data    #np.c_()
+    data_ary = data  # np.c_()
 
     data_power = data_ary ** 2
     # Set a target SNR
@@ -193,7 +196,22 @@ def create_outlier(data, prop=0.01, std=3, type='impulse', seed=1):
 
     return data
 
+
 def create_artifact(data, prop=0.01, std=3, number=3, type='eye', seed=None):
+    """
+
+    :param data:
+    :param prop:
+    :param std:
+    :param number:
+    :param type:
+    :param seed:
+    :return:
+    """
+    pass
+
+
+
 
 
 
@@ -342,40 +360,35 @@ def covariance(x, type='sample', loss=None):
     return cov
 
 
-"""
-[C,invC,iter,flag] = Mscat(X,loss,...)
-computes M-estimator of scatter matrix for the n x p data matrix X  
-using the loss function 'Huber' or 't-loss' and for a given parameter of
-the loss function (i.e., q for Huber's or degrees of freedom v for 
-the t-distribution). 
-
-Data is assumed to be centered (or the symmetry center parameter = 0)
-
-INPUT:
-       X: the data matrix with n rows (observations) and p columns.
-    loss: either 'Huber' or 't-loss' or 'Tyler'
- losspar: parameter of the loss function: q in [0,1) for Huber and 
-          d.o.f. v >= 0 for t-loss. For Tyler you do not need to specify
-          this value. Parameter q determines the treshold 
-          c^2 as the qth quantile of chi-squared distribution with p 
-          degrees of freedom distribution (Default q = 0.8). Parameter v 
-          is the def.freedom of t-distribution (Default v = 3)
-          if v = 0, then one computes Tyler's M-estimator
-    invC: initial estimate is the inverse scatter matrix (default = 
-          inverse of the sample covariance matrix) 
-printitn: print iteration number (default = 0, no printing)
-OUTPUT:
-       C: the M-estimate of scatter using Huber's weights
-    invC: the inverse of C
-    iter: nr of iterations
-    flag: flag (true/false) for convergence
-"""
-
-from scipy.stats.distributions import chi2
-import scipy as sp
-
-
 def Mscat(X, loss, losspar=None, invCx=None, printitn=0, MAX_ITER=1000, EPS=1.0e-5):
+    """
+    [C,invC,iter,flag] = Mscat(X,loss,...)
+    computes M-estimator of scatter matrix for the n x p data matrix X
+    using the loss function 'Huber' or 't-loss' and for a given parameter of
+    the loss function (i.e., q for Huber's or degrees of freedom v for
+    the t-distribution).
+
+    Data is assumed to be centered (or the symmetry center parameter = 0)
+
+    INPUT:
+           X: the data matrix with n rows (observations) and p columns.
+        loss: either 'Huber' or 't-loss' or 'Tyler'
+     losspar: parameter of the loss function: q in [0,1) for Huber and
+              d.o.f. v >= 0 for t-loss. For Tyler you do not need to specify
+              this value. Parameter q determines the treshold
+              c^2 as the qth quantile of chi-squared distribution with p
+              degrees of freedom distribution (Default q = 0.8). Parameter v
+              is the def.freedom of t-distribution (Default v = 3)
+              if v = 0, then one computes Tyler's M-estimator
+        invC: initial estimate is the inverse scatter matrix (default =
+              inverse of the sample covariance matrix)
+    printitn: print iteration number (default = 0, no printing)
+    OUTPUT:
+           C: the M-estimate of scatter using Huber's weights
+        invC: the inverse of C
+        iter: nr of iterations
+        flag: flag (true/false) for convergence
+    """
     def tloss_consistency_factor(p, v):
         '''
         computes the concistency factor b = (1/p) E[|| x ||^2 u_v( ||x||^2)] when
@@ -442,18 +455,17 @@ def Mscat(X, loss, losspar=None, invCx=None, printitn=0, MAX_ITER=1000, EPS=1.0e
     return C, invC, i, i == MAX_ITER - 1
 
 
-'''
-  Computes the spatial median based on (real or complex) data matrix X.
-  INPUT:
-         X: Numeric data matrix of size N x p. Each row represents one 
-           observation, and each column represents one variable 
- printitn : print iteration number (default = 0, no printing)
-
- OUTPUT
-      smed: Spatial median estimate
-'''
-
 def spatmed(X, printitn=0, iterMAX=500, EPS=1e-6, TOL=1e-5):
+    '''
+      Computes the spatial median based on (real or complex) data matrix X.
+      INPUT:
+             X: Numeric data matrix of size N x p. Each row represents one
+               observation, and each column represents one variable
+     printitn : print iteration number (default = 0, no printing)
+
+     OUTPUT
+          smed: Spatial median estimate
+    '''
     l = np.sum(X * np.conj(X), axis=1)
     X = X[l != 0, :]
     n = len(X)
@@ -461,10 +473,9 @@ def spatmed(X, printitn=0, iterMAX=500, EPS=1e-6, TOL=1e-5):
     smed0 = np.median(X) if np.isrealobj(X) else np.mean(X)
     norm0 = np.linalg.norm(smed0)
 
-
     for it in range(iterMAX):
         Xc = X - smed0
-        l = np.sqrt(np.sum(Xc * np.conj(Xc), axis=1, keepdims=1))
+        l = np.sqrt(np.sum(Xc * np.conj(Xc), axis=1, keepdims=1)) # modified
         l[l < EPS] = EPS
         Xpsi = np.divide(Xc, l)  # np.expand_dims(l, axis=1) Xc / l
         update = np.sum(Xpsi, axis=0) / sum(1 / l)
@@ -478,3 +489,33 @@ def spatmed(X, printitn=0, iterMAX=500, EPS=1e-6, TOL=1e-5):
         smed0 = smed
         norm0 = np.linalg.norm(smed, ord=2)
     return smed
+
+
+def md(A, Vhat):
+    """Minimum distance index as defined in
+    P. Ilmonen, K. Nordhausen, H. Oja, and E. Ollila.
+    A new performance index for ICA: Properties, computation and asymptotic
+    analysis.
+    In Latent Variable Analysis and Signal Separation, pages 229–236. Springer,
+    2010.
+
+    This Code is from the coroICA package which implements the coroICA algorithm presented in
+    "Robustifying Independent Component Analysis by Adjusting for Group-Wise Stationary Noise"
+    by N Pfister*, S Weichwald*, P Bühlmann, B Schölkopf.
+    - https://github.com/sweichwald/coroICA-python
+    """
+
+    # first dimensions of A (true Mixing Matrix)
+    d = np.shape(A)[0]
+    #calculate Gain Marix
+    G = Vhat.dot(A)
+    # transform into maximization problem and calculate new gain
+    Gsq = np.abs(G)**2
+    Gtilde = Gsq / (Gsq.sum(axis=1)).reshape((d, 1))
+    # Define the maximization problem
+    costmat = 1 - 2 * Gtilde + np.tile((Gtilde**2).sum(axis=1), d).reshape((d, d))
+
+    row_ind, col_ind = linear_sum_assignment(costmat)
+    md = np.sqrt(d - np.sum(np.diag(Gtilde[row_ind, col_ind]))) / \
+        np.sqrt(d - 1)
+    return md
