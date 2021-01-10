@@ -141,8 +141,8 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
     if seed == None:
         seed = 'None'
 
-    mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'Noise-level [dB]': [noise_lvl],'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med], 'nMAD': [nMAD], 'Time elapsed [s]': [t1]}
-    df = pd.DataFrame(mc_data, columns=['Method', '# Runs', 'Sample Size', 'Noise-level [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean', 'Std', 'Median', 'nMAD', 'Time elapsed [s]'])
+    mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'SNR [dB]': [noise_lvl], 'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med], 'nMAD': [nMAD], 'Time elapsed [s]': [t1]}
+    df = pd.DataFrame(mc_data, columns=['Method', '# Runs', 'Sample Size', 'SNR [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean', 'Std', 'Median', 'nMAD', 'Time elapsed [s]'])
     df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_JADE', 'Monte_Carlo_runs_JADE.csv'), index=True, header=True, mode='a')
 
     # return minimum distances stored in data_storage
@@ -205,7 +205,7 @@ if __name__ == "__main__":
                 s = sample_size
                 mds = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=snr, p_outlier=p)
 
-                d = {'Minimum Distance': mds, 'Noise Level': np.repeat(snr, n_runs),
+                d = {'Minimum Distance': mds, 'SNR': np.repeat(snr, n_runs),
                      '# MC Runs': np.repeat(n_runs, n_runs)}
                 temp = pd.DataFrame(data=d)
                 df = df.append(temp)
@@ -215,7 +215,7 @@ if __name__ == "__main__":
                 sample_size) + ', ' + str(p*10) + ' % outliers'
             file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
-            sns.boxplot(x='Noise Level', y='Minimum Distance', data=df).set_title(title)
+            sns.boxplot(x='SNR', y='Minimum Distance', data=df).set_title(title)
             plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
             plt.show()
 
