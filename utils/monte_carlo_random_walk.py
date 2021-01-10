@@ -154,7 +154,7 @@ if __name__ == "__main__":
     # def of types to test
     sample_size_full = np.array([1000, 2500, 5000, 10000, 15000])  # 1000, 2500, 5000, 10000, 15000
     noise_list = np.array([40, 30, 20, 10, 6, 3])
-    outlier_list = np.array([0.1, 0.25, 0.5, 1, 1.5, 5, 10, 20, 50])
+    outlier_list = np.array([0.01, 0.025, 0.05, 0.1, 0.15, 0.5, 0.10, 0.20, 0.50])
 
     type_dict = dict()
     type_dict.update({"Type 1": [1000, 0, 10000, sample_size_full]})  # no noise, no outlier, runs, samples
@@ -212,7 +212,7 @@ if __name__ == "__main__":
                 print("Ready noise level {} with sample size {}".format(snr, s))
 
             title = ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + 'sample size:' + str(
-                sample_size) + ', ' + str(p) + ' % outliers'
+                sample_size) + ', ' + str(p*10) + ' % outliers'
             file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
             sns.boxplot(x='Noise Level', y='Minimum Distance', data=df).set_title(title)
