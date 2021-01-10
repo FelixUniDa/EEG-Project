@@ -155,15 +155,15 @@ if __name__ == "__main__":
     sample_size_full = np.array([1000, 2500, 5000, 10000, 15000])  # 1000, 2500, 5000, 10000, 15000
     noise_list = np.array([40, 30, 20, 10, 6, 3])
     outlier_list = np.array([0.001, 0.0025, 0.005, 0.01, 0.015, 0.05, 0.10, 0.20, 0.50])
-
+    n_runs = 10000
     type_dict = dict()
-    type_dict.update({"Type 1": [1000, 0, 10000, sample_size_full]})  # no noise, no outlier, runs, samples
-    type_dict.update({"Type 2": [40, 0, 10000, sample_size_full]})  # 40db noise, no outlier, runs, samples
-    type_dict.update({"Type 3": [1000, 0.01, 10000, sample_size_full]})  # no noise, 0.1 % outlier, runs, samples
-    type_dict.update({"Type 4": [40, 0.01, 10000, sample_size_full]})  # 40 db noise, 0.1 % outlier, runs, samples
-    type_dict.update({"Type 5": [noise_list, 0, 10000, 10000]})
-    type_dict.update({"Type 6": [1000, outlier_list, 10000, 10000, 'patch']})
-    type_dict.update({"Type 7": [1000, outlier_list, 10000, 10000, 'impulse']})
+    type_dict.update({"Type 1": [1000, 0, n_runs, sample_size_full]})  # no noise, no outlier, runs, samples
+    type_dict.update({"Type 2": [40, 0, n_runs, sample_size_full]})  # 40db noise, no outlier, runs, samples
+    type_dict.update({"Type 3": [1000, 0.01, n_runs, sample_size_full]})  # no noise, 0.1 % outlier, runs, samples
+    type_dict.update({"Type 4": [40, 0.01, n_runs, sample_size_full]})  # 40 db noise, 0.1 % outlier, runs, samples
+    type_dict.update({"Type 5": [noise_list, 0, n_runs, 10000]})
+    type_dict.update({"Type 6": [1000, outlier_list, n_runs, 10000, 'patch']})
+    type_dict.update({"Type 7": [1000, outlier_list, n_runs, 10000, 'impulse']})
 
     # track time for how long this run takes
     start_time = time.time()
