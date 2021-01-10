@@ -256,7 +256,7 @@ def whitening(x, type='sample', loss = 'Huber',percentile=1):
 
     cov = covariance(centered_X,type,loss) # covariance(centered_X) #calculate Covariance matrix between signals
     d, E = np.linalg.eig(cov) #Eigenvalue decomposition (alternatively one can use SVD for faster computation)
-    print(d)
+    #print(d)
     idx = d.argsort()[::-1]     
     #Sort eigenvalues  
     cumul_var = np.cumsum(d)
@@ -268,7 +268,7 @@ def whitening(x, type='sample', loss = 'Huber',percentile=1):
                 n_components = i+1
                 break
 
-        print(n_components)   
+        #print(n_components)
         d = d[idx[0:n_components]]                #Sort eigenvalues
         E = E[:,idx[0:n_components]]              #Sort eigenvectors
 
