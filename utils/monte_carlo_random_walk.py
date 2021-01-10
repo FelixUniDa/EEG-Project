@@ -154,7 +154,7 @@ if __name__ == "__main__":
     # def of types to test
     sample_size_full = np.array([1000, 2500, 5000, 10000, 15000])  # 1000, 2500, 5000, 10000, 15000
     noise_list = np.array([40, 30, 20, 10, 6, 3])
-    outlier_list = np.array([0.01, 0.025, 0.05, 0.1, 0.15, 0.5, 0.10, 0.20, 0.50])
+    outlier_list = np.array([0.001, 0.0025, 0.005, 0.01, 0.015, 0.05, 0.10, 0.20, 0.50])
 
     type_dict = dict()
     type_dict.update({"Type 1": [1000, 0, 10000, sample_size_full]})  # no noise, no outlier, runs, samples
