@@ -115,7 +115,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
         else:
             return
         
-        data_storage[i] = md(W_whiten @ MM,W)
+        data_storage[i] = md(W_whiten @ MM, W)
         #print(data_storage[i])
 
     # elapsed time for Monte-Carlo Run
@@ -141,10 +141,8 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
     if seed == None:
         seed = 'None'
 
-
-
-    mc_data = {'Method': [ica_method], '# Runs' : [n_runs], 'Sample Size' : [data_size], 'Noise-level [dB]': [noise_lvl],'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med],'nMAD': [nMAD], 'Time elapsed [s]' : [t1]}
-    df = pd.DataFrame(mc_data, columns= ['Method', '# Runs', 'Sample Size', 'Noise-level [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean', 'Std', 'Median', 'nMAD', 'Time elapsed [s]'])
+    mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'Noise-level [dB]': [noise_lvl],'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med], 'nMAD': [nMAD], 'Time elapsed [s]': [t1]}
+    df = pd.DataFrame(mc_data, columns=['Method', '# Runs', 'Sample Size', 'Noise-level [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean', 'Std', 'Median', 'nMAD', 'Time elapsed [s]'])
     df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_JADE', 'Monte_Carlo_runs_JADE.csv'), index=True, header=True, mode='a')
 
     # return minimum distances stored in data_storage
@@ -155,26 +153,34 @@ if __name__ == "__main__":
 
     # def of types to test
     sample_size_full = np.array([1000, 2500, 5000, 10000, 15000])  # 1000, 2500, 5000, 10000, 15000
+    noise_list = np.array([40, 30, 20, 10, 6, 3])
+    outlier_list = np.array([0.1, 0.25, 0.5, 1, 1.5, 5, 10, 20, 50])
 
     type_dict = dict()
     type_dict.update({"Type 1": [1000, 0, 10000, sample_size_full]})  # no noise, no outlier, runs, samples
     type_dict.update({"Type 2": [40, 0, 10000, sample_size_full]})  # 40db noise, no outlier, runs, samples
     type_dict.update({"Type 3": [1000, 0.01, 10000, sample_size_full]})  # no noise, 0.1 % outlier, runs, samples
     type_dict.update({"Type 4": [40, 0.01, 10000, sample_size_full]})  # 40 db noise, 0.1 % outlier, runs, samples
+    type_dict.update({"Type 5": [noise_list, 0, 10000, 10000]})
+    type_dict.update({"Type 6": [1000, outlier_list, 10000, 10000, 'patchy']})
+    type_dict.update({"Type 7": [1000, outlier_list, 10000, 10000, 'impulsive']})
 
-    # track time for how long this old endures
+    # track time for how long this run takes
     start_time = time.time()
 
     # init DataFrame
     df = pd.DataFrame()
-    ica_method = 'jade'
+    ica_method = 'jade'  # further changes need to be made in plt.savefig & df.to_csv
     type_list_to_test = ["Type 1", "Type 2", "Type 3", "Type 4"]
     for name in type_list_to_test:
         # parameter for each type to test
         noise = type_dict.get(name)[0]
         p = type_dict.get(name)[1]
-        n_runs = type_dict.get(name)[3]
+        n_runs = type_dict.get(name)[2]
         sample_size = type_dict.get(name)[3]
+
+        if name == "Type 6" or name == "Type 7":
+            outlier_type = type_dict.get(name)[4]
 
         for s in sample_size:
             # do a monte-carlo run
@@ -185,11 +191,12 @@ if __name__ == "__main__":
             df = df.append(temp)
             print("Ready samplesize %s" %s)
 
-    title = ica_method + ',  ' + 'runs: ' + str(n_runs) + ', ' + str(noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
-    file_name = ica_method + '_' + str(n_runs) + 'Runs' + '_' + str(noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
+    title = ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
+    file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
     sns.boxplot(x='Sample Size', y='Minimum Distance', data=df).set_title(title)
     plt.savefig(os.path.join('results_Monte_Carlo_JADE', file_name), dpi=300)
     # plt.show()
+
     print("--- Success after %s seconds ---" % (time.time() - start_time))
 
 # def random_walk_1d(n_steps):
