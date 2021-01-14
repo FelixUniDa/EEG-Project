@@ -141,8 +141,8 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
     if seed == None:
         seed = 'None'
 
-    mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'Noise-level [dB]': [noise_lvl],'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med], 'nMAD': [nMAD], 'Time elapsed [s]': [t1]}
-    df = pd.DataFrame(mc_data, columns=['Method', '# Runs', 'Sample Size', 'Noise-level [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean', 'Std', 'Median', 'nMAD', 'Time elapsed [s]'])
+    mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'SNR [dB]': [noise_lvl], 'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med], 'nMAD': [nMAD], 'Time elapsed [s]': [t1]}
+    df = pd.DataFrame(mc_data, columns=['Method', '# Runs', 'Sample Size', 'SNR [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean', 'Std', 'Median', 'nMAD', 'Time elapsed [s]'])
     df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_JADE', 'Monte_Carlo_runs_JADE.csv'), index=True, header=True, mode='a')
 
     # return minimum distances stored in data_storage
@@ -154,25 +154,25 @@ if __name__ == "__main__":
     # def of types to test
     sample_size_full = np.array([1000, 2500, 5000, 10000, 15000])  # 1000, 2500, 5000, 10000, 15000
     noise_list = np.array([40, 30, 20, 10, 6, 3])
-    outlier_list = np.array([0.1, 0.25, 0.5, 1, 1.5, 5, 10, 20, 50])
-
+    outlier_list = np.array([0.001, 0.0025, 0.005, 0.01, 0.015, 0.05, 0.10, 0.20, 0.50])
+    n_runs = 10000
     type_dict = dict()
-    type_dict.update({"Type 1": [1000, 0, 10000, sample_size_full]})  # no noise, no outlier, runs, samples
-    type_dict.update({"Type 2": [40, 0, 10000, sample_size_full]})  # 40db noise, no outlier, runs, samples
-    type_dict.update({"Type 3": [1000, 0.01, 10000, sample_size_full]})  # no noise, 0.1 % outlier, runs, samples
-    type_dict.update({"Type 4": [40, 0.01, 10000, sample_size_full]})  # 40 db noise, 0.1 % outlier, runs, samples
-    type_dict.update({"Type 5": [noise_list, 0, 10000, 10000]})
-    type_dict.update({"Type 6": [1000, outlier_list, 10000, 10000, 'patch']})
-    type_dict.update({"Type 7": [1000, outlier_list, 10000, 10000, 'impulse']})
+    type_dict.update({"Type 1": [1000, 0, n_runs, sample_size_full]})  # no noise, no outlier, runs, samples
+    type_dict.update({"Type 2": [40, 0, n_runs, sample_size_full]})  # 40db noise, no outlier, runs, samples
+    type_dict.update({"Type 3": [1000, 0.01, n_runs, sample_size_full]})  # no noise, 0.1 % outlier, runs, samples
+    type_dict.update({"Type 4": [40, 0.01, n_runs, sample_size_full]})  # 40 db noise, 0.1 % outlier, runs, samples
+    type_dict.update({"Type 5": [noise_list, 0, n_runs, 10000]})
+    type_dict.update({"Type 6": [1000, outlier_list, n_runs, 10000, 'patch']})
+    type_dict.update({"Type 7": [1000, outlier_list, n_runs, 10000, 'impulse']})
 
     # track time for how long this run takes
     start_time = time.time()
 
     # init DataFrame
     df = pd.DataFrame()
-    ica_method = 'jade'  # further changes need to be made in plt.savefig & df.to_csv
+    ica_method = 'jade'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
     folder_to_save = 'results_Monte_Carlo_JADE'
-    type_list_to_test = ["Type 6", "Type 7"]  # "Type 1", "Type 2", "Type 3", "Type 4"
+    type_list_to_test = ["Type 1", "Type 2", "Type 3", "Type 4", "Type 5", "Type 6", "Type 7"]  # "Type 1", "Type 2", "Type 3", "Type 4"
     for name in type_list_to_test:
         # parameter for each type to test
         noise = type_dict.get(name)[0]
@@ -181,7 +181,7 @@ if __name__ == "__main__":
         sample_size = type_dict.get(name)[3]
 
         if name == "Type 1" or name == "Type 2" or name == "Type 3" or name == "Type 4":
-            outlier_type = type_dict.get(name)[4]
+            outlier_type = "impulse"
             for s in sample_size:
                 # do a monte-carlo run
                 mds = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type)
@@ -200,22 +200,23 @@ if __name__ == "__main__":
             plt.show()
 
         if name == "Type 5":
+            outlier_type = "impulse"
             for snr in noise:
                 # do a monte-carlo run
                 s = sample_size
                 mds = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=snr, p_outlier=p)
 
-                d = {'Minimum Distance': mds, 'Noise Level': np.repeat(snr, n_runs),
+                d = {'Minimum Distance': mds, 'SNR': np.repeat(snr, n_runs),
                      '# MC Runs': np.repeat(n_runs, n_runs)}
                 temp = pd.DataFrame(data=d)
                 df = df.append(temp)
                 print("Ready noise level {} with sample size {}".format(snr, s))
 
             title = ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + 'sample size:' + str(
-                sample_size) + ', ' + str(p) + ' % outliers'
+                sample_size) + ', ' + str(p*10) + ' % outliers'
             file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
-            sns.boxplot(x='Noise Level', y='Minimum Distance', data=df).set_title(title)
+            sns.boxplot(x='SNR', y='Minimum Distance', data=df).set_title(title)
             plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
             plt.show()
 
