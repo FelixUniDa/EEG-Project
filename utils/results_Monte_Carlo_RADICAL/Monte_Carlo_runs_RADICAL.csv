@@ -143,3 +143,191 @@
 0,radical,1000,1000,1000,0.2,None,0.6819259425415222,0.11728347361991745,0.6887824346813123,0.11020131862285114,273.47165751457214
 ,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
 0,radical,1000,1000,1000,0.5,None,0.8096435903967808,0.08608586533091792,0.8252186650973703,0.08021347408976104,288.31153297424316
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,5000,1000,1000,0,None,0.40628698580204436,0.12549585646915368,0.4682860558156694,0.05066635770583139,1311.4749565124512
+,Method,# Runs,Sample Size,Noise-level [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,5000,2500,1000,0,None,0.33308804471362763,0.1280055022387984,0.2991513904018968,0.07932483393815737,2276.4303801059723
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,1000,1000,0,None,0.35541521847749025,0.16843509041749744,0.4546542505710246,0.14291608240563827,580.6933453083038
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,2500,1000,0,None,0.23543806276619045,0.09613331843192756,0.20899656403954148,0.05422868683912164,1019.0886881351471
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,5000,1000,0,None,0.17282610450950034,0.03425270039604171,0.17529144646317737,0.029535953648888297,1642.6596186161041
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,40,0,None,0.2686728075037962,0.14250937226587512,0.22824034550478928,0.11272917454809671,3669.8757128715515
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,1000,0,None,0.2839113876376219,0.13538168705083622,0.3306991747760479,0.027965939812487017,2754.1987566947937
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,30,0,None,0.2917249616110331,0.1803607236983598,0.2209989147546963,0.12730726619458343,3142.17866396904
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,15000,1000,0,None,0.2339194371200837,0.02284949677003215,0.23343477676608637,0.014983275968357043,3487.3024640083313
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,20,0,None,0.41896753422681116,0.17967939908652997,0.3958575092899009,0.19601926564455371,2913.9179878234863
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,1000,40,0,None,0.41342362239813873,0.12875371045076411,0.43898105572644514,0.07942439057272373,358.80617570877075
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,2500,40,0,None,0.24721670236148022,0.16971022257567306,0.17136997677962357,0.05236496009956801,679.1875972747803
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,5000,40,0,None,0.2082724760298993,0.1418889398057762,0.15776522332502937,0.03917820474589858,1368.436140537262
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,10,0,None,0.5817929060736132,0.15132193626340457,0.5863097237684041,0.17118832188555216,2924.150317668915
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,40,0,None,0.3165845943235063,0.14423511526156815,0.33372205813336664,0.09576097663437116,2721.9266078472137
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,6,0,None,0.6572074443973682,0.12949579290681631,0.6712423478784184,0.14531314291660766,3032.3760418891907
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,3,0,None,0.7158814902360277,0.11481106677918969,0.7318631396096877,0.11762248618325291,3041.9166877269745
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,15000,40,0,None,0.23654657613026592,0.11097553672346114,0.2157645651691934,0.06262338505721982,4112.106476545334
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,1000,1000,0.01,None,0.4174002907438001,0.15155673291512137,0.47147468903763007,0.11837370053684962,250.5756332874298
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,2500,1000,0.01,None,0.32090359760537535,0.13628981947559024,0.3049357183629799,0.10687632019724107,461.21796441078186
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,5000,1000,0.01,None,0.27223626947700486,0.1114382882928517,0.25547829242949743,0.11384235829097403,876.6771295070648
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,1000,0.01,None,0.3227562645435371,0.10998099772789502,0.3263337882485223,0.025289612960677752,1699.749769449234
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,15000,1000,0.01,None,0.3090137891148172,0.06790462689067506,0.30045154463599427,0.034991002855532194,2576.9843876361847
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,1000,40,0.01,None,0.43687426783991684,0.13317061687061493,0.4818571294961709,0.05934556380154431,263.593878030777
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,2500,40,0.01,None,0.2680633600507421,0.13680655235887657,0.23199398416883157,0.06858324980609763,518.1835777759552
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,5000,40,0.01,None,0.22451826014249063,0.1523626689650542,0.1684706924277069,0.05183421713971699,1007.5868182182312
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,40,0.01,None,0.2645454668604877,0.16566865879802875,0.23345498627536765,0.16640827877010783,2017.7938125133514
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,15000,40,0.01,None,0.2352403429031736,0.13532085424280435,0.22013839998465828,0.08712206097334142,3085.4041838645935
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,40,0,None,0.14767884688825486,0.0,0.14767884688825486,0.0,3.943747043609619
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,30,0,None,0.12653072462812462,0.0,0.12653072462812462,0.0,4.057175636291504
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,20,0,None,0.251459580005983,0.0,0.251459580005983,0.0,4.054751634597778
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,10,0,None,0.6215992228538124,0.0,0.6215992228538124,0.0,4.2176477909088135
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,6,0,None,0.6713944368374213,0.0,0.6713944368374213,0.0,4.19876766204834
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,3,0,None,0.6668329851090468,0.0,0.6668329851090468,0.0,5.441605091094971
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.34289145745496524,0.0,0.34289145745496524,0.0,3.555985450744629
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.12013590845335174,0.0,0.12013590845335174,0.0,4.0817224979400635
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.3689135818963261,0.0,0.3689135818963261,0.0,4.02907657623291
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.7948778383862094,0.0,0.7948778383862094,0.0,4.137009143829346
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.8122612210332943,0.0,0.8122612210332943,0.0,4.098631381988525
+,Method,# Runs,Sample Size,SNR [dB],Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.838796425354294,0.0,0.838796425354294,0.0,3.979494571685791
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.0728020613141966,0.0,0.0728020613141966,0.0,3.7471048831939697
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.07923274146888733,0.0,0.07923274146888733,0.0,3.884098768234253
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.7316885850600118,0.0,0.7316885850600118,0.0,4.0296924114227295
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.3879323427007663,0.0,0.3879323427007663,0.0,4.157104730606079
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.7420092293698353,0.0,0.7420092293698353,0.0,4.043027400970459
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.7639029308440514,0.0,0.7639029308440514,0.0,5.020902156829834
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.3429997017239075,0.0,0.3429997017239075,0.0,4.119952917098999
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.3000862405674734,0.0,0.3000862405674734,0.0,4.222568988800049
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.227044412366485,0.0,0.227044412366485,0.0,4.2247560024261475
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.5167001942580733,0.0,0.5167001942580733,0.0,4.493906497955322
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.4513200551625547,0.0,0.4513200551625547,0.0,4.565309047698975
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.8122554180367877,0.0,0.8122554180367877,0.0,4.249921083450317
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.12218885876841744,0.0,0.12218885876841744,0.0,5.556899309158325
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.21056378898136222,0.0,0.21056378898136222,0.0,3.437089443206787
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.663492967414974,0.0,0.663492967414974,0.0,3.5144689083099365
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.474092333250637,0.0,0.474092333250637,0.0,3.4185187816619873
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.7342201564743077,0.0,0.7342201564743077,0.0,3.4321601390838623
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.8563555208093864,0.0,0.8563555208093864,0.0,3.45963454246521
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.1023050599999099,0.0,0.1023050599999099,0.0,2.7142562866210938
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.27909399436364396,0.0,0.27909399436364396,0.0,2.9776031970977783
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.19019230789199823,0.0,0.19019230789199823,0.0,7.047550678253174
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.1922880944257879,0.0,0.1922880944257879,0.0,3.9832358360290527
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.7918345931183413,0.0,0.7918345931183413,0.0,3.424597978591919
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.49320950491115323,0.0,0.49320950491115323,0.0,3.559522867202759
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.7185656345145838,0.0,0.7185656345145838,0.0,3.4297444820404053
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,0,None,0.885483528763496,0.0,0.885483528763496,0.0,3.6250298023223877
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.4492132875354498,0.0,0.4492132875354498,0.0,5.58832311630249
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.47669433059798816,0.0,0.47669433059798816,0.0,3.1918249130249023
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.34653896637521087,0.0,0.34653896637521087,0.0,3.0731987953186035
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,0,None,0.19308414031210913,0.1602177203549214,0.12202245480804295,0.05840769792721984,4587.684901475906
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.3570097233400834,0.1135108665964604,0.38321012317359915,0.03219116339048568,4284.596515417099
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.3150009713730641,0.11142631033693294,0.33053476485210415,0.02480108493622692,4291.757049798965
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.27384121302515574,0.11409086932126813,0.32501104272506776,0.0403265551482028,4706.017174005508
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.27696797255207184,0.13403632349843508,0.3251535461938152,0.03754709330240073,4707.527939796448
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,0,None,0.2828362805785674,0.1876455724038166,0.2114326556640437,0.14274833206711215,5582.084087610245
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.31033655087741047,0.13272213564893118,0.33345193130749373,0.04630787373627257,3615.8500130176544
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.3023690721161204,0.11937245830787745,0.3322105087897635,0.028028607014059462,3614.033533334732
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,0,None,0.4156472014620115,0.1827854422971203,0.3970321626576573,0.2122249089794628,4135.7919363975525
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.2835095345861988,0.14930485476709845,0.325045500636245,0.0753301769119535,2592.293463230133
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.310158990149931,0.13467351071052405,0.33600218941690974,0.04519812784329866,2593.2197535037994
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,0,None,0.5857152711870655,0.1489699798605445,0.5929418664471299,0.1759370844419691,3320.749323129654
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.32461817515698305,0.1372603923847413,0.33933324354284655,0.044157169996982853,2609.818989276886
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.32276687685617034,0.10934379795542352,0.32613280664387245,0.02557068325814495,2611.505043745041
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,0,None,0.6544875883808016,0.13547293623807638,0.6772579678724295,0.14795641152666286,3477.2649755477905
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.42700603894445716,0.12887210259784523,0.42346196574754347,0.08315360652742114,2821.8984310626984
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.37465088827863735,0.10296734600220951,0.35585391066539657,0.045919872705778304,2829.1905755996704
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.4954302790560358,0.13930721076083685,0.5026204852668675,0.14760253830472847,2771.809404373169
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.4754231470709535,0.13313746272614987,0.47377200814531595,0.134950404472486,2769.9711394309998
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,0,None,0.7224301026877155,0.1130183947387881,0.7406070490373476,0.1136575442070324,3338.64679646492
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.2806415070340298,0.12540641781663245,0.32634892453030384,0.03259590686967518,2571.26033616066
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.6822360887676848,0.12234235609425402,0.6958678995446972,0.11141531012984485,2914.7257924079895
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.6855401018986084,0.11607016984208705,0.6920612961509374,0.10507752217578088,2911.5802524089813
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.8079484142298717,0.08844180795745128,0.8229067545241965,0.08436203841603368,3248.511842727661
+,Method,# Runs,Sample Size,SNR,Percentage Outliers (3Std),Seed,Mean,Std,Median,nMAD,Time elapsed [s]
+0,radical,1000,10000,,[0.001  0.0025 0.005  0.01   0.015  0.05   0.1    0.2    0.5   ],None,0.8086477177433598,0.09107848067546379,0.8194482978537878,0.08363645730152587,3253.4072065353394

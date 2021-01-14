@@ -57,6 +57,7 @@ def create_signal(x = 10000, c = 'sin', ampl = 1, fs = 2,eeg_components=1):
             raw = mne.io.read_raw_fif(sample_data_raw_file)
             eeg = np.array(raw.get_data(picks='eeg')) # pick only eeg channels
             s8 = eeg[eeg_components,0:n_samples]   #return the number of channels, and samplesize as wanted
+            s8 = 2 * (s8 - np.min(s8)) / (np.max(s8) - np.min(s8)) - 1  # Normalize EEG data between -1 and 1
             if s8.shape[0] == 1:
                 s8 = s8.reshape(n_samples,)
             else:
