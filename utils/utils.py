@@ -12,32 +12,33 @@ from scipy.stats.distributions import chi2
 import scipy as sp
 from scipy.optimize import linear_sum_assignment
 
-def create_signal(x = 10000, c = 'sin', ampl = 1,fs = 1000 f = 2,eeg_components=1):
+def create_signal(x = 10000, c = 'sin', ampl = 1,fs = 1000, f = 2,eeg_components=1):
     """
     creates a certain signal
     :param x: length of the data vector
     :param c: type of signal, e.g sin, cos, sawt, rect, ecg
     :param ampl: amplitude of signal
     :param fs: sample frequency
+    :param f: desired frequency of the signal
     :return: data signal
     """
 
-    n_samples = np.arange(x)
+    samples = np.arange(x)
 
     def sin1():
-        s1 = np.sin(2 * np.pi * f * n_samples / fs)  # Signal 1 : sinusoidal signal
+        s1 = np.sin(2 * np.pi * f * samples / fs)  # Signal 1 : sinusoidal signal
         return s1
 
     def cos1():
-        s2 = np.cos(2 * np.pi * f * n_samples / fs)  # Signal 2 : cosinus signal
+        s2 = np.cos(2 * np.pi * f * samples / fs)  # Signal 2 : cosinus signal
         return s2
 
     def sawt():
-        s3 = signal.sawtooth(2 * np.pi * f * n_samples / fs)  # Signal 3: sawtooth signal
+        s3 = signal.sawtooth(2 * np.pi * f * samples / fs)  # Signal 3: sawtooth signal
         return s3
 
     def rect():
-        s4 = np.sign(np.sin(2 * np.pi * f * n_samples / fs))  # Signal 4: square signal
+        s4 = np.sign(np.sin(2 * np.pi * f * samples / fs))  # Signal 4: square signal
         return s4
 
     # def piky():
@@ -45,7 +46,7 @@ def create_signal(x = 10000, c = 'sin', ampl = 1,fs = 1000 f = 2,eeg_components=
     #    return s6
 
     def ecg():
-        s7 = nk.ecg_simulate(length=n_samples)
+        s7 = nk.ecg_simulate(length=x)
         return s7
 
     def eeg():
@@ -56,10 +57,10 @@ def create_signal(x = 10000, c = 'sin', ampl = 1,fs = 1000 f = 2,eeg_components=
                                         'sample_audvis_filt-0-40_raw.fif')
             raw = mne.io.read_raw_fif(sample_data_raw_file)
             eeg = np.array(raw.get_data(picks='eeg')) # pick only eeg channels
-            s8 = eeg[eeg_components,0:n_samples]   #return the number of channels, and samplesize as wanted
+            s8 = eeg[eeg_components,0:x]   #return the number of channels, and samplesize as wanted
             s8 = 2 * (s8 - np.min(s8)) / (np.max(s8) - np.min(s8)) - 1  # Normalize EEG data between -1 and 1
             if s8.shape[0] == 1:
-                s8 = s8.reshape(n_samples,)
+                s8 = s8.reshape(x,)
             else:
                 s8 = s8.T
             return s8

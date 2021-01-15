@@ -1,28 +1,27 @@
 #%%
 import numpy as np
 import matplotlib.pyplot as plt
-from utils import *
 import PowerICA
 import os
 import sys
 from coroica import CoroICA
 
-from fast_Radical import *
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath( __file__ ))))
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR,'Python_Code','JADE'))
 sys.path.append(os.path.join(BASE_DIR,'utils'))
-
+# print(os.path)
+# print(BASE_DIR)
+from utils import *
 from jade import jadeR
 #from monte_carlo_random_walk import monte_carlo_run
 from distances import *
-
+from fast_Radical import *
 # create example signals:
-data = np.stack([create_signal(c='ecg'),
-                 create_signal(ampl=4,c='cos'),
-                 create_signal(c='rect'),
-                 create_signal(c='sawt')]).T
+data = np.stack([create_signal(x = 2000, c='ecg'),
+                 create_signal(x = 2000,ampl=4,c='cos'),
+                 create_signal(x = 2000, c='rect'),
+                 create_signal(x = 2000,c='sawt')]).T
 
 # data_premixing_contamination = data
 # data_premixing_contamination[2]= create_outlier(data_premixing_contamination[2])
@@ -36,11 +35,11 @@ MM = mixing_matrix(r,seed=1)
 mixdata = MM@data.T
 
 #apply noise
-mixdata_noise = np.stack([create_outlier(apply_noise(dat,c='white', SNR_dB=20),prop=0.001,std=5) for dat in mixdata])
+mixdata_noise = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=20),prop=0.001,std=5) for dat in mixdata])
 #mixdata_noise = mixdata
 #%%
 # centering the data and whitening the data:
-white_data,W_whiten,W_dewhiten = whitening(mixdata_noise, type='sample')
+white_data,W_whiten,W_dewhiten,_ = whitening(mixdata_noise, type='sample')
 
 # perform PowerICA
 W_power, _ = PowerICA.powerICA(white_data, 'pow3')
