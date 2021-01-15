@@ -22,10 +22,12 @@ def create_signal(x = 10000, c = 'sin', ampl = 1,fs = 1000, f = 2,eeg_components
     :param f: desired frequency of the signal
     :return: data signal
     """
-
+    # arange samples from 0 to x
     samples = np.arange(x)
 
     def sin1():
+        # samples/fs = time of the signal
+        # to create signal 2*pi*f*t
         s1 = np.sin(2 * np.pi * f * samples / fs)  # Signal 1 : sinusoidal signal
         return s1
 
