@@ -7,7 +7,7 @@ import os
 import neurokit2 as nk
 import robustsp as rsp
 # from Mscat import *
-from sklearn.decomposition import FastICA, PCA
+from sklearn.metrics import mean_squared_error
 from scipy.stats.distributions import chi2
 import scipy as sp
 from scipy.optimize import linear_sum_assignment
@@ -520,3 +520,50 @@ def md(A, Vhat):
     md = np.sqrt(d - np.sum(np.diag(Gtilde[row_ind, col_ind]))) / \
         np.sqrt(d - 1)
     return md
+
+
+def MSE(pred_signals, true_signals):
+    '''
+      Computes the MSE between the estimated and true signals
+
+      INPUT:
+            pred_signals: Array of size (dim,n) containing the estimated signals as row vectors
+            true_signals: Array of size (dim,n) containing the true signals as row vectors
+      OUTPUT:
+            MSE: Array of size length dim containing the MSE of each estimated signal corresponding to the true Signal
+    '''
+
+    
+    dim,n = np.shape(true_signals)
+    pred_mean = np.mean(pred_signals,axis=1).reshape(dim,1)
+    pred_std = np.std(pred_signals,axis=1).reshape(dim,1)
+    true_mean = np.mean(true_signals,axis=1).reshape(dim,1)
+    true_std = np.std(true_signals,axis=1).reshape(dim,1)
+    #scale data to have unit variance 1/n*y@y.T=1
+    pred_signals = np.divide((pred_signals - pred_mean),pred_std)
+    true_signals = np.divide((true_signals - true_mean),true_std)
+    MSE = np.zeros(dim)
+    MSE_matrix1 = np.zeros((dim,dim))
+    MSE_matrix2 = np.zeros((dim,dim))
+
+    #calculate MSE between all estimated signals with changed sign and true signals and store in array
+    for i in range(0,dim):
+        for j in range(0,dim):
+            MSE_matrix1[i,j] = mean_squared_error(true_signals[j],pred_signals[i])
+    #calculate MSE between all estimated and true signals  and store in array
+    for i in range(0,dim):
+        for j in range(0,dim):
+            MSE_matrix2[i,j] = mean_squared_error(true_signals[j],-pred_signals[i])    
+    
+    #find minima of all possible MSE values
+    array_min1 = MSE_matrix1.min(axis=1)
+    array_min2 = MSE_matrix2.min(axis=1)
+
+    #store minima in separate array
+    for i in range(dim):
+        if(array_min1[i]>array_min2[i]):
+            MSE[i]=array_min2[i]
+        else:
+            MSE[i]=array_min1[i]
+
+    return MSE
