@@ -44,7 +44,7 @@ sns.set_theme(style="darkgrid")
 # ToDo: write experiment results to csv
 
 
-def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_outlier = 0.0, outlier_type='impulse'):
+def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_outlier = 0.0, outlier_type='impulse', partition = 100):
     """
     Do a Monte Carlo simulation of n_runs, plot a histogram, mean and standard deviation
     and write results to csv
@@ -83,6 +83,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
             #print(MM)
             mixdata = MM@data.T
             #apply noise and/or create outlier
+            mixdata_noise = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=noise_lvl),prop=p_outlier,std=3,type = 'impulse') for dat in mixdata])
             mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl), prop=p_outlier, std=3, type=outlier_type) for dat in mixdata])
 
             # centering the data and whitening the data:
@@ -109,7 +110,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
             W = RADICAL(white_data)
         elif (ica_method == 'coro_ica'):
             #print(r)
-            c = CoroICA(partitionsize=100, groupsize=10000)
+            c = CoroICA(partitionsize = partition,groupsize= data_size)
             c.fit(white_data.T)
             W = c.V_
         else:
@@ -143,7 +144,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
 
     mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'SNR [dB]': [noise_lvl], 'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med], 'nMAD': [nMAD], 'Time elapsed [s]': [t1]}
     df = pd.DataFrame(mc_data, columns=['Method', '# Runs', 'Sample Size', 'SNR [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean', 'Std', 'Median', 'nMAD', 'Time elapsed [s]'])
-    df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_JADE', 'Monte_Carlo_runs_JADE.csv'), index=True, header=True, mode='a')
+    df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_CoroICA', 'Monte_Carlo_runs_CoroICA.csv'), index=True, header=True, mode='a')
 
     # return minimum distances stored in data_storage
     return data_storage
@@ -155,24 +156,27 @@ if __name__ == "__main__":
     sample_size_full = np.array([1000, 2500, 5000, 10000, 15000])  # 1000, 2500, 5000, 10000, 15000
     noise_list = np.array([40, 30, 20, 10, 6, 3])
     outlier_list = np.array([0.001, 0.0025, 0.005, 0.01, 0.015, 0.05, 0.10, 0.20, 0.50])
-    n_runs = 10000
+    n_runs = 100
     type_dict = dict()
     type_dict.update({"Type 1": [1000, 0, n_runs, sample_size_full]})  # no noise, no outlier, runs, samples
     type_dict.update({"Type 2": [40, 0, n_runs, sample_size_full]})  # 40db noise, no outlier, runs, samples
-    type_dict.update({"Type 3": [1000, 0.01, n_runs, sample_size_full]})  # no noise, 0.1 % outlier, runs, samples
-    type_dict.update({"Type 4": [40, 0.01, n_runs, sample_size_full]})  # 40 db noise, 0.1 % outlier, runs, samples
+    type_dict.update({"Type 3": [1000, 0.001, n_runs, sample_size_full]})  # no noise, 0.1 % outlier, runs, samples
+    type_dict.update({"Type 4": [40, 0.001, n_runs, sample_size_full]})  # 40 db noise, 0.1 % outlier, runs, samples
     type_dict.update({"Type 5": [noise_list, 0, n_runs, 10000]})
     type_dict.update({"Type 6": [1000, outlier_list, n_runs, 10000, 'patch']})
     type_dict.update({"Type 7": [1000, outlier_list, n_runs, 10000, 'impulse']})
+    # Coro_ica partitionsize test. 
+    type_dict.update({"Type 8": [40, 0.000, n_runs, 2500]}) #(dB Noise, outlier proportion, runs, sample_size, partions_list)
+
 
     # track time for how long this run takes
     start_time = time.time()
 
     # init DataFrame
     df = pd.DataFrame()
-    ica_method = 'jade'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
-    folder_to_save = 'results_Monte_Carlo_JADE'
-    type_list_to_test = ["Type 1", "Type 2", "Type 3", "Type 4", "Type 5", "Type 6", "Type 7"]  # "Type 1", "Type 2", "Type 3", "Type 4"
+    ica_method = 'coro_ica'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
+    folder_to_save = 'results_Monte_Carlo_CoroICA'
+    type_list_to_test = ["Type 8"]  # "Type 1", "Type 2", "Type 3", "Type 4"
     for name in type_list_to_test:
         # parameter for each type to test
         noise = type_dict.get(name)[0]
@@ -197,7 +201,7 @@ if __name__ == "__main__":
                 noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
             sns.boxplot(x='Sample Size', y='Minimum Distance', data=df).set_title(title)
             plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
-            plt.show()
+            #plt.show()
 
         if name == "Type 5":
             outlier_type = "impulse"
@@ -218,7 +222,7 @@ if __name__ == "__main__":
                 noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
             sns.boxplot(x='SNR', y='Minimum Distance', data=df).set_title(title)
             plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
-            plt.show()
+            #plt.show()
 
         if name == "Type 6" or name == "Type 7":
             outlier_type = type_dict.get(name)[4]
@@ -240,46 +244,26 @@ if __name__ == "__main__":
                 noise) + 'dB_' + 'type_outlier_' + str(outlier_type) + '.jpg'
             sns.boxplot(x='Outlier Percentage', y='Minimum Distance', data=df).set_title(title)
             plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
-            plt.show()
+            #plt.show()
 
+        if name == "Type 8" :
+            outlier_type = "impulse"
+            partitions = np.arange(50,400,10) #np.ones(41)/np.arange(50,9,-1)*sample_size 
+            for ps in partitions:
+                # do a monte-carlo run
+                mds = monte_carlo_run(n_runs, sample_size , ica_method, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type, partition= (ps))
+
+                d = {'Minimum Distance': mds, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                temp = pd.DataFrame(data=d)
+                df = df.append(temp)
+                print("Ready Partitionsize {}".format(ps))
+
+            title = ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
+                noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
+            file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
+                noise) + 'dB_' + 'p_outliers_' + str(p) +'_Partitionsteps' + '.jpg'
+            sns.boxplot(x='Partition Size', y='Minimum Distance', data=df).set_title(title)
+            plt.show()
+            plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
     print("--- Success after %s seconds ---" % (time.time() - start_time))
 
-# def random_walk_1d(n_steps):
-#     """
-#     take a random walk of n_steps and return excursion from the origin
-#     :param n_steps: number of stebern
-#     :return: sum of steps
-#     """
-
-#     # generate an array of our steps (+1 for right, -1 for left)
-#     steps = 2 * np.random.randint(0, 2, n_steps) - 1
-#     # sum of steps
-#     return steps.sum()
-
-# # #steps to take for computing distribution
-# n_steps = 10000
-
-# # number of random walks to take
-# n_samples = 10000
-
-# # initial samples of displacements
-# x = np.empty(n_samples)
-
-# # take all of the random walks
-# for i in range(n_samples):
-#     x[i] = random_walk_1d(n_steps)
-
-# # make histogram and boxplot visualization for result
-# ax = sns.distplot(x)
-
-
-# # ax2.set(ylim=(-.5, 10))
-
-# x = pd.Series(x, name='$x$ (a.u.)')
-# sns.displot(x, kde=True)
-# plt.show()
-
-
-# # trial prints
-# print(' Mean displacement:', x.mean())
-# print('Standard deviation:', x.std())

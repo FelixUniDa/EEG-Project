@@ -12,7 +12,7 @@ from scipy.stats.distributions import chi2
 import scipy as sp
 from scipy.optimize import linear_sum_assignment
 
-def create_signal(x = 10000, c = 'sin', ampl = 1, fs = 2,eeg_components=1):
+def create_signal(x = 10000, c = 'sin', ampl = 1,fs = 1000 f = 2,eeg_components=1):
     """
     creates a certain signal
     :param x: length of the data vector
@@ -21,26 +21,23 @@ def create_signal(x = 10000, c = 'sin', ampl = 1, fs = 2,eeg_components=1):
     :param fs: sample frequency
     :return: data signal
     """
-    #
-    # x is number of samples
-    # sample rate
-    n_samples = x
-    time = np.linspace(0, 10, n_samples)
+
+    n_samples = np.arange(x)
 
     def sin1():
-        s1 = np.sin(fs * time)  # Signal 1 : sinusoidal signal
+        s1 = np.sin(2 * np.pi * f * n_samples / fs)  # Signal 1 : sinusoidal signal
         return s1
 
     def cos1():
-        s2 = np.cos(fs * time)  # Signal 2 : cosinus signal
+        s2 = np.cos(2 * np.pi * f * n_samples / fs)  # Signal 2 : cosinus signal
         return s2
 
     def sawt():
-        s3 = signal.sawtooth(fs * np.pi * time)  # Signal 3: sawtooth signal
+        s3 = signal.sawtooth(2 * np.pi * f * n_samples / fs)  # Signal 3: sawtooth signal
         return s3
 
     def rect():
-        s4 = np.sign(np.sin(fs * time))  # Signal 4: square signal
+        s4 = np.sign(np.sin(2 * np.pi * f * n_samples / fs))  # Signal 4: square signal
         return s4
 
     # def piky():
@@ -287,7 +284,7 @@ def whitening(x, type='sample', loss = 'Huber',percentile=1):
                 n_components = i+1
                 break
 
-        #print(n_components)
+        #print(n_components)   
         d = d[idx[0:n_components]]                #Sort eigenvalues
         E = E[:,idx[0:n_components]]              #Sort eigenvectors
 
