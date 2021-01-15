@@ -567,3 +567,52 @@ def MSE(pred_signals, true_signals):
             MSE[i]=array_min1[i]
 
     return MSE
+
+
+def SNR(pred_signals, true_signals):
+    """[summary]
+
+    Args:
+        pred_signals (dim,n): Array of size (dim,n) containing the estimated signals as row vectors
+        true_signals (dim,n): Array of size (dim,n) containing the true signals as row vectors
+
+    Returns:
+        SNR(dim): Array of length dim containing the SNR of each estimated signal corresponding to the true Signal in dB
+    """
+    dim,n = np.shape(true_signals)
+    pred_mean = np.mean(pred_signals,axis=1).reshape(dim,1)
+    pred_std = np.std(pred_signals,axis=1).reshape(dim,1)
+    true_mean = np.mean(true_signals,axis=1).reshape(dim,1)
+    true_std = np.std(true_signals,axis=1).reshape(dim,1)
+    #scale data to have unit variance 1/n*y@y.T=1
+    pred_signals = np.divide((pred_signals - pred_mean),pred_std)
+    true_signals = np.divide((true_signals - true_mean),true_std)
+    SNR = np.zeros(dim)
+    SNR_matrix1 = np.zeros((dim,dim))
+    SNR_matrix2 = np.zeros((dim,dim))
+
+    #calculate SNR between all estimated and true signals and store in array
+    for i in range(0,dim):
+        for j in range(0,dim):
+            pred_var1 = np.var(pred_signals[i])
+            diff_var1 = np.var(pred_signals[i]-true_signals[j])
+            SNR_matrix1[i,j] = pred_var1/diff_var1
+    #calculate SNR between all estimated and true signals with flipped sign and store in array
+    for i in range(0,dim):
+        for j in range(0,dim):
+            pred_var2 = np.var(pred_signals[i])
+            diff_var2 = np.var(pred_signals[i]+true_signals[j])
+            SNR_matrix2[i,j] = pred_var2/diff_var2
+   
+    #find maxima of all possible SNR values
+    array_max1 = SNR_matrix1.max(axis=1)
+    array_max2 = SNR_matrix2.max(axis=1)
+    
+    #store maxima in separate array
+    for i in range(dim):
+        if(array_max1[i]>array_max2[i]):
+            SNR[i]=array_max1[i]
+        else:
+            SNR[i]=array_max2[i]
+
+    return 10*np.log10(SNR)
