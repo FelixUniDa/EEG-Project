@@ -200,7 +200,7 @@ def create_outlier(data, prop=0.01, std=3, type='impulse', seed=None):
     return data
 
 
-def add_artifact(data, fs,  prop=0.05, snr_dB=3, number=3, type='eye', seed=None):
+def add_artifact(data, fs,  prop=0.1, snr_dB=3, number=3, type='eye', seed=None):
     """
 
     :param data:
@@ -217,43 +217,49 @@ def add_artifact(data, fs,  prop=0.05, snr_dB=3, number=3, type='eye', seed=None
     len_artifact = int(prop * c)
     np.random.seed(seed)
 
+    # Calculate signal power and convert to dB
+    sig_avg_watts = np.median(data ** 2)
+    sig_avg_db = 10 * np.log10(sig_avg_watts)
+    # Calculate noise then convert to watts
+    noise_avg_db = sig_avg_db - snr_dB
+    noise_avg_watts = 10 ** (noise_avg_db / 10)
+
 
     if (type == 'eye'):
         order = 3
         lowcut = 1.0
-        highcut = 3.0
+        highcut = 10.0
         sos = butter(order, [lowcut / (0.5 * fs), highcut / (0.5 * fs)], btype='band', output='sos')
 
         eye_outlier = np.zeros_like(data)
-        a = np.arange(0, c - len_artifact, 1)
+        a = np.arange(0, c - len_artifact-1, 1)
         for k in range(0, number):
             noise = apply_noise(data, type='white', SNR_dB=snr_dB) - data
             noise = noise[0:len_artifact]
             outlier = sosfilt(sos, noise)
             outlier_index = np.random.choice(a)
             a = np.delete(a, a[outlier_index-len_artifact:outlier_index+len_artifact])
+            outlier = (2 * (outlier - np.min(outlier)) / (np.max(outlier) - np.min(outlier)) - 1)*noise_avg_watts  # Normalize EEG data between -1 and 1
             eye_outlier[outlier_index:outlier_index + len_artifact] = outlier
-            plt.plot(eye_outlier)
-            plt.show()
-            plt.plot(noise)
-            plt.show()
-            plt.plot(outlier)
-            plt.show()
             data_outl = eye_outlier + data
 
     elif (type == 'muscle'):
-        order = 9
+        order = 3
         lowcut = 20.0
         highcut = 60.0
-        cb, ca = butter(order, [lowcut, highcut], btype='band', fs=fs)
+        sos = butter(order, [lowcut / (0.5 * fs), highcut / (0.5 * fs)], btype='band', output='sos')
 
         muscle_outlier = np.zeros_like(data)
         a = np.arange(0, c - len_artifact, 1)
         for k in range(0, number):
-            outlier = lfilter(cb, ca, noise)
+            noise = apply_noise(data, type='white', SNR_dB=snr_dB) - data
+            noise = noise[0:len_artifact]
+            outlier = sosfilt(sos, noise)
             outlier_index = np.random.choice(a)
-            np.delete(a, a[outlier_index:outlier_index + len_artifact])
-            muscle_outlier[outlier_index:outlier_index + len_artifact] = outlier[outlier_index:outlier_index + len_artifact]
+            a = np.delete(a, a[outlier_index - len_artifact:outlier_index + len_artifact])
+            outlier = (2 * (outlier - np.min(outlier)) / (
+                        np.max(outlier) - np.min(outlier)) - 1) * noise_avg_watts  # Normalize EEG data between -1 and 1
+            muscle_outlier[outlier_index:outlier_index + len_artifact] = outlier
             data_outl = muscle_outlier + data
 
     '''   

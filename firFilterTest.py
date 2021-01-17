@@ -21,13 +21,13 @@ def run():
 
     # Sample rate and desired cutoff frequencies (in Hz).
     fs = 5000.0
-    lowcut = 500.0
-    highcut = 1250.0
+    lowcut = 1.0
+    highcut = 10.0
 
     # Plot the frequency response for a few different orders.
     plt.figure(1)
     plt.clf()
-    for order in [3, 6, 9, 25]:
+    for order in [3, 6]:
         b, a = butter_bandpass(lowcut, highcut, fs, order=order)
         w, h = freqz(b, a, worN=2000)
         plt.plot((fs * 0.5 / np.pi) * w, abs(h), label="order = %d" % order)
