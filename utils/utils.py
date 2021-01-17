@@ -11,10 +11,10 @@ from sklearn.metrics import mean_squared_error
 from scipy.stats.distributions import chi2
 import scipy as sp
 from scipy.optimize import linear_sum_assignment
-from scipy.signal import butter, lfilter
+from scipy.signal import butter, sosfilt
 
 
-def create_signal(x = 10000, c = 'sin', ampl = 1,fs = 1000, f = 2, eeg_components=1):
+def create_signal(x=10000, c='sin', ampl=1, fs=1000, f=2, eeg_components=1):
     """
     creates a certain signal
     :param x: length of the data vector
@@ -200,12 +200,13 @@ def create_outlier(data, prop=0.01, std=3, type='impulse', seed=None):
     return data
 
 
-def add_artifact(data, fs,  prop=0.01, snr_dB = 3, number=3, type='eye', seed=None):
+def add_artifact(data, fs,  prop=0.05, snr_dB=3, number=3, type='eye', seed=None):
     """
 
     :param data:
+    :param fs:
     :param prop:
-    :param std:
+    :param snr_dB:
     :param number:
     :param type:
     :param seed:
@@ -215,26 +216,33 @@ def add_artifact(data, fs,  prop=0.01, snr_dB = 3, number=3, type='eye', seed=No
     c = len(data)
     len_artifact = int(prop * c)
     np.random.seed(seed)
-    noise = apply_noise(data, type='white', SNR_dB=snr_dB) - data
 
 
     if (type == 'eye'):
-        order = 128
+        order = 3
         lowcut = 1.0
         highcut = 3.0
-        cb, ca = butter(order, [lowcut, highcut], btype='band', fs=fs)
+        sos = butter(order, [lowcut / (0.5 * fs), highcut / (0.5 * fs)], btype='band', output='sos')
 
         eye_outlier = np.zeros_like(data)
         a = np.arange(0, c - len_artifact, 1)
         for k in range(0, number):
-            outlier = lfilter(cb, ca, noise)
+            noise = apply_noise(data, type='white', SNR_dB=snr_dB) - data
+            noise = noise[0:len_artifact]
+            outlier = sosfilt(sos, noise)
             outlier_index = np.random.choice(a)
-            np.delete(a, a[outlier_index:outlier_index+len_artifact])
-            eye_outlier[outlier_index:outlier_index + len_artifact] = outlier[outlier_index:outlier_index + len_artifact]
+            a = np.delete(a, a[outlier_index-len_artifact:outlier_index+len_artifact])
+            eye_outlier[outlier_index:outlier_index + len_artifact] = outlier
+            plt.plot(eye_outlier)
+            plt.show()
+            plt.plot(noise)
+            plt.show()
+            plt.plot(outlier)
+            plt.show()
             data_outl = eye_outlier + data
 
     elif (type == 'muscle'):
-        order = 128
+        order = 9
         lowcut = 20.0
         highcut = 60.0
         cb, ca = butter(order, [lowcut, highcut], btype='band', fs=fs)

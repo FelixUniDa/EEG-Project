@@ -65,8 +65,9 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
             create_signal(x=data_size, c='rect'),
             create_signal(x=data_size, c='sawt')]).T
 
-    eeg_data = create_signal(x=data_size, c='eeg')
-    eeg_data_artif = add_artifact(eeg_data, fs=2000)
+    fs=5000
+    eeg_data = create_signal(x=data_size, c='sin', fs=fs)
+    eeg_data_artif = add_artifact(eeg_data, fs=fs)
     plt.plot(eeg_data_artif)
     plt.show()
 
