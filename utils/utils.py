@@ -200,7 +200,7 @@ def create_outlier(data, prop=0.01, std=3, type='impulse', seed=None):
     return data
 
 
-def add_artifact(data, fs,  prop=0.1, snr_dB=3, number=3, type='eye', seed=None):
+def add_artifact(data, fs,  prop=0.05, snr_dB=3, number=3, type='eye', seed=None):
     """
 
     :param data:
@@ -231,17 +231,38 @@ def add_artifact(data, fs,  prop=0.1, snr_dB=3, number=3, type='eye', seed=None)
         highcut = 10.0
         sos = butter(order, [lowcut / (0.5 * fs), highcut / (0.5 * fs)], btype='band', output='sos')
 
+        # eye_outlier = np.zeros_like(data)
+        # a = np.arange(0, c - len_artifact, 1)
+        # for k in range(0, number):
+        #     noise = apply_noise(data, type='white', SNR_dB=snr_dB) - data
+        #     noise = noise[0:len_artifact]
+        #     outlier = sosfilt(sos, noise)
+        #     outlier_index = np.random.choice(a)
+        #     outlier_index_a = np.asarray(np.where(a == outlier_index))[0]
+        #     a = np.delete(a, a[outlier_index_a-len_artifact:outlier_index_a+len_artifact])
+        #     outlier = (2 * (outlier - np.min(outlier)) / (np.max(outlier) - np.min(outlier)) - 1)*noise_avg_watts  # Normalize EEG data between -1 and 1
+        #     eye_outlier[outlier_index:outlier_index + len_artifact] = outlier
+        #     data_outl = eye_outlier + data
+
         eye_outlier = np.zeros_like(data)
-        a = np.arange(0, c - len_artifact-1, 1)
+        a = np.arange(0, c - len_artifact, 1)
         for k in range(0, number):
             noise = apply_noise(data, type='white', SNR_dB=snr_dB) - data
             noise = noise[0:len_artifact]
             outlier = sosfilt(sos, noise)
-            outlier_index = np.random.choice(a)
-            a = np.delete(a, a[outlier_index-len_artifact:outlier_index+len_artifact])
-            outlier = (2 * (outlier - np.min(outlier)) / (np.max(outlier) - np.min(outlier)) - 1)*noise_avg_watts  # Normalize EEG data between -1 and 1
-            eye_outlier[outlier_index:outlier_index + len_artifact] = outlier
-            data_outl = eye_outlier + data
+            outlier = (2 * (outlier - np.min(outlier)) / (
+                    np.max(outlier) - np.min(outlier)) - 1) * noise_avg_watts  # Normalize EEG data between -1 and
+            done = False
+
+            while done == False:
+                outlier_index = np.random.choice(a)
+                if outlier_index is not False:
+                    #   a = np.delete(a, a[outlier_index - len_artifact:outlier_index + len_artifact])
+                    outlier_indices = np.arange(start=outlier_index, stop=outlier_index + len_artifact, step=1)
+                    a[outlier_index - len_artifact:outlier_index + len_artifact] = False
+                    eye_outlier[outlier_indices] = outlier
+                    data_outl = eye_outlier + data
+                    done = True
 
     elif (type == 'muscle'):
         order = 3
@@ -255,17 +276,24 @@ def add_artifact(data, fs,  prop=0.1, snr_dB=3, number=3, type='eye', seed=None)
             noise = apply_noise(data, type='white', SNR_dB=snr_dB) - data
             noise = noise[0:len_artifact]
             outlier = sosfilt(sos, noise)
-            outlier_index = np.random.choice(a)
-            a = np.delete(a, a[outlier_index - len_artifact:outlier_index + len_artifact])
             outlier = (2 * (outlier - np.min(outlier)) / (
-                        np.max(outlier) - np.min(outlier)) - 1) * noise_avg_watts  # Normalize EEG data between -1 and 1
-            muscle_outlier[outlier_index:outlier_index + len_artifact] = outlier
-            data_outl = muscle_outlier + data
+                    np.max(outlier) - np.min(outlier)) - 1) * noise_avg_watts  # Normalize EEG data between -1 and
+            done = False
+
+            while done == False:
+                outlier_index = np.random.choice(a)
+                if outlier_index is not False:
+                #   a = np.delete(a, a[outlier_index - len_artifact:outlier_index + len_artifact])
+                    outlier_indices = np.arange(start=outlier_index, stop=outlier_index+len_artifact, step=1)
+                    a[outlier_index - len_artifact:outlier_index + len_artifact] = False
+                    muscle_outlier[outlier_indices] = outlier
+                    data_outl = muscle_outlier + data
+                    done = True
 
     elif (type == 'linear'):
         linear_outlier = np.zeros_like(data)
         a = np.arange(0, c - len_artifact, 1)
-        outlier = np.arange(start=-1, stop=1, step=1 / len_artifact) * noise_avg_watts
+        outlier = np.arange(start=-1, stop=1, step=2 / len_artifact) * noise_avg_watts
         for k in range(0, number):
 
             if number == 2:
