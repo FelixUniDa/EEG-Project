@@ -65,6 +65,11 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
             create_signal(x=data_size, c='rect'),
             create_signal(x=data_size, c='sawt')]).T
 
+    eeg_data = create_signal(x=data_size, c='eeg')
+    eeg_data_artif = add_artifact(eeg_data, fs=2000)
+    plt.plot(eeg_data_artif)
+    plt.show()
+
     # create mixing matrix and mixed signals
     c, r = data.shape
 
@@ -141,15 +146,10 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
     if seed == None:
         seed = 'None'
 
-<<<<<<< Updated upstream
-    mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'SNR [dB]': [noise_lvl], 'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med], 'nMAD': [nMAD], 'Time elapsed [s]': [t1]}
-    df = pd.DataFrame(mc_data, columns=['Method', '# Runs', 'Sample Size', 'SNR [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean', 'Std', 'Median', 'nMAD', 'Time elapsed [s]'])
-    df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_JADE', 'Monte_Carlo_runs_JADE.csv'), index=True, header=True, mode='a')
-=======
     mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'SNR [dB]': [noise_lvl],'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med], 'nMAD': [nMAD], 'Time elapsed [s]': [t1]}
     df = pd.DataFrame(mc_data, columns=['Method', '# Runs', 'Sample Size', 'SNR', 'Percentage Outliers (3Std)', 'Seed', 'Mean', 'Std', 'Median', 'nMAD', 'Time elapsed [s]'])
     df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_RADICAL', 'Monte_Carlo_runs_RADICAL.csv'), index=True, header=True, mode='a')
->>>>>>> Stashed changes
+
 
     # return minimum distances stored in data_storage
     return data_storage
@@ -160,15 +160,7 @@ if __name__ == "__main__":
     # def of types to test
     sample_size_full = np.array([1000, 2500, 5000, 10000, 15000])  # 1000, 2500, 5000, 10000, 15000
     noise_list = np.array([40, 30, 20, 10, 6, 3])
-<<<<<<< Updated upstream
-    outlier_list = np.array([0.001, 0.0025, 0.005, 0.01, 0.015, 0.05, 0.10, 0.20, 0.50])
-    n_runs = 10000
-    type_dict = dict()
-    type_dict.update({"Type 1": [1000, 0, n_runs, sample_size_full]})  # no noise, no outlier, runs, samples
-    type_dict.update({"Type 2": [40, 0, n_runs, sample_size_full]})  # 40db noise, no outlier, runs, samples
-    type_dict.update({"Type 3": [1000, 0.01, n_runs, sample_size_full]})  # no noise, 0.1 % outlier, runs, samples
-    type_dict.update({"Type 4": [40, 0.01, n_runs, sample_size_full]})  # 40 db noise, 0.1 % outlier, runs, samples
-=======
+
     outlier_list = np.array([0.1, 0.25, 0.5, 1, 1.5, 5, 10, 20, 50])*0.01   # outlier in %
     n_runs = 1000
 
@@ -177,7 +169,6 @@ if __name__ == "__main__":
     type_dict.update({"Type 2": [40, 0, n_runs, sample_size_full]})  # 40db noise, no outlier, runs, samples
     type_dict.update({"Type 3": [1000, 0.001, n_runs, sample_size_full]})  # no noise, 0.1 % outlier, runs, samples
     type_dict.update({"Type 4": [40, 0.001, n_runs, sample_size_full]})  # 40 db noise, 0.1 % outlier, runs, samples
->>>>>>> Stashed changes
     type_dict.update({"Type 5": [noise_list, 0, n_runs, 10000]})
     type_dict.update({"Type 6": [1000, outlier_list, n_runs, 10000, 'patch']})
     type_dict.update({"Type 7": [1000, outlier_list, n_runs, 10000, 'impulse']})
@@ -187,15 +178,9 @@ if __name__ == "__main__":
 
     # init DataFrame
     df = pd.DataFrame()
-<<<<<<< Updated upstream
-    ica_method = 'jade'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
-    folder_to_save = 'results_Monte_Carlo_JADE'
-    type_list_to_test = ["Type 1", "Type 2", "Type 3", "Type 4", "Type 5", "Type 6", "Type 7"]  # "Type 1", "Type 2", "Type 3", "Type 4"
-=======
     ica_method = 'radical'  # further changes need to be made in plt.savefig & df.to_csv
     folder_to_save = 'results_Monte_Carlo_RADICAL'
     type_list_to_test = ["Type 7"] #,"Type 6", "Type 7"]  # "Type 1", "Type 2", "Type 3", "Type 4"
->>>>>>> Stashed changes
     for name in type_list_to_test:
         # parameter for each type to test
         noise = type_dict.get(name)[0]
@@ -204,11 +189,8 @@ if __name__ == "__main__":
         sample_size = type_dict.get(name)[3]
 
         if name == "Type 1" or name == "Type 2" or name == "Type 3" or name == "Type 4":
-<<<<<<< Updated upstream
             outlier_type = "impulse"
-=======
-            outlier_type = 'impulse'#type_dict.get(name)[4]
->>>>>>> Stashed changes
+
             for s in sample_size:
                 # do a monte-carlo run
                 mds = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type)
@@ -233,28 +215,18 @@ if __name__ == "__main__":
                 s = sample_size
                 mds = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=snr, p_outlier=p)
 
-<<<<<<< Updated upstream
-                d = {'Minimum Distance': mds, 'SNR': np.repeat(snr, n_runs),
-=======
+
                 d = {'Minimum Distance': mds, 'SNR [dB]': np.repeat(snr, n_runs),
->>>>>>> Stashed changes
                      '# MC Runs': np.repeat(n_runs, n_runs)}
                 temp = pd.DataFrame(data=d)
                 df = df.append(temp)
                 print("Ready noise level {} with sample size {}".format(snr, s))
 
             title = ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + 'sample size:' + str(
-<<<<<<< Updated upstream
-                sample_size) + ', ' + str(p*10) + ' % outliers'
-            file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
-                noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
-            sns.boxplot(x='SNR', y='Minimum Distance', data=df).set_title(title)
-=======
                 sample_size) + ', ' + str(p*100) + ' % outliers'
             file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p*100) + '.jpg'
             sns.boxplot(x='SNR [dB]', y='Minimum Distance', data=df).set_title(title)
->>>>>>> Stashed changes
             plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
             plt.show()
 

@@ -11,8 +11,10 @@ from sklearn.metrics import mean_squared_error
 from scipy.stats.distributions import chi2
 import scipy as sp
 from scipy.optimize import linear_sum_assignment
+from scipy.signal import butter, lfilter
 
-def create_signal(x = 10000, c = 'sin', ampl = 1,fs = 1000, f = 2,eeg_components=1):
+
+def create_signal(x = 10000, c = 'sin', ampl = 1,fs = 1000, f = 2, eeg_components=1):
     """
     creates a certain signal
     :param x: length of the data vector
@@ -59,7 +61,7 @@ def create_signal(x = 10000, c = 'sin', ampl = 1,fs = 1000, f = 2,eeg_components
                                         'sample_audvis_filt-0-40_raw.fif')
             raw = mne.io.read_raw_fif(sample_data_raw_file)
             eeg = np.array(raw.get_data(picks='eeg')) # pick only eeg channels
-            s8 = eeg[eeg_components,0:x]   #return the number of channels, and samplesize as wanted
+            s8 = eeg[eeg_components, 0:x]   #return the number of channels, and samplesize as wanted
             s8 = 2 * (s8 - np.min(s8)) / (np.max(s8) - np.min(s8)) - 1  # Normalize EEG data between -1 and 1
             if s8.shape[0] == 1:
                 s8 = s8.reshape(x,)
@@ -75,7 +77,7 @@ def create_signal(x = 10000, c = 'sin', ampl = 1,fs = 1000, f = 2,eeg_components
         'ecg': ecg(),
         'eeg': eeg(),
         #'piky': piky(),
-        'all': np.stack([sin1(), cos1(), sawt(), rect(), ecg()], axis=1) #
+        'all': np.stack([cos1(), sawt(), rect(), ecg()], axis=1) #
     }
 
     def switch_signal(c):
@@ -86,15 +88,15 @@ def create_signal(x = 10000, c = 'sin', ampl = 1,fs = 1000, f = 2,eeg_components
 
 
 
-def apply_noise(data, type='white', SNR_dB=20):
+def apply_noise(data, type='white', SNR_dB=20, seed=None):
     """
     :param data: input signal vector
     :param type: type of noise
-    :param SNR_dB: Difference bewteen signal power and noise power in dB
+    :param SNR_dB: Difference between signal power and noise power in dB
     :return: data vector with applied noise
     """
 
-    np.random.seed(None)  # set seed for reproducible results
+    np.random.seed(seed)  # set seed for reproducible results
     data_ary = data  # np.c_()
 
     data_power = data_ary ** 2
@@ -169,7 +171,7 @@ def apply_noise(data, type='white', SNR_dB=20):
 
 # apply_noise(np.linspace(0, 10, 2000), c = 'gamma', SNR_dB = 50)
 
-def create_outlier(data, prop=0.01, std=3, type='impulse', seed=1):
+def create_outlier(data, prop=0.01, std=3, type='impulse', seed=None):
     """
     :param data: input data
     :param prop: percentage of outlier dependent on datalength
@@ -198,7 +200,7 @@ def create_outlier(data, prop=0.01, std=3, type='impulse', seed=1):
     return data
 
 
-def create_artifact(data, prop=0.01, std=3, number=3, type='eye', seed=None):
+def add_artifact(data, fs,  prop=0.01, snr_dB = 3, number=3, type='eye', seed=None):
     """
 
     :param data:
@@ -209,22 +211,45 @@ def create_artifact(data, prop=0.01, std=3, number=3, type='eye', seed=None):
     :param seed:
     :return:
     """
-    pass
+    data_outl = np.zeros_like(data)
+    c = len(data)
+    len_artifact = int(prop * c)
+    np.random.seed(seed)
+    noise = apply_noise(data, type='white', SNR_dB=snr_dB) - data
 
 
+    if (type == 'eye'):
+        order = 128
+        lowcut = 1.0
+        highcut = 3.0
+        cb, ca = butter(order, [lowcut, highcut], btype='band', fs=fs)
 
+        eye_outlier = np.zeros_like(data)
+        a = np.arange(0, c - len_artifact, 1)
+        for k in range(0, number):
+            outlier = lfilter(cb, ca, noise)
+            outlier_index = np.random.choice(a)
+            np.delete(a, a[outlier_index:outlier_index+len_artifact])
+            eye_outlier[outlier_index:outlier_index + len_artifact] = outlier[outlier_index:outlier_index + len_artifact]
+            data_outl = eye_outlier + data
 
-
-
-
-    #TODO
-    '''if (type == 'eye'):
-        outlier_index = np.random.choice(a=np.arange(0, c, 1), size=n_outl)
-        data[outlier_index] = outlier
     elif (type == 'muscle'):
-        outlier_index = np.random.choice(a=np.arange(0, c - n_outl, 1))
-        data[outlier_index:outlier_index + n_outl] = outlier
-    elif (type == 'electic'):
+        order = 128
+        lowcut = 20.0
+        highcut = 60.0
+        cb, ca = butter(order, [lowcut, highcut], btype='band', fs=fs)
+
+        muscle_outlier = np.zeros_like(data)
+        a = np.arange(0, c - len_artifact, 1)
+        for k in range(0, number):
+            outlier = lfilter(cb, ca, noise)
+            outlier_index = np.random.choice(a)
+            np.delete(a, a[outlier_index:outlier_index + len_artifact])
+            muscle_outlier[outlier_index:outlier_index + len_artifact] = outlier[outlier_index:outlier_index + len_artifact]
+            data_outl = muscle_outlier + data
+
+    '''   
+    elif (type == 'electric'):
         outlier_index = np.random.choice(a=np.arange(0, c - n_outl, 1))
         data[outlier_index:outlier_index + n_outl] = outlier
     elif (type == 'high_noise'):
@@ -236,7 +261,7 @@ def create_artifact(data, prop=0.01, std=3, number=3, type='eye', seed=None):
     else:
         print("invalid type")
     '''
-    return 0
+    return data_outl
 
 
 def mixing_matrix(n_components, seed=None):
