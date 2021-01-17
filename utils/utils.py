@@ -262,6 +262,25 @@ def add_artifact(data, fs,  prop=0.1, snr_dB=3, number=3, type='eye', seed=None)
             muscle_outlier[outlier_index:outlier_index + len_artifact] = outlier
             data_outl = muscle_outlier + data
 
+    elif (type == 'linear'):
+        linear_outlier = np.zeros_like(data)
+        a = np.arange(0, c - len_artifact, 1)
+        outlier = np.arange(start=-1, stop=1, step=1 / len_artifact) * noise_avg_watts
+        for k in range(0, number):
+
+            if number == 2:
+                noise_avg_watts = noise_avg_watts*0.5
+            done = False
+
+            while done == False:
+                outlier_index = np.random.choice(a)
+                if outlier_index is not False:
+                    outlier_indices = np.arange(start=outlier_index, stop=outlier_index+len_artifact, step=1)
+                    # a = np.delete(a, a[outlier_index - len_artifact:outlier_index + len_artifact])
+                    a[outlier_index - len_artifact:outlier_index + len_artifact] = False
+                    linear_outlier[outlier_indices] = outlier
+                    data_outl = linear_outlier + data
+                    done = True
     '''   
     elif (type == 'electric'):
         outlier_index = np.random.choice(a=np.arange(0, c - n_outl, 1))
@@ -269,9 +288,7 @@ def add_artifact(data, fs,  prop=0.1, snr_dB=3, number=3, type='eye', seed=None)
     elif (type == 'high_noise'):
         outlier_index = np.random.choice(a=np.arange(0, c - n_outl, 1))
         data[outlier_index:outlier_index + n_outl] = outlier
-    elif (type == 'linear'):
-        outlier_index = np.random.choice(a=np.arange(0, c - n_outl, 1))
-        data[outlier_index:outlier_index + n_outl] = outlier
+    
     else:
         print("invalid type")
     '''
