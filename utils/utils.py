@@ -61,10 +61,10 @@ def create_signal(x=10000, c='sin', ampl=1, fs=1000, f=2, eeg_components=1):
                                         'sample_audvis_filt-0-40_raw.fif')
             raw = mne.io.read_raw_fif(sample_data_raw_file)
             eeg = np.array(raw.get_data(picks='eeg')) # pick only eeg channels
-            s8 = eeg[eeg_components, 0:x]   #return the number of channels, and samplesize as wanted
+            s8 = eeg[0:eeg_components, 0:x]   #return the number of channels, and samplesize as wanted
             s8 = 2 * (s8 - np.min(s8)) / (np.max(s8) - np.min(s8)) - 1  # Normalize EEG data between -1 and 1
             if s8.shape[0] == 1:
-                s8 = s8.reshape(x,)
+                s8 = s8.reshape(x,1)
             else:
                 s8 = s8.T
             return s8
@@ -200,7 +200,7 @@ def create_outlier(data, prop=0.01, std=3, type='impulse', seed=None):
     return data
 
 
-def add_artifact(data, fs,  prop=0.05, snr_dB=3, number=3, type='eye', seed=None):
+def add_artifact(data, fs,  prop=0.99, snr_dB=3, number=1, type='eye', seed=None):
     """
 
     :param data:
@@ -259,10 +259,10 @@ def add_artifact(data, fs,  prop=0.05, snr_dB=3, number=3, type='eye', seed=None
                 if outlier_index is not False:
                     #   a = np.delete(a, a[outlier_index - len_artifact:outlier_index + len_artifact])
                     outlier_indices = np.arange(start=outlier_index, stop=outlier_index + len_artifact, step=1)
-                    a[outlier_index - len_artifact:outlier_index + len_artifact] = False
+                    a[(outlier_index - len_artifact):(outlier_index + len_artifact)] = False
                     eye_outlier[outlier_indices] = outlier
-                    data_outl = eye_outlier + data
                     done = True
+        data_outl = eye_outlier + data
 
     elif (type == 'muscle'):
         order = 3
@@ -285,10 +285,11 @@ def add_artifact(data, fs,  prop=0.05, snr_dB=3, number=3, type='eye', seed=None
                 if outlier_index is not False:
                 #   a = np.delete(a, a[outlier_index - len_artifact:outlier_index + len_artifact])
                     outlier_indices = np.arange(start=outlier_index, stop=outlier_index+len_artifact, step=1)
-                    a[outlier_index - len_artifact:outlier_index + len_artifact] = False
+                    a[(outlier_index - len_artifact):outlier_index + len_artifact] = False
                     muscle_outlier[outlier_indices] = outlier
-                    data_outl = muscle_outlier + data
                     done = True
+
+        data_outl = muscle_outlier + data
 
     elif (type == 'linear'):
         linear_outlier = np.zeros_like(data)
@@ -305,25 +306,58 @@ def add_artifact(data, fs,  prop=0.05, snr_dB=3, number=3, type='eye', seed=None
                 if outlier_index is not False:
                     outlier_indices = np.arange(start=outlier_index, stop=outlier_index+len_artifact, step=1)
                     # a = np.delete(a, a[outlier_index - len_artifact:outlier_index + len_artifact])
-                    a[outlier_index - len_artifact:outlier_index + len_artifact] = False
+                    a[(outlier_index - len_artifact):outlier_index + len_artifact] = False
                     linear_outlier[outlier_indices] = outlier
-                    data_outl = linear_outlier + data
                     done = True
-    '''   
+        data_outl = linear_outlier + data
+
     elif (type == 'electric'):
-        outlier_index = np.random.choice(a=np.arange(0, c - n_outl, 1))
-        data[outlier_index:outlier_index + n_outl] = outlier
-    elif (type == 'high_noise'):
-        outlier_index = np.random.choice(a=np.arange(0, c - n_outl, 1))
-        data[outlier_index:outlier_index + n_outl] = outlier
+        electric_outlier = np.zeros_like(data)
+        outlier = np.ones_like(data) * noise_avg_watts
+        a = np.arange(0, c - len_artifact, 1)
+        for k in range(0, number):
+
+            if number == 2:
+                len_artifact_e = int(len_artifact/4)
+            else:
+                len_artifact_e = len_artifact
+            done = False
+
+            while done == False:
+                outlier_index = np.random.choice(a)
+                if outlier_index is not False:
+                    outlier_indices = np.arange(start=outlier_index, stop=outlier_index + len_artifact_e, step=1)
+                    a[(outlier_index - len_artifact_e):outlier_index + len_artifact_e] = False
+                    electric_outlier[outlier_indices] = outlier[outlier_indices]
+                    done = True
+
+        data_outl = electric_outlier + data
+
+    elif (type == 'noise'):
+        noise_outlier = np.zeros_like(data)
+        outlier = (apply_noise(data, type='white', SNR_dB=snr_dB) - data)
+        outlier = (outlier/max(outlier)) * noise_avg_watts
+        a = np.arange(0, c - len_artifact, 1)
+        for k in range(0, number):
+            done = False
+
+            while done == False:
+                outlier_index = np.random.choice(a)
+                if outlier_index is not False:
+                    outlier_indices = np.arange(start=outlier_index, stop=outlier_index + len_artifact, step=1)
+                    a[(outlier_index - len_artifact):outlier_index + len_artifact] = False
+                    noise_outlier[outlier_indices] = outlier[outlier_indices]
+                    done = True
+
+        data_outl = noise_outlier + data
     
     else:
         print("invalid type")
-    '''
+
     return data_outl
 
 
-def mixing_matrix(n_components, seed=None):
+def mixing_matrix(n_components, seed=None, m = 0):
     """Creates random mixing Ma
 
     Args:
@@ -336,12 +370,14 @@ def mixing_matrix(n_components, seed=None):
     np.random.seed(seed)
     #if seed is not None:
     #   np.random.seed(seed)
-    mixingmat = np.random.rand(n_components, n_components)
+    n_components_x = n_components + m
+    n_components_y = n_components
+    mixingmat = np.random.rand(n_components_x, n_components_y)
 
     return mixingmat
 
 
-def whitening(x, type='sample', loss = 'Huber',percentile=1):
+def whitening(x, type='sample', loss = 'Huber', percentile=1):
     """linearly transform the observed signals X in a way that potential 
        correlations between the signals are removed and their variances equal unity. 
        As a result the covariance matrix of the whitened signals will be equal to the identity matrix
@@ -357,7 +393,7 @@ def whitening(x, type='sample', loss = 'Huber',percentile=1):
     """
     centered_X, _ = centering(x)
 
-    cov = covariance(centered_X,type,loss) # covariance(centered_X) #calculate Covariance matrix between signals
+    cov = covariance(centered_X, type, loss) # covariance(centered_X) #calculate Covariance matrix between signals
     d, E = np.linalg.eig(cov) #Eigenvalue decomposition (alternatively one can use SVD for faster computation)
     #print(d)
     idx = d.argsort()[::-1]     
@@ -386,7 +422,7 @@ def whitening(x, type='sample', loss = 'Huber',percentile=1):
         W_whiten =  D_inv @ E.T         #Calculate Whitening matrix W_whiten 
         W_dewhiten = E @ np.diag(np.sqrt(d))
         x_whitened = (W_whiten @ centered_X)
-        return x_whitened, W_whiten,W_dewhiten, n_components
+        return x_whitened, W_whiten, W_dewhiten, n_components
 
 
 def centering(x, type = 'sample'):
@@ -400,12 +436,13 @@ def centering(x, type = 'sample'):
         mean [array]: Vector containing the mean of each signal.
     """
     # mean = np.mean(x, axis=1, keepdims=True)
+    ary = np.copy(x)
     if(type == 'sample'):
-        mean = np.apply_along_axis(np.mean, axis=1, arr=x)
+        mean = np.apply_along_axis(np.mean, axis=1, arr=ary)
     if(type == 'spatmed'):
-        mean = spatmed(x.T)
-    centered = x
-    n, m = np.shape(x)
+        mean = spatmed(ary.T)
+    centered = ary
+    n, m = np.shape(ary)
     for i in range(0, n, 1):
         centered[i, :] = centered[i, :] - mean[i]
     # print(centered)

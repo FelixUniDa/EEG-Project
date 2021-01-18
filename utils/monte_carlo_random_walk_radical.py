@@ -65,20 +65,6 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
             create_signal(x=data_size, c='rect'),
             create_signal(x=data_size, c='sawt')]).T
 
-    fs=1000
-    eeg_data = create_signal(x=data_size, c='sin', fs=fs)
-    plt.plot(eeg_data)
-    plt.show()
-    eeg_data_artif = add_artifact(eeg_data, fs=fs)
-    plt.plot(eeg_data_artif)
-    plt.show()
-    eeg_data_artif = add_artifact(eeg_data, type='muscle', fs=fs)
-    plt.plot(eeg_data_artif)
-    plt.show()
-    eeg_data_artif = add_artifact(eeg_data, type='linear', fs=fs)
-    plt.plot(eeg_data_artif)
-    plt.show()
-
     # create mixing matrix and mixed signals
     c, r = data.shape
 

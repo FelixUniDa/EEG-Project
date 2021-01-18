@@ -125,8 +125,8 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
             return
         
         md_data[i] = md(W_whiten @ MM, W)
-        MSE_data[i] = np.mean(MSE(W @ white_data-W @ W_whiten @ noise,data.T))
-        SNR_data[i] = np.mean(SNR(W @ white_data-W @ W_whiten @ noise,data.T))
+        MSE_data[i] = np.mean(MSE(W @ white_data-W @ W_whiten @ noise, data.T))
+        SNR_data[i] = np.mean(SNR(W @ white_data-W @ W_whiten @ noise, data.T))
        
         #data_storage[i] = md(W_whiten @ MM, W)
         #print(data_storage[i])
