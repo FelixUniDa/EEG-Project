@@ -50,6 +50,7 @@ import os
 
 import sys
 from coroica import CoroICA
+import robustsp as sp
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath( __file__ )))
@@ -103,7 +104,7 @@ H = pca.fit_transform(X)  # estimate PCA sources
 
 
 #print((X.T).shape)
-B_jade = jadeR(X.T,m = 3)
+B_jade = jadeR(X.T,m = 3,rho_x= sp.MLocTUK, robust_loc= True)
 #print(B_jade)
 S_jade = B_jade @ X.T
 #print(S_jade)

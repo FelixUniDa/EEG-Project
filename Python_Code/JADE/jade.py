@@ -31,11 +31,12 @@ future.
 from sys import stdout 
 from numpy import abs, append, arange, arctan2, argsort, array, concatenate, \
     cos, diag, dot, eye, float32, float64, matrix, multiply, ndarray, newaxis, \
-    sign, sin, sqrt, zeros
+    sign, sin, sqrt, zeros, mean
+import numpy as np
 from numpy.linalg import eig, pinv
 
 
-def jadeR(X, m=None, verbose=True, is_whitened=False):
+def jadeR(X, m=None, verbose=True, is_whitened=False, rho_x = lambda x: np.mean, robust_loc = False):
 
 
     """
@@ -125,6 +126,8 @@ def jadeR(X, m=None, verbose=True, is_whitened=False):
         m=n 	# Number of sources defaults to # of sensors
     assert m <= n,\
         "jade -> Do not ask more sources (%d) than sensors (%d )here!!!" % (m,n)
+    
+    assert ~callable(rho_x), " rho_x is not a callable method" % type(rho_x)
 
     # whitening & projection onto signal subspace
     # ===========================================
@@ -199,14 +202,33 @@ def jadeR(X, m=None, verbose=True, is_whitened=False):
         # directly compute e.g. auto cumulant of first signal and several cross cumulants (3x3)
         # first row: (0,0,0,0) (0,0,0,1) (0,0,0,2) second row: (0,0,1,0), (0,0,1,1),
         # (0,0,1,2) third row (0,0,2,0) (0,0,2,1)(0,0,2,2)first round)
-        Qij = multiply(Xijm, X).T * X / float(T) - R - 2 * dot(R[:,im], R[:,im].T)
+        if robust_loc:
+            temp = np.multiply(Xijm, X).T
+            for i in range(m):
+                for j in range(m):
+                    t = np.multiply(temp,np.repeat(X[:,j],m,axis = 1).T)
+                    Qij[i,j] = rho_x(t[i,:])
+            Qij = Qij - R - 2 * dot(R[:,im], R[:,im].T)
+        else: 
+            Qij = multiply(Xijm, X).T * X / float(T) - R - 2 * dot(R[:,im], R[:,im].T)
+
+        
         CM[:, Range] = Qij
         Range = Range + m
         for jm in range(im):
             # compute odd cross cumulants e.g. second round im = 1, 3x3 matrix
             # -> (1,0,0,0),(1,0,0,1),(1,0,0,2) | (1,0,1,0),(1,0,1,1),(1,0,1,2) | (1,0,2,0),(1,0,2,1),(1,0,2,2)
             Xijm = multiply(Xim, X[:, jm])
-            Qij = sqrt(2) * multiply(Xijm, X).T * X / float(T) - R[:,im] * R[:, jm].T - R[:, jm] * R[:, im].T
+
+            if robust_loc:
+                temp = np.multiply(Xijm, X).T
+                for i in range(m):
+                    for j in range(m):
+                        t = np.multiply(temp,np.repeat(X[:,j],m,axis = 1).T)
+                        Qij[i,j] = rho_x(t[i,:])
+                        Qij = Qij - R - 2 * dot(R[:,im], R[:,im].T)
+            else: 
+                Qij = sqrt(2) * multiply(Xijm, X).T * X / float(T) - R[:,im] * R[:, jm].T - R[:, jm] * R[:, im].T
             CM[:, Range]	= Qij
             Range = Range + m
 
