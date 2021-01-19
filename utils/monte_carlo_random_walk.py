@@ -44,7 +44,7 @@ sns.set_theme(style="darkgrid")
 # ToDo: write experiment results to csv
 
 
-def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=None, noise_lvl=20, p_outlier=0.0, outlier_type='impulse', partition=30):
+def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=None, noise_lvl=20, std_outlier=3, p_outlier=0.0, outlier_type='impulse', partition=30):
     """
     Do a Monte Carlo simulation of n_runs, plot a histogram, mean and standard deviation
     and write results to csv
@@ -80,7 +80,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
     # create mixing matrix and mixed signals
     c, r = data.shape
 
-    #data_storage = np.empty(n_runs)
+    # data_storage = np.empty(n_runs)
 
     md_data = np.empty(n_runs)
     SNR_data = np.empty(n_runs)
@@ -88,29 +88,34 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
 
     new_MM = True
     
-    #time tracking
+    # time tracking
     t0 = time.time()
 
-    #start Monte-Carlo run
+    # start Monte-Carlo run
     for i in range(n_runs):
         
         if(new_MM):
-            MM = mixing_matrix(r, None)
-            #print(MM)
-            mixdata = MM@data.T
-            #apply noise and/or create outlier
+
             if data_type == 'standard':
-                mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl),prop=p_outlier,std=3, type = 'impulse') for dat in mixdata])
-                mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl), prop=p_outlier, std=3, type=outlier_type) for dat in mixdata])
+                MM = mixing_matrix(r, None)
+                # print(MM)
+                mixdata = MM @ data.T
+                # apply noise and/or create outlier
+                mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl), prop=p_outlier, type=outlier_type) for dat in mixdata])
                 noise = mixdata_noise - mixdata
                 # centering the data and whitening the data:
                 white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='sample')
+
             if data_type == 'delorme':
-                noise_lvl
+                # parameter for add_artifact function for delorme artefacts
                 fs = 1000
                 eeg_components = 4
                 eeg_data = data
-                delorme_type='all'
+                delorme_type = 'all'
+                prop = 0.1
+                snr_dB = 3
+                artifacts = 5
+
                 if (delorme_type == 'all'):
                     type = np.array(['eye', 'muscle', 'linear', 'electric', 'noise'])
                     artifacts = 5
@@ -121,13 +126,16 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
                     artifacts = eeg_components
 
                 eeg_data_artif = np.zeros_like(eeg_data)
+                eeg_data_outlier = np.zeros_like(eeg_data)
                 for i in range(0, eeg_components):
                     if (i < artifacts):
-                        data_outl, outlier = add_artifact(eeg_data[0::, i], fs, prop=0.1, snr_dB=3,
+                        data_outl, outlier = add_artifact(eeg_data[0::, i], fs, prop=prop, snr_dB=snr_dB,
                                                               number=artifacts, type=type[i], seed=None)
                         eeg_data_artif[0::, i] = data_outl
+                        eeg_data_outlier[0::, i] = outlier
                     else:
                         eeg_data_artif[0::, i] = eeg_data[0::, i]
+                        eeg_data_outlier[0::, i] = eeg_data_outlier[0::, i]
 
                 # plt.plot(eeg_data_artif)
                 # plt.show()
@@ -136,23 +144,26 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
                 MM = mixing_matrix(r, None, m=artifacts)
                 # print(MM)
                 mixdata = MM @ eeg_data_artif.T
+                noise = eeg_data_outlier
 
-                noise_lvl = 100
-                p_outlier = 0.0
+                # get
+                # noise_lvl = 100
+                # p_outlier = 0.0
+
                 # apply noise and/or create outlier
-                mixdata_noise = np.stack(
-                    [create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl), prop=p_outlier, std=3,
-                                    type='impulse') for dat in mixdata])
+                mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl),
+                                                         prop=p_outlier, std=std_outlier, type=outlier_type) for dat in mixdata])
 
                 # centering the data and whitening the data:
                 white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='sample')
+
+                """
                 mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl),
                                                          prop=p_outlier, std=3, type='impulse') for dat in mixdata])
                 mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl),
                                                          prop=p_outlier, std=3, type=outlier_type) for dat in mixdata])
                 noise = mixdata_noise - mixdata
-
-
+                """
 
             if(seed is not None):
                 new_MM = False
@@ -176,7 +187,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
             W = RADICAL(white_data)
         elif (ica_method == 'coro_ica'):
             #print(r)
-            c = CoroICA(partitionsize = partition,groupsize= data_size)
+            c = CoroICA(partitionsize=partition, groupsize=data_size)
             c.fit(white_data.T)
             W = c.V_
         elif (ica_method == "random"):
@@ -256,17 +267,21 @@ if __name__ == "__main__":
     noise_list = np.array([40, 30, 20, 10, 6, 3])
     outlier_list = np.array([0.001, 0.0025, 0.005, 0.01, 0.015, 0.05, 0.10, 0.20, 0.50])
     n_runs = 100
+    std_outlier = 3
     type_dict = dict()
-    type_dict.update({"Type 1": [1000, 0, n_runs, sample_size_full]})  # no noise, no outlier, runs, samples
-    type_dict.update({"Type 2": [40, 0, n_runs, sample_size_full]})  # 40db noise, no outlier, runs, samples
-    type_dict.update({"Type 3": [1000, 0.001, n_runs, sample_size_full]})  # no noise, 0.1 % outlier, runs, samples
-    type_dict.update({"Type 4": [40, 0.001, n_runs, sample_size_full]})  # 40 db noise, 0.1 % outlier, runs, samples
-    type_dict.update({"Type 5": [noise_list, 0, n_runs, 10000]})
-    type_dict.update({"Type 6": [1000, outlier_list, n_runs, 10000, 'patch']})
-    type_dict.update({"Type 7": [1000, outlier_list, n_runs, 10000, 'impulse']})
+    type_dict.update({"Type 1": [1000, 0, n_runs, sample_size_full, 'impulse', std_outlier]})  # no noise, no outlier, runs, samples
+    type_dict.update({"Type 2": [40, 0, n_runs, sample_size_full, 'impulse', std_outlier]})  # 40db noise, no outlier, runs, samples
+    type_dict.update({"Type 3": [1000, 0.001, n_runs, sample_size_full, 'impulse', std_outlier]})  # no noise, 0.1 % outlier, runs, samples
+    type_dict.update({"Type 4": [40, 0.001, n_runs, sample_size_full, 'impulse', std_outlier]})  # 40 db noise, 0.1 % outlier, runs, samples
+    type_dict.update({"Type 5": [noise_list, 0, n_runs, 10000, 'impulse', std_outlier]})
+    type_dict.update({"Type 6": [1000, outlier_list, n_runs, 10000, 'patch', std_outlier]})
+    type_dict.update({"Type 7": [1000, outlier_list, n_runs, 10000, 'impulse', std_outlier]})
     # Coro_ica partitionsize test. 
-    type_dict.update({"Type 8": [1000, 0.000, n_runs, 10000]}) #(dB Noise, outlier proportion, runs, sample_size)
+    type_dict.update({"Type 8": [1000, 0.000, n_runs, 10000, 'impulse', std_outlier]}) # (dB Noise, outlier proportion, runs, sample_size)
 
+    # check if data should be based on standard 4 signals, delorme artefacts or eeg
+    signal_types = ['standard', 'delorme', 'eeg']
+    signal_type = signal_types[0]
 
     # track time for how long this run takes
     start_time = time.time()
@@ -286,6 +301,7 @@ if __name__ == "__main__":
         p = type_dict.get(name)[1]
         n_runs = type_dict.get(name)[2]
         sample_size = type_dict.get(name)[3]
+        std_outlier = type_dict.get(name)[5]
 
         if name == "Type 1" or name == "Type 2" or name == "Type 3" or name == "Type 4":
             outlier_type = "impulse"
@@ -297,7 +313,7 @@ if __name__ == "__main__":
                 # temp = pd.DataFrame(data=d)
                 # df = df.append(temp)
 
-                mds, MSEs, SNRs = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type)
+                mds, MSEs, SNRs = monte_carlo_run(n_runs, s, ica_method, seed=None, data_type=signal_type, noise_lvl=noise, p_outlier=p, std_outlier=std_outlier, outlier_type=outlier_type)
 
                 d_SNR = {'Signal to Noise Ratio (Mixed Signals) in dB': SNRs, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_MSE = {'Mean Squared Error': MSEs, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
@@ -333,7 +349,7 @@ if __name__ == "__main__":
         
             # fig, axes = plt.subplots(3, 1, figsize=(10, 18))
             # fig.suptitle('Metrics')
-            sns.boxplot(ax = axes[0], x='Sample Size', y='Minimum Distance', data=df_md).set_title(title_md)
+            sns.boxplot(ax=axes[0], x='Sample Size', y='Minimum Distance', data=df_md).set_title(title_md)
             #plt.savefig(os.path.join(folder_to_save, file_name_md), dpi=300)
             #plt.show()
             
@@ -346,7 +362,7 @@ if __name__ == "__main__":
             #plt.savefig(os.path.join(folder_to_save, file_name_MSE), dpi=300)
             #plt.show()       
 
-            plt.ylim(top=60,bottom=0)
+            plt.ylim(top=60, bottom=0)
             title_SNR = 'SNR_' + ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
                 noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
             file_name_SNR = 'SNR_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
@@ -368,7 +384,7 @@ if __name__ == "__main__":
                 # temp = pd.DataFrame(data=d)
                 # df = df.append(temp)
 
-                mds, MSEs, SNRs = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=snr, p_outlier=p, outlier_type=outlier_type)
+                mds, MSEs, SNRs = monte_carlo_run(n_runs, s, ica_method, seed=None, data_type=signal_type, noise_lvl=snr, p_outlier=p, std_outlier=std_outlier, outlier_type=outlier_type)
 
                 d_SNR = {'Signal to Noise Ratio (Mixed Signals) in dB': SNRs, 'SNR(additive noise)': np.repeat(snr, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_MSE = {'Mean Squared Error': MSEs, 'SNR(additive noise)': np.repeat(snr, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
@@ -390,7 +406,7 @@ if __name__ == "__main__":
             # plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
             #plt.show()
             plt.clf()
-            plt.ylim(top=1,bottom=0)
+            plt.ylim(top=1, bottom=0)
             fig, axes = plt.subplots(3, 1, figsize=(12, 16))
             title = ica_method + ' ' + name + ' Metrics'
             file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
@@ -404,7 +420,7 @@ if __name__ == "__main__":
         
             # fig, axes = plt.subplots(3, 1, figsize=(10, 18))
             # fig.suptitle('Metrics')
-            sns.boxplot(ax = axes[0], x='SNR(additive noise)', y='Minimum Distance', data=df_md).set_title(title_md)
+            sns.boxplot(ax=axes[0], x='SNR(additive noise)', y='Minimum Distance', data=df_md).set_title(title_md)
             #plt.savefig(os.path.join(folder_to_save, file_name_md), dpi=300)
             #plt.show()
 
@@ -437,7 +453,7 @@ if __name__ == "__main__":
                 # temp = pd.DataFrame(data=d)
                 # df = df.append(temp)
 
-                mds, MSEs, SNRs = monte_carlo_run(n_runs, s, ica_method, seed=None, noise_lvl=noise, p_outlier=percentage, outlier_type=outlier_type)
+                mds, MSEs, SNRs = monte_carlo_run(n_runs, s, ica_method, data_type=signal_type, seed=None, noise_lvl=noise, p_outlier=percentage, std_outlier=std_outlier, outlier_type=outlier_type)
 
                 d_SNR = {'Signal to Noise Ratio (Mixed Signals) in dB': SNRs, 'Outlier Percentage': np.repeat(percentage, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_MSE = {'Mean Squared Error': MSEs, 'Outlier Percentage': np.repeat(percentage, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
@@ -493,11 +509,11 @@ if __name__ == "__main__":
                 noise) + 'dB noise' + ', ' + str(outlier_type) + ' outlier type'
             file_name_SNR = 'SNR_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'type_outlier_' + str(outlier_type) + '.jpg'
-            sns.boxplot(ax = axes[2],x='Outlier Percentage', y='Signal to Noise Ratio (Mixed Signals) in dB', data=df_SNR).set_title(title_SNR)
+            sns.boxplot(ax = axes[2], x='Outlier Percentage', y='Signal to Noise Ratio (Mixed Signals) in dB', data=df_SNR).set_title(title_SNR)
             plt.savefig(os.path.join(folder_to_save, file_name_SNR), dpi=300)
             plt.show()
 
-        if name == "Type 8" :
+        if name == "Type 8":
             outlier_type = "impulse"
             partitions = np.arange(10, 100, 10) #np.ones(41)/np.arange(50,9,-1)*sample_size
             for ps in partitions:
@@ -507,8 +523,7 @@ if __name__ == "__main__":
                 # d = {'Minimum Distance': mds, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 # temp = pd.DataFrame(data=d)
                 # df = df.append(temp)
-                mds, MSEs, SNRs = monte_carlo_run(n_runs, sample_size, ica_method, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type, partition= (ps))
-
+                mds, MSEs, SNRs = monte_carlo_run(n_runs, sample_size, ica_method, data_type=signal_type, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type, partition= (ps))
 
                 d_SNR = {'Signal to Noise Ratio (Mixed Signals) in dB': SNRs, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_MSE = {'Mean Squared Error': MSEs, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
@@ -543,7 +558,7 @@ if __name__ == "__main__":
             file_name_md = 'MD_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) +'_Partitionsteps' + '.jpg'
            
-            sns.boxplot(ax = axes[0], x='Partition Size', y='Minimum Distance', data=df_md).set_title(title_md)
+            sns.boxplot(ax=axes[0], x='Partition Size', y='Minimum Distance', data=df_md).set_title(title_md)
             #plt.savefig(os.path.join(folder_to_save, file_name_md), dpi=300)
             #plt.show()
 
@@ -561,7 +576,7 @@ if __name__ == "__main__":
                 noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
             file_name_SNR = 'SNR_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) +'_Partitionsteps' + '.jpg'
-            sns.boxplot(ax = axes[2], x='Partition Size', y='Signal to Noise Ratio (Mixed Signals) in dB', data=df_SNR).set_title(title_SNR)
+            sns.boxplot(ax=axes[2], x='Partition Size', y='Signal to Noise Ratio (Mixed Signals) in dB', data=df_SNR).set_title(title_SNR)
             plt.savefig(os.path.join(folder_to_save, file_name_SNR), dpi=300)
             plt.show()
 

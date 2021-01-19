@@ -36,7 +36,8 @@ def create_artif(x=10000, fs=1000, eeg_components=1, artifacts=1, type='eye'):
     eeg_data_artif = np.zeros_like(eeg_data)
     for i in range(0, eeg_components):
         if(i < artifacts):
-            eeg_data_artif[0::, i] = add_artifact(eeg_data[0::, i], fs,  prop=0.1, snr_dB=3, number=artifacts, type=type[i], seed=None)
+            data_outl, outlier = add_artifact(eeg_data[0::, i], fs, prop=0.1, snr_dB=3, number=artifacts, type=type[i], seed=None)
+            eeg_data_artif[0::, i] = data_outl
         else:
             eeg_data_artif[0::, i] = eeg_data[0::, i]
 
