@@ -59,11 +59,20 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
     
     assert (ica_method in methods), "Can't choose  '%s' as ICA - method, possible optiions: %s" %(ica_method, methods)
 
-    # create example signals:
-    data = np.stack([create_signal(x=data_size, c='ecg'),
-            create_signal(x=data_size, ampl=1, c='cos'),
-            create_signal(x=data_size, c='rect'),
-            create_signal(x=data_size, c='sawt')]).T
+    # create example signals: 
+    # choose Frequencies in the range of brainwaves (Alpha to Delta)
+    # DELTA WAVES (0.5 - 3 HZ) 
+    # THETA WAVES (3 - 8 HZ)
+    # ALPHA WAVES (8 - 12 HZ)
+    # BETA WAVES (12 - 38 HZ)
+    # LOW GAMMA WAVES (38 - 70 HZ)
+    # HIGH GAMMA WAVES (70 - 150 HZ )
+    # https://en.wikipedia.org/wiki/Neural_oscillation
+    # https://brainworksneurotherapy.com/what-are-brainwaves 
+    data = np.stack([create_signal(f = 2, x=data_size, c='ecg'),
+            create_signal(f = 5, x=data_size, ampl=1, c='cos'),
+            create_signal(f = 10, x=data_size, c='rect'),
+            create_signal(f = 25,x=data_size, c='sawt')]).T
 
     # create mixing matrix and mixed signals
     c, r = data.shape
@@ -178,7 +187,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, seed=None, noise_lvl = 20, p_
 
     mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'Noise-level [dB]': [noise_lvl],'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean_MD': [md_mu], 'Std_MD': [md_sigma], 'Median_MD': [md_med], 'nMAD_MD': [md_nMAD],'Mean_MSE': [MSE_mu], 'Std_MSE': [MSE_sigma], 'Median_MSE': [MSE_med], 'nMAD_MSE': [MSE_nMAD],'Mean_SNR': [SNR_mu], 'Std_SNR': [SNR_sigma], 'Median_SNR': [SNR_med], 'nMAD_SNR': [SNR_nMAD], 'Time elapsed [s]': [t1]}
     df = pd.DataFrame(mc_data, columns=['Method', '# Runs', 'Sample Size', 'Noise-level [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean_MD', 'Std_MD', 'Median_MD', 'nMAD_MD', 'Mean_MSE', 'Std_MSE', 'Median_MSE', 'nMAD_MSE', 'Mean_SNR', 'Std_SNR', 'Median_SNR', 'nMAD_SNR', 'Time elapsed [s]'])
-    df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_PowerICA', 'Monte_Carlo_runs_PowerICA.csv'), index=True, header=True, mode='a')
+    df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_CoroICA', 'Monte_Carlo_runs_CoroICA.csv'), index=True, header=True, mode='a')
 
     # mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'SNR [dB]': [noise_lvl], 'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med], 'nMAD': [nMAD], 'Time elapsed [s]': [t1]}
     # df = pd.DataFrame(mc_data, columns=['Method', '# Runs', 'Sample Size', 'SNR [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean', 'Std', 'Median', 'nMAD', 'Time elapsed [s]'])
@@ -204,7 +213,7 @@ if __name__ == "__main__":
     type_dict.update({"Type 6": [1000, outlier_list, n_runs, 10000, 'patch']})
     type_dict.update({"Type 7": [1000, outlier_list, n_runs, 10000, 'impulse']})
     # Coro_ica partitionsize test. 
-    type_dict.update({"Type 8": [40, 0.000, n_runs, 2500]}) #(dB Noise, outlier proportion, runs, sample_size, partions_list)
+    type_dict.update({"Type 8": [1000, 0.000, n_runs, 10000]}) #(dB Noise, outlier proportion, runs, sample_size)
 
 
     # track time for how long this run takes
@@ -218,7 +227,7 @@ if __name__ == "__main__":
 
     ica_method = 'coro_ica'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
     folder_to_save = 'results_Monte_Carlo_CoroICA'
-    type_list_to_test = ["Type 1","Type 5"]  # "Type 1", "Type 2", "Type 3", "Type 4"
+    type_list_to_test = ["Type 1", "Type 2", "Type 3", "Type 4","Type 5","Type 6","Type 7"]  # "Type 1", "Type 2", "Type 3", "Type 4"
     for name in type_list_to_test:
         # parameter for each type to test
         noise = type_dict.get(name)[0]
@@ -438,7 +447,7 @@ if __name__ == "__main__":
 
         if name == "Type 8" :
             outlier_type = "impulse"
-            partitions = np.arange(50,400,10) #np.ones(41)/np.arange(50,9,-1)*sample_size 
+            partitions = np.arange(10,100,10) #np.ones(41)/np.arange(50,9,-1)*sample_size 
             for ps in partitions:
                 # do a monte-carlo run
                 #mds = monte_carlo_run(n_runs, sample_size , ica_method, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type, partition= (ps))
