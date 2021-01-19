@@ -14,7 +14,7 @@ import os
 import sys
 
 #from Python_Code.Compare_ICA_algos.fast_Radical import RADICAL
-from utils import mixing_matrix, create_signal, create_outlier, apply_noise, whitening, SNR, MSE, md
+from utils import mixing_matrix, create_signal, create_outlier, apply_noise, whitening, SNR, MSE, md, add_artifact
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath( __file__ )))
 sys.path.append(BASE_DIR)
@@ -106,12 +106,52 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
                 # centering the data and whitening the data:
                 white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='sample')
             if data_type == 'delorme':
+                noise_lvl
+                fs = 1000
+                eeg_components = 4
+                eeg_data = data
+                delorme_type='all'
+                if (delorme_type == 'all'):
+                    type = np.array(['eye', 'muscle', 'linear', 'electric', 'noise'])
+                    artifacts = 5
+                else:
+                    type = np.repeat(type, artifacts)
+
+                if (eeg_components < artifacts):
+                    artifacts = eeg_components
+
+                eeg_data_artif = np.zeros_like(eeg_data)
+                for i in range(0, eeg_components):
+                    if (i < artifacts):
+                        data_outl, outlier = add_artifact(eeg_data[0::, i], fs, prop=0.1, snr_dB=3,
+                                                              number=artifacts, type=type[i], seed=None)
+                        eeg_data_artif[0::, i] = data_outl
+                    else:
+                        eeg_data_artif[0::, i] = eeg_data[0::, i]
+
+                # plt.plot(eeg_data_artif)
+                # plt.show()
+
+                c, r = eeg_data_artif.shape
+                MM = mixing_matrix(r, None, m=artifacts)
+                # print(MM)
+                mixdata = MM @ eeg_data_artif.T
+
+                noise_lvl = 100
+                p_outlier = 0.0
+                # apply noise and/or create outlier
+                mixdata_noise = np.stack(
+                    [create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl), prop=p_outlier, std=3,
+                                    type='impulse') for dat in mixdata])
+
+                # centering the data and whitening the data:
+                white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='sample')
                 mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl),
                                                          prop=p_outlier, std=3, type='impulse') for dat in mixdata])
                 mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl),
                                                          prop=p_outlier, std=3, type=outlier_type) for dat in mixdata])
                 noise = mixdata_noise - mixdata
-                
+
 
 
             if(seed is not None):

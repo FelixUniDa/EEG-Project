@@ -364,7 +364,7 @@ def add_artifact(data, fs,  prop=0.99, snr_dB=3, number=1, type='eye', seed=None
     return data_outl, outlier
 
 
-def mixing_matrix(n_components, seed=None, m = 0):
+def mixing_matrix(n_components, seed=None, m=0):
     """Creates random mixing Ma
 
     Args:
@@ -384,7 +384,7 @@ def mixing_matrix(n_components, seed=None, m = 0):
     return mixingmat
 
 
-def whitening(x, type='sample', loss = 'Huber', percentile=1):
+def whitening(x, type='sample', loss='Huber', percentile=1):
     """linearly transform the observed signals X in a way that potential 
        correlations between the signals are removed and their variances equal unity. 
        As a result the covariance matrix of the whitened signals will be equal to the identity matrix
