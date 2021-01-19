@@ -202,6 +202,9 @@ def create_outlier(data, prop=0.01, std=3, type='impulse', seed=None):
 
 def add_artifact(data, fs,  prop=0.99, snr_dB=3, number=1, type='eye', seed=None):
     """
+    Artifcats created after the types of Delorme
+    inspired by:
+    Enhanced detection of artifacts in EEG data using higher-order statistics and independent component analysis, 2007
 
     :param data:
     :param fs:
@@ -263,6 +266,7 @@ def add_artifact(data, fs,  prop=0.99, snr_dB=3, number=1, type='eye', seed=None
                     eye_outlier[outlier_indices] = outlier
                     done = True
         data_outl = eye_outlier + data
+        outlier = eye_outlier
 
     elif (type == 'muscle'):
         order = 3
@@ -290,6 +294,7 @@ def add_artifact(data, fs,  prop=0.99, snr_dB=3, number=1, type='eye', seed=None
                     done = True
 
         data_outl = muscle_outlier + data
+        outlier = muscle_outlier
 
     elif (type == 'linear'):
         linear_outlier = np.zeros_like(data)
@@ -310,6 +315,7 @@ def add_artifact(data, fs,  prop=0.99, snr_dB=3, number=1, type='eye', seed=None
                     linear_outlier[outlier_indices] = outlier
                     done = True
         data_outl = linear_outlier + data
+        outlier = linear_outlier
 
     elif (type == 'electric'):
         electric_outlier = np.zeros_like(data)
@@ -332,6 +338,7 @@ def add_artifact(data, fs,  prop=0.99, snr_dB=3, number=1, type='eye', seed=None
                     done = True
 
         data_outl = electric_outlier + data
+        outlier = electric_outlier
 
     elif (type == 'noise'):
         noise_outlier = np.zeros_like(data)
@@ -350,11 +357,11 @@ def add_artifact(data, fs,  prop=0.99, snr_dB=3, number=1, type='eye', seed=None
                     done = True
 
         data_outl = noise_outlier + data
-    
+        outlier = noise_outlier
     else:
         print("invalid type")
 
-    return data_outl
+    return data_outl, outlier
 
 
 def mixing_matrix(n_components, seed=None, m = 0):
@@ -644,7 +651,7 @@ def md(A, Vhat):
 
 
 def MSE(pred_signals, true_signals):
-    '''
+    """
       Computes the MSE between the estimated and true signals
 
       INPUT:
@@ -652,29 +659,28 @@ def MSE(pred_signals, true_signals):
             true_signals: Array of size (dim,n) containing the true signals as row vectors
       OUTPUT:
             MSE: Array of size length dim containing the MSE of each estimated signal corresponding to the true Signal
-    '''
+    """
 
-    
-    dim,n = np.shape(true_signals)
-    pred_mean = np.mean(pred_signals,axis=1).reshape(dim,1)
-    pred_std = np.std(pred_signals,axis=1).reshape(dim,1)
-    true_mean = np.mean(true_signals,axis=1).reshape(dim,1)
-    true_std = np.std(true_signals,axis=1).reshape(dim,1)
+    dim, n = np.shape(true_signals)
+    pred_mean = np.mean(pred_signals,axis=1).reshape(dim, 1)
+    pred_std = np.std(pred_signals,axis=1).reshape(dim, 1)
+    true_mean = np.mean(true_signals,axis=1).reshape(dim, 1)
+    true_std = np.std(true_signals,axis=1).reshape(dim, 1)
     #scale data to have unit variance 1/n*y@y.T=1
-    pred_signals = np.divide((pred_signals - pred_mean),pred_std)
-    true_signals = np.divide((true_signals - true_mean),true_std)
+    pred_signals = np.divide((pred_signals - pred_mean), pred_std)
+    true_signals = np.divide((true_signals - true_mean), true_std)
     MSE = np.zeros(dim)
-    MSE_matrix1 = np.zeros((dim,dim))
-    MSE_matrix2 = np.zeros((dim,dim))
+    MSE_matrix1 = np.zeros((dim, dim))
+    MSE_matrix2 = np.zeros((dim, dim))
 
     #calculate MSE between all estimated signals with changed sign and true signals and store in array
-    for i in range(0,dim):
-        for j in range(0,dim):
-            MSE_matrix1[i,j] = mean_squared_error(true_signals[j],pred_signals[i])
+    for i in range(0, dim):
+        for j in range(0, dim):
+            MSE_matrix1[i, j] = mean_squared_error(true_signals[j],pred_signals[i])
     #calculate MSE between all estimated and true signals  and store in array
-    for i in range(0,dim):
-        for j in range(0,dim):
-            MSE_matrix2[i,j] = mean_squared_error(true_signals[j],-pred_signals[i])    
+    for i in range(0, dim):
+        for j in range(0, dim):
+            MSE_matrix2[i, j] = mean_squared_error(true_signals[j],-pred_signals[i])
     
     #find minima of all possible MSE values
     array_min1 = MSE_matrix1.min(axis=1)
@@ -683,9 +689,9 @@ def MSE(pred_signals, true_signals):
     #store minima in separate array
     for i in range(dim):
         if(array_min1[i]>array_min2[i]):
-            MSE[i]=array_min2[i]
+            MSE[i] = array_min2[i]
         else:
-            MSE[i]=array_min1[i]
+            MSE[i] = array_min1[i]
 
     return MSE
 
@@ -700,17 +706,17 @@ def SNR(pred_signals, true_signals):
     Returns:
         SNR(dim): Array of length dim containing the SNR of each estimated signal corresponding to the true Signal in dB
     """
-    dim,n = np.shape(true_signals)
-    pred_mean = np.mean(pred_signals,axis=1).reshape(dim,1)
-    pred_std = np.std(pred_signals,axis=1).reshape(dim,1)
-    true_mean = np.mean(true_signals,axis=1).reshape(dim,1)
-    true_std = np.std(true_signals,axis=1).reshape(dim,1)
+    dim, n = np.shape(true_signals)
+    pred_mean = np.mean(pred_signals, axis=1).reshape(dim, 1)
+    pred_std = np.std(pred_signals, axis=1).reshape(dim, 1)
+    true_mean = np.mean(true_signals, axis=1).reshape(dim, 1)
+    true_std = np.std(true_signals, axis=1).reshape(dim, 1)
     #scale data to have unit variance 1/n*y@y.T=1
-    pred_signals = np.divide((pred_signals - pred_mean),pred_std)
-    true_signals = np.divide((true_signals - true_mean),true_std)
+    pred_signals = np.divide((pred_signals - pred_mean), pred_std)
+    true_signals = np.divide((true_signals - true_mean), true_std)
     SNR = np.zeros(dim)
-    SNR_matrix1 = np.zeros((dim,dim))
-    SNR_matrix2 = np.zeros((dim,dim))
+    SNR_matrix1 = np.zeros((dim, dim))
+    SNR_matrix2 = np.zeros((dim, dim))
 
     #calculate SNR between all estimated and true signals and store in array
     for i in range(0,dim):
@@ -719,11 +725,11 @@ def SNR(pred_signals, true_signals):
             diff_var1 = np.var(pred_signals[i]-true_signals[j])
             SNR_matrix1[i,j] = pred_var1/diff_var1
     #calculate SNR between all estimated and true signals with flipped sign and store in array
-    for i in range(0,dim):
-        for j in range(0,dim):
+    for i in range(0, dim):
+        for j in range(0, dim):
             pred_var2 = np.var(pred_signals[i])
             diff_var2 = np.var(pred_signals[i]+true_signals[j])
-            SNR_matrix2[i,j] = pred_var2/diff_var2
+            SNR_matrix2[i, j] = pred_var2/diff_var2
    
     #find maxima of all possible SNR values
     array_max1 = SNR_matrix1.max(axis=1)

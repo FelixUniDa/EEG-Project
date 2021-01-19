@@ -207,12 +207,11 @@ def jadeR(X, m=None, verbose=True, is_whitened=False, rho_x = lambda x: np.mean,
             for i in range(m):
                 for j in range(m):
                     t = np.multiply(temp,np.repeat(X[:,j],m,axis = 1).T)
-                    Qij[i,j] = rho_x(t[i,:])
-            Qij = Qij - R - 2 * dot(R[:,im], R[:,im].T)
+                    Qij[i, j] = rho_x(t[i, :])
+            Qij = Qij - R - 2 * dot(R[:, im], R[:, im].T)
         else: 
-            Qij = multiply(Xijm, X).T * X / float(T) - R - 2 * dot(R[:,im], R[:,im].T)
+            Qij = multiply(Xijm, X).T * X / float(T) - R - 2 * dot(R[:, im], R[:, im].T)
 
-        
         CM[:, Range] = Qij
         Range = Range + m
         for jm in range(im):
@@ -224,12 +223,12 @@ def jadeR(X, m=None, verbose=True, is_whitened=False, rho_x = lambda x: np.mean,
                 temp = np.multiply(Xijm, X).T
                 for i in range(m):
                     for j in range(m):
-                        t = np.multiply(temp,np.repeat(X[:,j],m,axis = 1).T)
-                        Qij[i,j] = rho_x(t[i,:])
-                        Qij = Qij - R - 2 * dot(R[:,im], R[:,im].T)
+                        t = np.multiply(temp,np.repeat(X[:, j], m, axis=1).T)
+                        Qij[i, j] = rho_x(t[i, :])
+                        Qij = Qij - R - 2 * dot(R[:, im], R[:, im].T)
             else: 
-                Qij = sqrt(2) * multiply(Xijm, X).T * X / float(T) - R[:,im] * R[:, jm].T - R[:, jm] * R[:, im].T
-            CM[:, Range]	= Qij
+                Qij = sqrt(2) * multiply(Xijm, X).T * X / float(T) - R[:, im] * R[:, jm].T - R[:, jm] * R[:, im].T
+            CM[:, Range] = Qij
             Range = Range + m
 
     # if Symmetry isn't taken into account : nbcm = m(m+1)/2 cumulants matrices stored in a big m x m*nbcm array.
