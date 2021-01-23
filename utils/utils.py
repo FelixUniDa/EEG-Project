@@ -384,7 +384,7 @@ def mixing_matrix(n_components, seed=None, m=0):
     return mixingmat
 
 
-def whitening(x, type='sample', loss='Huber', percentile=1):
+def whitening(x, type='sample', loss='Huber', percentile=1, r=0):
     """linearly transform the observed signals X in a way that potential 
        correlations between the signals are removed and their variances equal unity. 
        As a result the covariance matrix of the whitened signals will be equal to the identity matrix
@@ -399,11 +399,16 @@ def whitening(x, type='sample', loss='Huber', percentile=1):
         x_whitened: Whitened Data with covariance matrix that is equal to identity matrix.
     """
     centered_X, _ = centering(x)
+    # plt.plot(centered_X.T)
+    # plt.show()
 
     cov = covariance(centered_X, type, loss) # covariance(centered_X) #calculate Covariance matrix between signals
-    d, E = np.linalg.eig(cov) #Eigenvalue decomposition (alternatively one can use SVD for faster computation)
-    #print(d)
-    idx = d.argsort()[::-1]     
+    d, E = np.linalg.eig(cov)#Eigenvalue decomposition (alternatively one can use SVD for faster computation)
+    # e1, e2 = E.shape
+    # #print(d)
+    # d = np.real(d)
+    #     E = np.real(E.flatten()).reshape(e1, e2)
+    idx = d.argsort()[::-1]
     #Sort eigenvalues  
     cumul_var = np.cumsum(d)
     N = len(d)
@@ -418,21 +423,21 @@ def whitening(x, type='sample', loss='Huber', percentile=1):
         d = d[idx[0:n_components]]                #Sort eigenvalues
         E = E[:,idx[0:n_components]]              #Sort eigenvectors
 
-        D_inv = np.diag(1/np.sqrt(d))   #Calculate D^(-0.5)
+        D_inv = np.diag(1/np.sqrt(d+r))   #Calculate D^(-0.5)
         W_whiten =  D_inv @ E.T         #Calculate Whitening matrix W_whiten 
         #W_dewhiten = E @ np.diag(np.sqrt(d))
         x_whitened = (W_whiten @ centered_X)
         return x_whitened, W_whiten, n_components
 
     elif percentile==1:   
-        D_inv = np.diag(1/np.sqrt(d))   #Calculate D^(-0.5)
+        D_inv = np.diag(1/np.sqrt(d+r))   #Calculate D^(-0.5)
         W_whiten =  D_inv @ E.T         #Calculate Whitening matrix W_whiten 
-        W_dewhiten = E @ np.diag(np.sqrt(d))
+        W_dewhiten = E @ np.diag(np.sqrt(d+r))
         x_whitened = (W_whiten @ centered_X)
         return x_whitened, W_whiten, W_dewhiten, n_components
 
 
-def centering(x, type = 'sample'):
+def centering(x, type='sample'):
     """Centers input data x by subtracting the mean of each Signal represented by the row vectors of x.
 
     Args:

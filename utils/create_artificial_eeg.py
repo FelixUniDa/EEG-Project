@@ -11,6 +11,7 @@ sys.path.append(os.path.join(BASE_DIR, 'utils'))
 sys.path.append(os.path.join(BASE_DIR, 'Python_Code', 'Compare_ICA_algos'))
 
 import PowerICA
+import seaborn as sns
 from fast_Radical import *
 from jade import jadeR
 # from distances import *
@@ -20,9 +21,13 @@ from coroica import CoroICA
 
 
 
-def create_artif(x=10000, fs=1000, eeg_components=1, artifacts=1, type='eye'):
+def create_artif(x=1000, fs=1000, eeg_components=1, artifacts=1, type='eye'):
 
-    eeg_data = create_signal(x=x, c='eeg', ampl=1, eeg_components=eeg_components)
+    #eeg_data = create_signal(x=x, c='eeg', ampl=1, eeg_components=eeg_components)
+    eeg_data = np.stack([create_signal(f=2, x=x, c='ecg'),
+                     create_signal(f=5, x=x, ampl=1, c='cos'),
+                     create_signal(f=10, x=x, c='rect'),
+                     create_signal(f=25, x=x, c='sawt')]).T
     if (type == 'all'):
         type = np.array(['eye', 'muscle', 'linear', 'electric', 'noise'])
         artifacts = 5
@@ -34,12 +39,15 @@ def create_artif(x=10000, fs=1000, eeg_components=1, artifacts=1, type='eye'):
 
 
     eeg_data_artif = np.zeros_like(eeg_data)
+    data_artif = np.zeros_like(eeg_data)
     for i in range(0, eeg_components):
         if(i < artifacts):
-            data_outl, outlier = add_artifact(eeg_data[0::, i], fs, prop=0.1, snr_dB=3, number=artifacts, type=type[i], seed=None)
+            data_outl, outlier = add_artifact(eeg_data[0::, i], fs, prop=0.2, snr_dB=3, number=artifacts, type=type[i], seed=1)
             eeg_data_artif[0::, i] = data_outl
+            data_artif[0::, i] = outlier
         else:
             eeg_data_artif[0::, i] = eeg_data[0::, i]
+            data_artif[0::, i] = outlier
 
     # plt.plot(eeg_data_artif)
     # plt.show()
@@ -56,16 +64,24 @@ def create_artif(x=10000, fs=1000, eeg_components=1, artifacts=1, type='eye'):
         [create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl), prop=p_outlier, std=3, type='impulse') for dat
          in mixdata])
 
-    # centering the data and whitening the data:
-    white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='sample')
+    # plt.plot(mixdata_noise.T)
+    # plt.show()
 
-    return eeg_data, eeg_data_artif, mixdata_noise, white_data
+    # centering the data and whitening the data:
+    white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='sample', r=1*10**(-5))
+    # plt.plot(white_data.T)
+    # plt.show()
+
+    return eeg_data, eeg_data_artif, mixdata_noise, white_data, data_artif
 
 
 if __name__ == "__main__":
 
-    artifacts = 3
-    eeg_data, eeg_data_artif, mixdata_noise, artif_white_data = create_artif(x=10000, fs=1000, eeg_components=3, artifacts=artifacts, type='all')
+    sns.set_theme(style='darkgrid')
+    sns.set_context('paper')
+
+    artifacts = 4
+    eeg_data, eeg_data_artif, mixdata_noise, artif_white_data, data_artifact = create_artif(x=1000, fs=1000, eeg_components=4, artifacts=artifacts, type='all')
     W_power, _ = PowerICA.powerICA(artif_white_data, 'pow3')
     unMixed_power = W_power @ artif_white_data
 
@@ -74,8 +90,8 @@ if __name__ == "__main__":
 
     # Plot input signals (not mixed)
     i = 0
-    fig1, axs1 = plt.subplots(r)  # , sharex=True)
-    fig2, axs2 = plt.subplots(r)  # , sharex=True)
+    fig1, axs1 = plt.subplots(4)  # , sharex=True)
+    fig2, axs2 = plt.subplots(4)  # , sharex=True)
     fig3, axs3 = plt.subplots(r)  # , sharex=True)
     fig4, axs4 = plt.subplots(r)  # , sharex=True)
     # fig5, axs5 = plt.subplots(r)  # , sharex=True)
@@ -87,7 +103,7 @@ if __name__ == "__main__":
         axs1[i].set_ylabel('sig: ' + str(i))
         fig1.suptitle('Input Signals')
 
-        axs2[i].plot(eeg_data_artif[:, i], lw=1)
+        axs2[i].plot(data_artifact[:, i], lw=1)
         axs2[i].set_ylabel('sig: ' + str(i))
         fig2.suptitle('artifact signals')
         i = i + 1
