@@ -7,14 +7,14 @@ from sklearn.neighbors import KernelDensity
 from sklearn.decomposition import FastICA, PCA
 import neurokit2
 import time
-from scipy.stats import median_abs_deviation
+from scipy.stats import hmean,median_abs_deviation
 import scipy
 
 import os
 import sys
 
 #from Python_Code.Compare_ICA_algos.fast_Radical import RADICAL
-from utils import mixing_matrix, create_signal, create_outlier, apply_noise, whitening, SNR, MSE, md, add_artifact
+from utils_neu import mixing_matrix, create_signal, create_outlier, apply_noise, whitening, SNR, MSE, md, add_artifact
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath( __file__ )))
 sys.path.append(BASE_DIR)
@@ -83,9 +83,14 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
 
     # data_storage = np.empty(n_runs)
 
-    md_data = np.empty(n_runs)
-    SNR_data = np.empty(n_runs)
-    MSE_data = np.empty(n_runs)
+    md_data = np.zeros(n_runs)
+    SNR_data = np.zeros(n_runs)
+    SNR_mean_data = np.zeros(n_runs)
+    SNR_med_data = np.zeros(n_runs)
+    SNR_hmean_data = np.zeros(n_runs)
+    MSE_data = np.zeros(n_runs)
+    MSE_mean_data = np.zeros(n_runs)
+    MSE_med_data = np.zeros(n_runs)
 
     new_MM = True
     
@@ -197,9 +202,15 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
         else:
             return
         
+        unmixed_data = W @ white_data-W @ W_whiten @ noise
         md_data[i] = md(W_whiten @ MM, W)
-        MSE_data[i] = np.mean(MSE(W @ white_data-W @ W_whiten @ noise, data.T))
-        SNR_data[i] = np.mean(SNR(W @ white_data-W @ W_whiten @ noise, data.T))
+        MSE_data[i] = np.mean(MSE(unmixed_data, data.T))
+        MSE_mean_data[i] = np.mean(MSE(unmixed_data, data.T))
+        MSE_med_data[i] = np.median(MSE(unmixed_data, data.T))
+        SNR_data[i] = np.mean(SNR(unmixed_data, data.T))
+        SNR_mean_data[i] = np.mean(SNR(unmixed_data, data.T))
+        SNR_med_data[i] = np.median(SNR(unmixed_data, data.T))
+        SNR_hmean_data[i] = hmean(10**(SNR(unmixed_data, data.T)/10))
        
         #data_storage[i] = md(W_whiten @ MM, W)
         #print(data_storage[i])
@@ -258,7 +269,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
     # df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_CoroICA', 'Monte_Carlo_runs_CoroICA.csv'), index=True, header=True, mode='a')
 
     # return minimum distances stored in data_storage
-    return md_data, MSE_data, SNR_data #data_storage
+    return md_data, MSE_med_data, SNR_med_data,MSE_data, SNR_data, SNR_hmean_data #data_storage
 
 
 if __name__ == "__main__":
@@ -266,8 +277,9 @@ if __name__ == "__main__":
     # def of types to test
     sample_size_full = np.array([1000, 2500, 5000, 10000, 15000])  # 1000, 2500, 5000, 10000, 15000
     noise_list = np.array([40, 30, 20, 10, 6, 3])
+    noise_list2 = np.array([40, 35, 30, 25, 20, 15, 10, 8, 6, 3, 1, 0])
     outlier_list = np.array([0.001, 0.0025, 0.005, 0.01, 0.015, 0.05, 0.10, 0.20, 0.50])
-    n_runs = 100
+    n_runs = 3
     std_outlier = 100
     type_dict = dict()
     type_dict.update({"Type 1": [1000, 0, n_runs, sample_size_full, 'impulse', std_outlier]})  # no noise, no outlier, runs, samples
@@ -279,6 +291,7 @@ if __name__ == "__main__":
     type_dict.update({"Type 7": [1000, outlier_list, n_runs, 10000, 'impulse', std_outlier]})
     # Coro_ica partitionsize test. 
     type_dict.update({"Type 8": [1000, 0.000, n_runs, 10000, 'impulse', std_outlier]}) # (dB Noise, outlier proportion, runs, sample_size)
+    type_dict.update({"Type scat": [noise_list2, 0.000, n_runs, 10000, 'impulse', std_outlier]})
 
     # check if data should be based on standard 4 signals, delorme artefacts or eeg
     signal_types = ['standard', 'delorme', 'eeg']
@@ -295,7 +308,7 @@ if __name__ == "__main__":
 
     ica_method = 'jade'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
     folder_to_save = 'results_Monte_Carlo_JADE'
-    type_list_to_test = ["Type 1", "Type 2", "Type 3", "Type 4", "Type 5", "Type 6", "Type 7"]  # "Type 1", "Type 2", "Type 3", "Type 4"
+    type_list_to_test = ["Type scat"]  # "Type 1", "Type 2", "Type 3", "Type 4"
 
     # quick adjustment -> this is here to make quick checks for the implementations not for the big runs!
     # type_list_to_test = ["Type 6"]
@@ -318,10 +331,10 @@ if __name__ == "__main__":
                 # temp = pd.DataFrame(data=d)
                 # df = df.append(temp)
 
-                mds, MSEs, SNRs = monte_carlo_run(n_runs, s, ica_method, seed=None, data_type=signal_type, noise_lvl=noise, p_outlier=p, std_outlier=std_outlier, outlier_type=outlier_type)
+                mds, median_MSEs, median_SNRs,mean_MSEs, mean_SNRs, hSNRs = monte_carlo_run(n_runs, s, ica_method, seed=None, data_type=signal_type, noise_lvl=noise, p_outlier=p, std_outlier=std_outlier, outlier_type=outlier_type)
 
-                d_SNR = {'Signal to Noise Ratio\n (Mixed Signals) in dB': SNRs, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
-                d_MSE = {'Mean Squared Error': MSEs, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_SNR = {'Signal to Noise Ratio\n (Mixed Signals) in dB': mean_SNRs, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_MSE = {'Mean Squared Error': mean_MSEs, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_md = {'Minimum Distance': mds, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 temp_md = pd.DataFrame(data=d_md)
                 temp_MSE = pd.DataFrame(data=d_MSE)
@@ -390,10 +403,10 @@ if __name__ == "__main__":
                 # temp = pd.DataFrame(data=d)
                 # df = df.append(temp)
 
-                mds, MSEs, SNRs = monte_carlo_run(n_runs, s, ica_method, seed=None, data_type=signal_type, noise_lvl=snr, p_outlier=p, std_outlier=std_outlier, outlier_type=outlier_type)
+                mds, median_MSEs, median_SNRs,mean_MSEs, mean_SNRs, hSNRs = monte_carlo_run(n_runs, s, ica_method, seed=None, data_type=signal_type, noise_lvl=snr, p_outlier=p, std_outlier=std_outlier, outlier_type=outlier_type)
 
-                d_SNR = {'Signal to Noise Ratio\n (Mixed Signals) in dB': SNRs, 'SNR(additive noise)': np.repeat(snr, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
-                d_MSE = {'Mean Squared Error': MSEs, 'SNR(additive noise)': np.repeat(snr, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_SNR = {'Signal to Noise Ratio\n (Mixed Signals) in dB': mean_SNRs, 'SNR(additive noise)': np.repeat(snr, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_MSE = {'Mean Squared Error': mean_MSEs, 'SNR(additive noise)': np.repeat(snr, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_md = {'Minimum Distance': mds, 'SNR(additive noise)': np.repeat(snr, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 temp_md = pd.DataFrame(data=d_md)
                 temp_MSE = pd.DataFrame(data=d_MSE)
@@ -459,10 +472,10 @@ if __name__ == "__main__":
                 # temp = pd.DataFrame(data=d)
                 # df = df.append(temp)
 
-                mds, MSEs, SNRs = monte_carlo_run(n_runs, s, ica_method, data_type=signal_type, seed=None, noise_lvl=noise, p_outlier=percentage, std_outlier=std_outlier, outlier_type=outlier_type)
+                mds, median_MSEs, median_SNRs,mean_MSEs, mean_SNRs, hSNRs = monte_carlo_run(n_runs, s, ica_method, data_type=signal_type, seed=None, noise_lvl=noise, p_outlier=percentage, std_outlier=std_outlier, outlier_type=outlier_type)
                 percentage = percentage * 100
-                d_SNR = {'Signal to Noise Ratio\n (Mixed Signals) in dB': SNRs, 'Outlier Percentage': np.repeat(percentage, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
-                d_MSE = {'Mean Squared Error': MSEs, 'Outlier Percentage': np.repeat(percentage, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_SNR = {'Signal to Noise Ratio\n (Mixed Signals) in dB': mean_SNRs, 'Outlier Percentage': np.repeat(percentage, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_MSE = {'Mean Squared Error': mean_MSEs, 'Outlier Percentage': np.repeat(percentage, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 # adjustment for percentage to be percentage for correct plotting
 
                 d_md = {'Minimum Distance': mds, 'Outlier Percentage': np.repeat(percentage, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
@@ -532,10 +545,10 @@ if __name__ == "__main__":
                 # d = {'Minimum Distance': mds, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 # temp = pd.DataFrame(data=d)
                 # df = df.append(temp)
-                mds, MSEs, SNRs = monte_carlo_run(n_runs, sample_size, ica_method, data_type=signal_type, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type, partition= (ps))
+                mds, median_MSEs, median_SNRs,mean_MSEs, mean_SNRs, hSNRs = monte_carlo_run(n_runs, sample_size, ica_method, data_type=signal_type, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type, partition= (ps))
 
-                d_SNR = {'Signal to Noise Ratio\n (Mixed Signals) in dB': SNRs, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
-                d_MSE = {'Mean Squared Error': MSEs, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_SNR = {'Signal to Noise Ratio\n (Mixed Signals) in dB': mean_SNRs, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_MSE = {'Mean Squared Error': mean_MSEs, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_md = {'Minimum Distance': mds, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 temp_md = pd.DataFrame(data=d_md)
                 temp_MSE = pd.DataFrame(data=d_MSE)
@@ -589,5 +602,62 @@ if __name__ == "__main__":
             sns.boxplot(ax=axes[2], x='Partition Size', y='Signal to Noise Ratio\n (Mixed Signals) in dB', data=df_SNR).set_title(title_SNR)
             plt.savefig(os.path.join(folder_to_save, file_name_SNR), dpi=300)
             plt.show()
+
+
+        if name == "Type scat":
+            outlier_type = "impulse"
+            mds_ges = np.empty(len(noise) * n_runs)
+            theoretical_mds = np.empty(len(noise) * n_runs)
+            median_MSEs_ges = np.empty(len(noise) * n_runs)
+            median_SNRs_ges = np.empty(len(noise) * n_runs)
+            mean_MSEs_ges = np.empty(len(noise) * n_runs)
+            mean_SNRs_ges = np.empty(len(noise) * n_runs)
+            i=0
+            for snr in noise:
+                # do a monte-carlo run
+                # mds = monte_carlo_run(n_runs, sample_size , ica_method, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type, partition= (ps))
+
+                # d = {'Minimum Distance': mds, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                # temp = pd.DataFrame(data=d)
+                # df = df.append(temp)
+                mds, median_MSEs, median_SNRs,mean_MSEs, mean_SNRs, hSNRs = monte_carlo_run(n_runs, sample_size, ica_method, seed=None, noise_lvl=snr,
+                                                  p_outlier=p, outlier_type=outlier_type)
+                mds_ges[range(i*n_runs,i*n_runs+n_runs)] = mds
+                theoretical_mds[range(i*n_runs,i*n_runs+n_runs)] = np.sqrt(1/hSNRs)
+                median_MSEs_ges[range(i*n_runs,i*n_runs+n_runs)] = median_MSEs
+                median_SNRs_ges[range(i*n_runs,i*n_runs+n_runs)] = median_SNRs
+                mean_MSEs_ges[range(i*n_runs,i*n_runs+n_runs)] = mean_MSEs
+                mean_SNRs_ges[range(i*n_runs,i*n_runs+n_runs)] = mean_SNRs
+                i += 1
+            # mds_ges_array = np.asarray(mds_ges).reshape(len(noise) * n_runs)
+            # MSEs_ges_array = np.asarray(MSEs_ges).reshape(len(noise) * n_runs)
+            # SNRs_ges_array = np.asarray(SNRs_ges).reshape(len(noise) * n_runs)
+
+            d_scatter = {'Median of SNRs (Mixed Signals) in dB': median_SNRs_ges,'Mean of SNRs (Mixed Signals) in dB': mean_SNRs_ges,
+                         'Median of MSEs': median_MSEs_ges,'Mean of MSEs': mean_MSEs_ges, 'Minimum Distance': mds_ges, 'Theoretical Minimum Distance (from SNR)': theoretical_mds}
+            df_scatter = pd.DataFrame(data=d_scatter)
+
+            sns.set()
+            fig, axes = plt.subplots(3, 3)
+            fig.canvas.manager.window.showMaximized()
+            fig.tight_layout()
+            #plt.subplots_adjust(bottom=0.1, hspace=0.5)
+            title_scatter = 'Scatterplots of metrics'
+            #fig.suptitle(title_scatter)
+            file_name_scatter = 'Scatterplot.jpg'
+
+            #sns.boxplot(ax=axes[0], x='Iterations', y='Minimum Distance', data=df_md).set_title(title_md)
+            sns.scatterplot(ax = axes[0,0],data=df_scatter, y='Median of MSEs', x='Minimum Distance',)
+            sns.scatterplot(ax = axes[0,1],data=df_scatter, y='Median of SNRs (Mixed Signals) in dB', x='Minimum Distance')
+            sns.scatterplot(ax = axes[0,2],data=df_scatter, y='Median of SNRs (Mixed Signals) in dB', x='Median of MSEs')
+            sns.scatterplot(ax = axes[1,0],data=df_scatter, y='Mean of MSEs', x='Minimum Distance')
+            sns.scatterplot(ax = axes[1,1],data=df_scatter, y='Mean of SNRs (Mixed Signals) in dB', x='Minimum Distance')
+            sns.scatterplot(ax = axes[1,2],data=df_scatter, y='Mean of SNRs (Mixed Signals) in dB', x='Mean of MSEs')
+            sns.scatterplot(ax = axes[2,0],data=df_scatter, x='Theoretical Minimum Distance (from SNR)', y='Minimum Distance')
+            sns.scatterplot(ax = axes[2,1],data=df_scatter, y='Theoretical Minimum Distance (from SNR)', x='Minimum Distance')
+
+            plt.savefig(os.path.join(folder_to_save, file_name_scatter), dpi=300)
+            plt.show()
+
 
     print("--- Success after %s seconds ---" % (time.time() - start_time))
