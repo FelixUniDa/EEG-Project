@@ -36,6 +36,7 @@ from coroica import CoroICA
 # (3)
 # seaborn settings
 sns.set_theme(style="darkgrid")
+sns.set_context("poster")
 
 
 # ToDo: rewrite Skeleton for our needs
@@ -84,7 +85,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
 
     md_data = np.empty(n_runs)
     SNR_data = np.empty(n_runs)
-    MSE_data =np.empty(n_runs)
+    MSE_data = np.empty(n_runs)
 
     new_MM = True
     
@@ -101,7 +102,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
                 # print(MM)
                 mixdata = MM @ data.T
                 # apply noise and/or create outlier
-                mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl), prop=p_outlier, type=outlier_type) for dat in mixdata])
+                mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl), std=std_outlier, prop=p_outlier, type=outlier_type) for dat in mixdata])
                 noise = mixdata_noise - mixdata
                 # centering the data and whitening the data:
                 white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='sample')
@@ -250,7 +251,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
 
     mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'Noise-level [dB]': [noise_lvl],'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean_MD': [md_mu], 'Std_MD': [md_sigma], 'Median_MD': [md_med], 'nMAD_MD': [md_nMAD],'Mean_MSE': [MSE_mu], 'Std_MSE': [MSE_sigma], 'Median_MSE': [MSE_med], 'nMAD_MSE': [MSE_nMAD],'Mean_SNR': [SNR_mu], 'Std_SNR': [SNR_sigma], 'Median_SNR': [SNR_med], 'nMAD_SNR': [SNR_nMAD], 'Time elapsed [s]': [t1]}
     df = pd.DataFrame(mc_data, columns=['Method', '# Runs', 'Sample Size', 'Noise-level [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean_MD', 'Std_MD', 'Median_MD', 'nMAD_MD', 'Mean_MSE', 'Std_MSE', 'Median_MSE', 'nMAD_MSE', 'Mean_SNR', 'Std_SNR', 'Median_SNR', 'nMAD_SNR', 'Time elapsed [s]'])
-    df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_CoroICA', 'Monte_Carlo_runs_CoroICA.csv'), index=True, header=True, mode='a')
+    df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_JADE', 'Monte_Carlo_runs_JADE.csv'), index=True, header=True, mode='a')
 
     # mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'SNR [dB]': [noise_lvl], 'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med], 'nMAD': [nMAD], 'Time elapsed [s]': [t1]}
     # df = pd.DataFrame(mc_data, columns=['Method', '# Runs', 'Sample Size', 'SNR [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean', 'Std', 'Median', 'nMAD', 'Time elapsed [s]'])
@@ -267,7 +268,7 @@ if __name__ == "__main__":
     noise_list = np.array([40, 30, 20, 10, 6, 3])
     outlier_list = np.array([0.001, 0.0025, 0.005, 0.01, 0.015, 0.05, 0.10, 0.20, 0.50])
     n_runs = 100
-    std_outlier = 3
+    std_outlier = 100
     type_dict = dict()
     type_dict.update({"Type 1": [1000, 0, n_runs, sample_size_full, 'impulse', std_outlier]})  # no noise, no outlier, runs, samples
     type_dict.update({"Type 2": [40, 0, n_runs, sample_size_full, 'impulse', std_outlier]})  # 40db noise, no outlier, runs, samples
@@ -292,9 +293,13 @@ if __name__ == "__main__":
     df_MSE = pd.DataFrame()
     df_SNR = pd.DataFrame()
 
-    ica_method = 'coro_ica'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
-    folder_to_save = 'results_Monte_Carlo_CoroICA'
+    ica_method = 'jade'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
+    folder_to_save = 'results_Monte_Carlo_JADE'
     type_list_to_test = ["Type 1", "Type 2", "Type 3", "Type 4", "Type 5", "Type 6", "Type 7"]  # "Type 1", "Type 2", "Type 3", "Type 4"
+
+    # quick adjustment -> this is here to make quick checks for the implementations not for the big runs!
+    # type_list_to_test = ["Type 6"]
+
     for name in type_list_to_test:
         # parameter for each type to test
         noise = type_dict.get(name)[0]
@@ -315,7 +320,7 @@ if __name__ == "__main__":
 
                 mds, MSEs, SNRs = monte_carlo_run(n_runs, s, ica_method, seed=None, data_type=signal_type, noise_lvl=noise, p_outlier=p, std_outlier=std_outlier, outlier_type=outlier_type)
 
-                d_SNR = {'Signal to Noise Ratio (Mixed Signals) in dB': SNRs, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_SNR = {'Signal to Noise Ratio\n (Mixed Signals) in dB': SNRs, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_MSE = {'Mean Squared Error': MSEs, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_md = {'Minimum Distance': mds, 'Sample Size': np.repeat(s, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 temp_md = pd.DataFrame(data=d_md)
@@ -337,13 +342,14 @@ if __name__ == "__main__":
             plt.clf()
             plt.ylim(top=1, bottom=0)
             fig, axes = plt.subplots(3, 1, figsize=(12, 16))
+            plt.subplots_adjust(bottom=0.1, hspace=0.5)
             title = ica_method + ' ' + name + ' Metrics'
             file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
-                noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
+                noise) + 'dB_' + 'p_outliers_' + str(p*100) + '.jpg'
             fig.suptitle(title)
 
-            title_md = 'MD_' + ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
-                noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
+            title_md = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
+                noise) + 'dB noise' + ', ' + str(p*100) + '% outliers'
             file_name_md = 'MD_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
         
@@ -354,20 +360,20 @@ if __name__ == "__main__":
             #plt.show()
             
 
-            title_MSE = 'MSE_' + ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
-                noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
+            title_MSE = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
+                noise) + 'dB noise' + ', ' + str(p*100) + '% outliers'
             file_name_MSE = 'MSE_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
-                noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
-            sns.boxplot(ax = axes[1],x='Sample Size', y='Mean Squared Error', data=df_MSE).set_title(title_MSE)
+                noise) + 'dB_' + 'p_outliers_' + str(p*100) + '.jpg'
+            sns.boxplot(ax = axes[1], x='Sample Size', y='Mean Squared Error', data=df_MSE).set_title(title_MSE)
             #plt.savefig(os.path.join(folder_to_save, file_name_MSE), dpi=300)
             #plt.show()       
 
             plt.ylim(top=60, bottom=0)
-            title_SNR = 'SNR_' + ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
-                noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
+            title_SNR = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
+                noise) + 'dB noise' + ', ' + str(p*100) + '% outliers'
             file_name_SNR = 'SNR_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
-                noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
-            sns.boxplot(ax=axes[2], x='Sample Size', y='Signal to Noise Ratio (Mixed Signals) in dB', data=df_SNR).set_title(title_SNR)
+                noise) + 'dB_' + 'p_outliers_' + str(p*100) + '.jpg'
+            sns.boxplot(ax=axes[2], x='Sample Size', y='Signal to Noise Ratio\n (Mixed Signals) in dB', data=df_SNR).set_title(title_SNR)
             #plt.savefig(os.path.join(folder_to_save, file_name_SNR), dpi=300)
             plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
             plt.show()
@@ -386,7 +392,7 @@ if __name__ == "__main__":
 
                 mds, MSEs, SNRs = monte_carlo_run(n_runs, s, ica_method, seed=None, data_type=signal_type, noise_lvl=snr, p_outlier=p, std_outlier=std_outlier, outlier_type=outlier_type)
 
-                d_SNR = {'Signal to Noise Ratio (Mixed Signals) in dB': SNRs, 'SNR(additive noise)': np.repeat(snr, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_SNR = {'Signal to Noise Ratio\n (Mixed Signals) in dB': SNRs, 'SNR(additive noise)': np.repeat(snr, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_MSE = {'Mean Squared Error': MSEs, 'SNR(additive noise)': np.repeat(snr, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_md = {'Minimum Distance': mds, 'SNR(additive noise)': np.repeat(snr, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 temp_md = pd.DataFrame(data=d_md)
@@ -408,12 +414,13 @@ if __name__ == "__main__":
             plt.clf()
             plt.ylim(top=1, bottom=0)
             fig, axes = plt.subplots(3, 1, figsize=(12, 16))
+            plt.subplots_adjust(bottom=0.1, hspace=0.5)
             title = ica_method + ' ' + name + ' Metrics'
             file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
             fig.suptitle(title)
 
-            title_md = 'MD_' + ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
+            title_md = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
                 noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
             file_name_md = 'MD_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
@@ -424,20 +431,19 @@ if __name__ == "__main__":
             #plt.savefig(os.path.join(folder_to_save, file_name_md), dpi=300)
             #plt.show()
 
-            title_MSE = 'MSE_' + ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
+            title_MSE = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
                 noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
             file_name_MSE = 'MSE_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
-            sns.boxplot(ax = axes[1],x='SNR(additive noise)', y='Mean Squared Error', data=df_MSE).set_title(title_MSE)
+            sns.boxplot(ax = axes[1], x='SNR(additive noise)', y='Mean Squared Error', data=df_MSE).set_title(title_MSE)
             #plt.savefig(os.path.join(folder_to_save, file_name_MSE), dpi=300)
             #plt.show()       
 
             plt.ylim(top=60, bottom=0)
-            title_SNR = 'SNR_' + ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
-                noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
+            title_SNR = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(noise[-1]) + "-" + str(noise[0]) + 'dB noise' + ', ' + str(p) + '% outliers'
             file_name_SNR = 'SNR_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
-            sns.boxplot(ax=axes[2], x='SNR(additive noise)', y='Signal to Noise Ratio (Mixed Signals) in dB', data=df_SNR).set_title(title_SNR)
+            sns.boxplot(ax=axes[2], x='SNR(additive noise)', y='Signal to Noise Ratio\n (Mixed Signals) in dB', data=df_SNR).set_title(title_SNR)
             plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
             plt.show()
 
@@ -454,9 +460,11 @@ if __name__ == "__main__":
                 # df = df.append(temp)
 
                 mds, MSEs, SNRs = monte_carlo_run(n_runs, s, ica_method, data_type=signal_type, seed=None, noise_lvl=noise, p_outlier=percentage, std_outlier=std_outlier, outlier_type=outlier_type)
-
-                d_SNR = {'Signal to Noise Ratio (Mixed Signals) in dB': SNRs, 'Outlier Percentage': np.repeat(percentage, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                percentage = percentage * 100
+                d_SNR = {'Signal to Noise Ratio\n (Mixed Signals) in dB': SNRs, 'Outlier Percentage': np.repeat(percentage, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_MSE = {'Mean Squared Error': MSEs, 'Outlier Percentage': np.repeat(percentage, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                # adjustment for percentage to be percentage for correct plotting
+
                 d_md = {'Minimum Distance': mds, 'Outlier Percentage': np.repeat(percentage, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 temp_md = pd.DataFrame(data=d_md)
                 temp_MSE = pd.DataFrame(data=d_MSE)
@@ -478,12 +486,13 @@ if __name__ == "__main__":
 
             plt.clf()
             fig, axes = plt.subplots(3, 1, figsize=(12, 16))
+            plt.subplots_adjust(bottom=0.1, hspace=0.5)
             title = ica_method + ' ' + name + ' Metrics'
             file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
             fig.suptitle(title)
 
-            title_md = 'MD_' + ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + 'sample size:' + str(
+            title_md = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + 'sample size:' + str(
                 sample_size) + ', ' + str(
                 noise) + 'dB noise' + ', ' + str(outlier_type) + ' outlier type'
             
@@ -494,22 +503,22 @@ if __name__ == "__main__":
             #plt.savefig(os.path.join(folder_to_save, file_name_md), dpi=300)
             #plt.show()
 
-            title_MSE = 'MSE_' + ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + 'sample size:' + str(
+            title_MSE = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + 'sample size:' + str(
                 sample_size) + ', ' + str(
                 noise) + 'dB noise' + ', ' + str(outlier_type) + ' outlier type'
             file_name_MSE = 'MSE_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'type_outlier_' + str(outlier_type) + '.jpg'
-            sns.boxplot(ax = axes[1], x='Outlier Percentage', y='Mean Squared Error', data=df_MSE).set_title(title_MSE)
+            sns.boxplot(ax=axes[1], x='Outlier Percentage', y='Mean Squared Error', data=df_MSE).set_title(title_MSE)
             #plt.savefig(os.path.join(folder_to_save, file_name_MSE), dpi=300)
             #plt.show()       
 
 
-            title_SNR = 'SNR_' + ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + 'sample size:' + str(
+            title_SNR = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + 'sample size:' + str(
                 sample_size) + ', ' + str(
                 noise) + 'dB noise' + ', ' + str(outlier_type) + ' outlier type'
             file_name_SNR = 'SNR_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'type_outlier_' + str(outlier_type) + '.jpg'
-            sns.boxplot(ax = axes[2], x='Outlier Percentage', y='Signal to Noise Ratio (Mixed Signals) in dB', data=df_SNR).set_title(title_SNR)
+            sns.boxplot(ax=axes[2], x='Outlier Percentage', y='Signal to Noise Ratio\n (Mixed Signals) in dB', data=df_SNR).set_title(title_SNR)
             plt.savefig(os.path.join(folder_to_save, file_name_SNR), dpi=300)
             plt.show()
 
@@ -525,7 +534,7 @@ if __name__ == "__main__":
                 # df = df.append(temp)
                 mds, MSEs, SNRs = monte_carlo_run(n_runs, sample_size, ica_method, data_type=signal_type, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type, partition= (ps))
 
-                d_SNR = {'Signal to Noise Ratio (Mixed Signals) in dB': SNRs, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_SNR = {'Signal to Noise Ratio\n (Mixed Signals) in dB': SNRs, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_MSE = {'Mean Squared Error': MSEs, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_md = {'Minimum Distance': mds, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 temp_md = pd.DataFrame(data=d_md)
@@ -547,12 +556,13 @@ if __name__ == "__main__":
 
             plt.clf()
             fig, axes = plt.subplots(3, 1, figsize=(12, 16))
+            plt.subplots_adjust(bottom=0.1, hspace=0.5)
             title = ica_method + ' ' + name + ' Metrics'
             file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
             fig.suptitle(title)
 
-            title_md = 'MD_' + ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
+            title_md = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
                 noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
             
             file_name_md = 'MD_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
@@ -562,7 +572,7 @@ if __name__ == "__main__":
             #plt.savefig(os.path.join(folder_to_save, file_name_md), dpi=300)
             #plt.show()
 
-            title_MSE = 'MSE_' + ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
+            title_MSE = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
                 noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
 
             file_name_MSE = 'MSE_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
@@ -572,11 +582,11 @@ if __name__ == "__main__":
             #plt.show()       
 
 
-            title_SNR = 'SNR_' + ica_method + ',  ' + name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
+            title_SNR = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
                 noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
             file_name_SNR = 'SNR_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) +'_Partitionsteps' + '.jpg'
-            sns.boxplot(ax=axes[2], x='Partition Size', y='Signal to Noise Ratio (Mixed Signals) in dB', data=df_SNR).set_title(title_SNR)
+            sns.boxplot(ax=axes[2], x='Partition Size', y='Signal to Noise Ratio\n (Mixed Signals) in dB', data=df_SNR).set_title(title_SNR)
             plt.savefig(os.path.join(folder_to_save, file_name_SNR), dpi=300)
             plt.show()
 
