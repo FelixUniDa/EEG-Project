@@ -7,7 +7,7 @@ from sklearn.neighbors import KernelDensity
 from sklearn.decomposition import FastICA, PCA
 import neurokit2
 import time
-from scipy.stats import hmean,median_abs_deviation
+from scipy.stats import hmean, median_abs_deviation
 import scipy
 
 import os
@@ -16,7 +16,7 @@ import sys
 #from Python_Code.Compare_ICA_algos.fast_Radical import RADICAL
 from utils import mixing_matrix, create_signal, create_outlier, apply_noise, whitening, SNR, MSE, md, add_artifact
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath( __file__ )))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, 'Python_Code', 'JADE'))
 sys.path.append(os.path.join(BASE_DIR, 'utils'))
@@ -45,7 +45,8 @@ sns.set_context("poster")
 # ToDo: write experiment results to csv
 
 
-def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=None, noise_lvl=20, std_outlier=3, p_outlier=0.0, outlier_type='impulse', partition=30):
+def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=None, noise_lvl=20, std_outlier=3,
+                    p_outlier=0.0, outlier_type='impulse', partition=30):
     """
     Do a Monte Carlo simulation of n_runs, plot a histogram, mean and standard deviation
     and write results to csv
@@ -54,17 +55,17 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
     :param matrix1: np.array of first parameters used in method,
     :param matrix12: np.array of second parameters used in method
 
-    :return: 
+    :return:
     """
     methods = ["jade", "power_ica", "fast_ica", "radical", "coro_ica", "random"]
     data_types = ['standard', 'delorme']
 
-    assert (ica_method in methods), "Can't choose  '%s' as ICA - method, possible options: %s" %(ica_method, methods)
+    assert (ica_method in methods), "Can't choose  '%s' as ICA - method, possible options: %s" % (ica_method, methods)
     assert (data_type in data_types), "Can't choose  '%s' as datatype, possible options: %s" % (data_type, data_types)
 
-    # create example signals: 
+    # create example signals:
     # choose Frequencies in the range of brainwaves (Alpha to Delta)
-    # DELTA WAVES (0.5 - 3 HZ) 
+    # DELTA WAVES (0.5 - 3 HZ)
     # THETA WAVES (3 - 8 HZ)
     # ALPHA WAVES (8 - 12 HZ)
     # BETA WAVES (12 - 38 HZ)
@@ -74,9 +75,9 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
     # https://brainworksneurotherapy.com/what-are-brainwaves
 
     data = np.stack([create_signal(f=2, x=data_size, c='ecg'),
-            create_signal(f=5, x=data_size, ampl=1, c='cos'),
-            create_signal(f=10, x=data_size, c='rect'),
-            create_signal(f=25, x=data_size, c='sawt')]).T
+                     create_signal(f=5, x=data_size, ampl=1, c='cos'),
+                     create_signal(f=10, x=data_size, c='rect'),
+                     create_signal(f=25, x=data_size, c='sawt')]).T
 
     # create mixing matrix and mixed signals
     c, r = data.shape
@@ -93,21 +94,23 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
     MSE_med_data = np.zeros(n_runs)
 
     new_MM = True
-    
+
     # time tracking
     t0 = time.time()
 
     # start Monte-Carlo run
     for i in range(n_runs):
-        
-        if(new_MM):
+
+        if (new_MM):
 
             if data_type == 'standard':
                 MM = mixing_matrix(r, None)
                 # print(MM)
                 mixdata = MM @ data.T
                 # apply noise and/or create outlier
-                mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl), std=std_outlier, prop=p_outlier, type=outlier_type) for dat in mixdata])
+                mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl),
+                                                         std=std_outlier, prop=p_outlier, type=outlier_type) for dat in
+                                          mixdata])
                 noise = mixdata_noise - mixdata
                 # centering the data and whitening the data:
                 white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='sample')
@@ -136,7 +139,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
                 for i in range(0, eeg_components):
                     if (i < artifacts):
                         data_outl, outlier = add_artifact(eeg_data[0::, i], fs, prop=prop, snr_dB=snr_dB,
-                                                              number=artifacts, type=type[i], seed=None)
+                                                          number=artifacts, type=type[i], seed=None)
                         eeg_data_artif[0::, i] = data_outl
                         eeg_data_outlier[0::, i] = outlier
                     else:
@@ -158,7 +161,8 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
 
                 # apply noise and/or create outlier
                 mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl),
-                                                         prop=p_outlier, std=std_outlier, type=outlier_type) for dat in mixdata])
+                                                         prop=p_outlier, std=std_outlier, type=outlier_type) for dat in
+                                          mixdata])
 
                 # centering the data and whitening the data:
                 white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='sample')
@@ -171,7 +175,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
                 noise = mixdata_noise - mixdata
                 """
 
-            if(seed is not None):
+            if (seed is not None):
                 new_MM = False
 
         # print(mixdata_noise.shape)
@@ -192,7 +196,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
             # Perform Radical
             W = RADICAL(white_data)
         elif (ica_method == 'coro_ica'):
-            #print(r)
+            # print(r)
             c = CoroICA(partitionsize=partition, groupsize=data_size)
             c.fit(white_data.T)
             W = c.V_
@@ -201,8 +205,8 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
             W = np.random.rand(r, r)
         else:
             return
-        
-        unmixed_data = W @ white_data-W @ W_whiten @ noise
+
+        unmixed_data = W @ white_data - W @ W_whiten @ noise
         md_data[i] = md(W_whiten @ MM, W)
         MSE_data[i] = np.mean(MSE(unmixed_data, data.T))
         MSE_mean_data[i] = np.mean(MSE(unmixed_data, data.T))
@@ -210,49 +214,49 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
         SNR_data[i] = np.mean(SNR(unmixed_data, data.T))
         SNR_mean_data[i] = np.mean(SNR(unmixed_data, data.T))
         SNR_med_data[i] = np.median(SNR(unmixed_data, data.T))
-        SNR_hmean_data[i] = hmean(10**(SNR(unmixed_data, data.T)/10))
-       
-        #data_storage[i] = md(W_whiten @ MM, W)
-        #print(data_storage[i])
+        SNR_hmean_data[i] = hmean(10 ** (SNR(unmixed_data, data.T) / 10))
+
+        # data_storage[i] = md(W_whiten @ MM, W)
+        # print(data_storage[i])
 
     # elapsed time for Monte-Carlo Run
     t1 = time.time() - t0
-    print("Time elapsed: ", t1) # CPU seconds elapsed (floating point)   
+    print("Time elapsed: ", t1)  # CPU seconds elapsed (floating point)
 
     md_mu = np.mean(md_data)
     md_sigma = np.std(md_data)
     md_med = np.median(md_data)
-    md_nMAD = scipy.stats.median_abs_deviation(md_data, scale=1/1.4826)
+    md_nMAD = scipy.stats.median_abs_deviation(md_data, scale=1 / 1.4826)
 
     MSE_mu = np.mean(MSE_data)
     MSE_sigma = np.std(MSE_data)
     MSE_med = np.median(MSE_data)
-    MSE_nMAD = scipy.stats.median_abs_deviation(MSE_data, scale=1/1.4826)
+    MSE_nMAD = scipy.stats.median_abs_deviation(MSE_data, scale=1 / 1.4826)
 
     SNR_mu = np.mean(SNR_data)
     SNR_sigma = np.std(SNR_data)
     SNR_med = np.median(SNR_data)
-    SNR_nMAD = scipy.stats.median_abs_deviation(SNR_data, scale=1/1.4826)
-       
+    SNR_nMAD = scipy.stats.median_abs_deviation(SNR_data, scale=1 / 1.4826)
+
     # mu = np.mean(data_storage)
     # sigma = np.std(data_storage)
     # med = np.median(data_storage)
     # nMAD = scipy.stats.median_abs_deviation(data_storage, scale=1/1.4826)
 
-    # # FRESH SEABORN PLOT - Histogram 
+    # # FRESH SEABORN PLOT - Histogram
     # x = pd.Series(data_storage, name=('Minimum Distance: %s ' % ica_method))
     # sns.displot(x, kde=True)
     # plt.ylabel('count')
     # file_name = ica_method + '_' + str(n_runs) + '_' + str(noise_lvl) +'dB_' + '.jpg'
-    # plt.savefig(os.path.join('results_Monte_Carlo',file_name), dpi=300)  
+    # plt.savefig(os.path.join('results_Monte_Carlo',file_name), dpi=300)
     # plt.show()
 
     print('Mean MD %s: %f ' % (ica_method, md_mu))
-    print('Standard deviation MD %s: %f' %(ica_method, md_sigma))
+    print('Standard deviation MD %s: %f' % (ica_method, md_sigma))
     print('Mean MSE %s: %f ' % (ica_method, MSE_mu))
-    print('Standard deviation MSE %s: %f' %(ica_method, MSE_sigma))
+    print('Standard deviation MSE %s: %f' % (ica_method, MSE_sigma))
     print('Mean SNR %s: %f ' % (ica_method, SNR_mu))
-    print('Standard deviation SNR %s: %f' %(ica_method, SNR_sigma))
+    print('Standard deviation SNR %s: %f' % (ica_method, SNR_sigma))
 
     # print('Mean %s: %f ' % (ica_method, mu))
     # print('Standard deviation %s: %f' %(ica_method, sigma))
@@ -260,16 +264,24 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
     if seed == None:
         seed = 'None'
 
-    mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'Noise-level [dB]': [noise_lvl],'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean_MD': [md_mu], 'Std_MD': [md_sigma], 'Median_MD': [md_med], 'nMAD_MD': [md_nMAD],'Mean_MSE': [MSE_mu], 'Std_MSE': [MSE_sigma], 'Median_MSE': [MSE_med], 'nMAD_MSE': [MSE_nMAD],'Mean_SNR': [SNR_mu], 'Std_SNR': [SNR_sigma], 'Median_SNR': [SNR_med], 'nMAD_SNR': [SNR_nMAD], 'Time elapsed [s]': [t1]}
-    df = pd.DataFrame(mc_data, columns=['Method', '# Runs', 'Sample Size', 'Noise-level [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean_MD', 'Std_MD', 'Median_MD', 'nMAD_MD', 'Mean_MSE', 'Std_MSE', 'Median_MSE', 'nMAD_MSE', 'Mean_SNR', 'Std_SNR', 'Median_SNR', 'nMAD_SNR', 'Time elapsed [s]'])
-    df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_JADE', 'Monte_Carlo_runs_JADE.csv'), index=True, header=True, mode='a')
+    mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'Noise-level [dB]': [noise_lvl],
+               'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean_MD': [md_mu], 'Std_MD': [md_sigma],
+               'Median_MD': [md_med], 'nMAD_MD': [md_nMAD], 'Mean_MSE': [MSE_mu], 'Std_MSE': [MSE_sigma],
+               'Median_MSE': [MSE_med], 'nMAD_MSE': [MSE_nMAD], 'Mean_SNR': [SNR_mu], 'Std_SNR': [SNR_sigma],
+               'Median_SNR': [SNR_med], 'nMAD_SNR': [SNR_nMAD], 'Time elapsed [s]': [t1]}
+    df = pd.DataFrame(mc_data,
+                      columns=['Method', '# Runs', 'Sample Size', 'Noise-level [dB]', 'Percentage Outliers (3Std)',
+                               'Seed', 'Mean_MD', 'Std_MD', 'Median_MD', 'nMAD_MD', 'Mean_MSE', 'Std_MSE', 'Median_MSE',
+                               'nMAD_MSE', 'Mean_SNR', 'Std_SNR', 'Median_SNR', 'nMAD_SNR', 'Time elapsed [s]'])
+    df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_JADE', 'Monte_Carlo_runs_JADE.csv'), index=True,
+              header=True, mode='a')
 
     # mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'SNR [dB]': [noise_lvl], 'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med], 'nMAD': [nMAD], 'Time elapsed [s]': [t1]}
     # df = pd.DataFrame(mc_data, columns=['Method', '# Runs', 'Sample Size', 'SNR [dB]', 'Percentage Outliers (3Std)', 'Seed', 'Mean', 'Std', 'Median', 'nMAD', 'Time elapsed [s]'])
     # df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_CoroICA', 'Monte_Carlo_runs_CoroICA.csv'), index=True, header=True, mode='a')
 
     # return minimum distances stored in data_storage
-    return md_data, MSE_med_data, SNR_med_data,MSE_data, SNR_data, SNR_hmean_data #data_storage
+    return md_data, MSE_med_data, SNR_med_data, MSE_data, SNR_data, SNR_hmean_data  # data_storage
 
 
 if __name__ == "__main__":
@@ -284,10 +296,14 @@ if __name__ == "__main__":
 
     ### setup experiment types ###
     type_dict = dict()
-    type_dict.update({"Type 1": [1000, 0, n_runs, sample_size_full, 'impulse', std_outlier]})  # no noise, no outlier, runs, samples
-    type_dict.update({"Type 2": [40, 0, n_runs, sample_size_full, 'impulse', std_outlier]})  # 40db noise, no outlier, runs, samples
-    type_dict.update({"Type 3": [1000, 0.001, n_runs, sample_size_full, 'impulse', std_outlier]})  # no noise, 0.1 % outlier, runs, samples
-    type_dict.update({"Type 4": [40, 0.001, n_runs, sample_size_full, 'impulse', std_outlier]})  # 40 db noise, 0.1 % outlier, runs, samples
+    type_dict.update(
+        {"Type 1": [1000, 0, n_runs, sample_size_full, 'impulse', std_outlier]})  # no noise, no outlier, runs, samples
+    type_dict.update(
+        {"Type 2": [40, 0, n_runs, sample_size_full, 'impulse', std_outlier]})  # 40db noise, no outlier, runs, samples
+    type_dict.update({"Type 3": [1000, 0.001, n_runs, sample_size_full, 'impulse',
+                                 std_outlier]})  # no noise, 0.1 % outlier, runs, samples
+    type_dict.update({"Type 4": [40, 0.001, n_runs, sample_size_full, 'impulse',
+                                 std_outlier]})  # 40 db noise, 0.1 % outlier, runs, samples
     type_dict.update({"Type 5": [noise_list, 0, n_runs, 10000, 'impulse', std_outlier]})
     type_dict.update({"Type 6": [1000, outlier_list, n_runs, 10000, 'patch', std_outlier]})
     type_dict.update({"Type 7": [1000, outlier_list, n_runs, 10000, 'impulse', std_outlier]})
@@ -361,21 +377,21 @@ if __name__ == "__main__":
             ### set titles ###
             title = ica_method + ' ' + name + ' Metrics'
             file_name = ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
-                noise) + 'dB_' + 'p_outliers_' + str(p*100) + '.jpg'
+                noise) + 'dB_' + 'p_outliers_' + str(p * 100) + '.jpg'
             fig.suptitle(title)
 
             title_md = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
-                noise) + 'dB noise' + ', ' + str(p*100) + '% outliers'
+                noise) + 'dB noise' + ', ' + str(p * 100) + '% outliers'
             file_name_md = 'MD_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) + '.jpg'
         
             title_MSE = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
-                noise) + 'dB noise' + ', ' + str(p*100) + '% outliers'
+                noise) + 'dB noise' + ', ' + str(p * 100) + '% outliers'
             file_name_MSE = 'MSE_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p*100) + '.jpg'
            
             title_SNR = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
-                noise) + 'dB noise' + ', ' + str(p*100) + '% outliers'
+                noise) + 'dB noise' + ', ' + str(p * 100) + '% outliers'
             file_name_SNR = 'SNR_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p*100) + '.jpg'
 
@@ -458,7 +474,8 @@ if __name__ == "__main__":
                 d_median_SNR = {'Location': 'median','Signal to Noise Ratio\n (Mixed Signals) in dB': median_SNRs, 'Outlier Percentage': np.repeat(percentage, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
                 d_median_MSE = {'Location': 'median','Mean Squared Error': median_MSEs, 'Outlier Percentage': np.repeat(percentage, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
 
-                d_md = {'Minimum Distance': mds, 'Outlier Percentage': np.repeat(percentage, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_md = {'Minimum Distance': mds, 'Outlier Percentage': np.repeat(percentage, n_runs),
+                        '# MC Runs': np.repeat(n_runs, n_runs)}
                 temp_md = pd.DataFrame(data=d_md)
                 
                 temp_mean_MSE = pd.DataFrame(data=d_mean_MSE)
@@ -489,7 +506,7 @@ if __name__ == "__main__":
             title_md = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + 'sample size:' + str(
                 sample_size) + ', ' + str(
                 noise) + 'dB noise' + ', ' + str(outlier_type) + ' outlier type'
-            
+
             file_name_md = 'MD_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'type_outlier_' +str(outlier_type) + '.jpg'
            
@@ -514,14 +531,22 @@ if __name__ == "__main__":
 
         if name == "Type 8":
             outlier_type = "impulse"
-            partitions = np.arange(10, 100, 10) #np.ones(41)/np.arange(50,9,-1)*sample_size
+            partitions = np.arange(10, 100, 10)  # np.ones(41)/np.arange(50,9,-1)*sample_size
             for ps in partitions:
                 # do a monte-carlo run
+                #mds = monte_carlo_run(n_runs, sample_size , ica_method, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type, partition= (ps))
+
+                # d = {'Minimum Distance': mds, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                # temp = pd.DataFrame(data=d)
+                # df = df.append(temp)
                 mds, median_MSEs, median_SNRs,mean_MSEs, mean_SNRs, hSNRs = monte_carlo_run(n_runs, sample_size, ica_method, data_type=signal_type, seed=None, noise_lvl=noise, p_outlier=p, outlier_type=outlier_type, partition= (ps))
 
-                d_SNR = {'Signal to Noise Ratio\n (Mixed Signals) in dB': mean_SNRs, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
-                d_MSE = {'Mean Squared Error': mean_MSEs, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
-                d_md = {'Minimum Distance': mds, 'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_SNR = {'Signal to Noise Ratio\n (Mixed Signals) in dB': mean_SNRs,
+                         'Partition Size': np.repeat(ps, n_runs), '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_MSE = {'Mean Squared Error': mean_MSEs, 'Partition Size': np.repeat(ps, n_runs),
+                         '# MC Runs': np.repeat(n_runs, n_runs)}
+                d_md = {'Minimum Distance': mds, 'Partition Size': np.repeat(ps, n_runs),
+                        '# MC Runs': np.repeat(n_runs, n_runs)}
                 temp_md = pd.DataFrame(data=d_md)
                 temp_MSE = pd.DataFrame(data=d_MSE)
                 temp_SNR = pd.DataFrame(data=d_SNR)
@@ -545,7 +570,7 @@ if __name__ == "__main__":
 
             title_md = name + ':  ' + 'runs: ' + str(n_runs) + ', ' + str(
                 noise) + 'dB noise' + ', ' + str(p) + ' % outliers'
-            
+
             file_name_md = 'MD_' + ica_method + '_' + name + '_' + str(n_runs) + 'Runs' + '_' + str(
                 noise) + 'dB_' + 'p_outliers_' + str(p) +'_Partitionsteps' + '.jpg'
            
@@ -567,7 +592,6 @@ if __name__ == "__main__":
             plt.savefig(os.path.join(folder_to_save, file_name_SNR), dpi=300)
             plt.show()
 
-
         if name == "Type scat":
             outlier_type = "impulse"
             mds_ges = np.empty(len(noise) * n_runs)
@@ -576,7 +600,7 @@ if __name__ == "__main__":
             median_SNRs_ges = np.empty(len(noise) * n_runs)
             mean_MSEs_ges = np.empty(len(noise) * n_runs)
             mean_SNRs_ges = np.empty(len(noise) * n_runs)
-            i=0
+            i = 0
             for snr in noise:
                 # do a monte-carlo run
                 mds, median_MSEs, median_SNRs,mean_MSEs, mean_SNRs, hSNRs = monte_carlo_run(n_runs, sample_size, ica_method, seed=None, noise_lvl=snr,
@@ -596,26 +620,38 @@ if __name__ == "__main__":
 
             ### setup figure ###
             sns.set()
+            sns.set_theme(style='darkgrid')
+            sns.set_context('paper')
             fig, axes = plt.subplots(3, 3)
-            fig.canvas.manager.window.showMaximized()
-            fig.tight_layout()
-
-            ### set titles ###
+            #fig.canvas.manager.window.showMaximized()
+            #fig.tight_layout()
+            # plt.subplots_adjust(bottom=0.1, hspace=0.5)
             title_scatter = 'Scatterplots of metrics'
+            # fig.suptitle(title_scatter)
             file_name_scatter = 'Scatterplot.jpg'
 
-            ### plot scatterplots ###
-            sns.scatterplot(ax = axes[0,0],data=df_scatter, y='Median of MSEs', x='Minimum Distance',)
-            sns.scatterplot(ax = axes[0,1],data=df_scatter, y='Median of SNRs (Mixed Signals) in dB', x='Minimum Distance')
-            sns.scatterplot(ax = axes[0,2],data=df_scatter, y='Median of SNRs (Mixed Signals) in dB', x='Median of MSEs')
-            sns.scatterplot(ax = axes[1,0],data=df_scatter, y='Mean of MSEs', x='Minimum Distance')
-            sns.scatterplot(ax = axes[1,1],data=df_scatter, y='Mean of SNRs (Mixed Signals) in dB', x='Minimum Distance')
-            sns.scatterplot(ax = axes[1,2],data=df_scatter, y='Mean of SNRs (Mixed Signals) in dB', x='Mean of MSEs')
-            sns.scatterplot(ax = axes[2,0],data=df_scatter, x='Theoretical Minimum Distance (from SNR)', y='Minimum Distance')
-            sns.scatterplot(ax = axes[2,1],data=df_scatter, y='Theoretical Minimum Distance (from SNR)', x='Minimum Distance')
+            g = sns.FacetGrid(df_scatter, col="size", height=3, col_wrap=3)
+
+            # sns.boxplot(ax=axes[0], x='Iterations', y='Minimum Distance', data=df_md).set_title(title_md)
+            sns.scatterplot(ax=axes[0, 0], data=df_scatter, y='Median of MSEs', x='Minimum Distance', )
+            sns.lmplot(x='Minimum Distance', y="Median of MSEs", data=df_scatter, order=3, ci=None, x_jitter=.05)
+            sns.scatterplot(ax=axes[0, 1], data=df_scatter, y='Median of SNRs (Mixed Signals) in dB',
+                            x='Minimum Distance')
+            sns.scatterplot(ax=axes[0, 2], data=df_scatter, y='Median of SNRs (Mixed Signals) in dB',
+                            x='Median of MSEs')
+
+            sns.scatterplot(ax=axes[1, 0], data=df_scatter, y='Mean of MSEs', x='Minimum Distance')
+            sns.scatterplot(ax=axes[1, 1], data=df_scatter, y='Mean of SNRs (Mixed Signals) in dB',
+                            x='Minimum Distance')
+            sns.scatterplot(ax=axes[1, 2], data=df_scatter, y='Mean of SNRs (Mixed Signals) in dB', x='Mean of MSEs')
+
+            sns.scatterplot(ax=axes[2, 0], data=df_scatter, x='Theoretical Minimum Distance (from SNR)',
+                            y='Minimum Distance')
+            sns.scatterplot(ax=axes[2, 1], data=df_scatter, y='Theoretical Minimum Distance (from SNR)',
+                            x='Minimum Distance')
+            sns.lmplot(x='Theoretical Minimum Distance (from SNR)', y="Minimum Distance", data=df_scatter, order=1, ci=None, yx_jitter=.03)
 
             plt.savefig(os.path.join(folder_to_save, file_name_scatter), dpi=300)
             plt.show()
-
 
     print("--- Success after %s seconds ---" % (time.time() - start_time))
