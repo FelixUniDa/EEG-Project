@@ -1,5 +1,7 @@
 import numpy as np
 # import numba
+import matplotlib
+matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -310,6 +312,7 @@ if __name__ == "__main__":
     
     ### Coro_ica partitionsize test. ###
     type_dict.update({"Type 8": [1000, 0.000, n_runs, 10000, 'impulse', std_outlier]}) # (dB Noise, outlier proportion, runs, sample_size)
+
     ### scatterplots of metrics ###
     type_dict.update({"Type scat": [noise_list2, 0.000, n_runs, 10000, 'impulse', std_outlier]})
 
@@ -328,7 +331,7 @@ if __name__ == "__main__":
 
     ica_method = 'jade'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
     folder_to_save = 'results_Monte_Carlo_JADE'
-    type_list_to_test = ["Type 5"]
+    type_list_to_test = ["Type scat"]
 
     # quick adjustment -> this is here to make quick checks for the implementations not for the big runs!
     # type_list_to_test = ["Type 6"]
@@ -600,6 +603,7 @@ if __name__ == "__main__":
             median_SNRs_ges = np.empty(len(noise) * n_runs)
             mean_MSEs_ges = np.empty(len(noise) * n_runs)
             mean_SNRs_ges = np.empty(len(noise) * n_runs)
+
             i = 0
             for snr in noise:
                 # do a monte-carlo run
@@ -613,43 +617,44 @@ if __name__ == "__main__":
                 mean_SNRs_ges[range(i*n_runs,i*n_runs+n_runs)] = mean_SNRs
                 i += 1
 
-
-            d_scatter = {'Median of SNRs (Mixed Signals) in dB': median_SNRs_ges,'Mean of SNRs (Mixed Signals) in dB': mean_SNRs_ges,
-                         'Median of MSEs': median_MSEs_ges,'Mean of MSEs': mean_MSEs_ges, 'Minimum Distance': mds_ges, 'Theoretical Minimum Distance (from SNR)': theoretical_mds}
+            comp = np.arange(1, 10, 1)
+            d_scatter = {'Median of SNRs (dB)': median_SNRs_ges,'Mean of SNRs (dB)': mean_SNRs_ges,
+                         'Median of MSEs': median_MSEs_ges,'Mean of MSEs': mean_MSEs_ges, 'Minimum Distance': mds_ges, 'Theor. MD (from SNR)': theoretical_mds}
             df_scatter = pd.DataFrame(data=d_scatter)
 
             ### setup figure ###
             sns.set()
             sns.set_theme(style='darkgrid')
-            sns.set_context('paper')
+            #sns.set_context('paper')
             fig, axes = plt.subplots(3, 3)
-            #fig.canvas.manager.window.showMaximized()
-            #fig.tight_layout()
+            fig.canvas.manager.window.showMaximized()
+            fig.tight_layout()
             # plt.subplots_adjust(bottom=0.1, hspace=0.5)
             title_scatter = 'Scatterplots of metrics'
             # fig.suptitle(title_scatter)
             file_name_scatter = 'Scatterplot.jpg'
 
-            g = sns.FacetGrid(df_scatter, col="size", height=3, col_wrap=3)
+            #g = sns.FacetGrid(df_scatter, col="size", height=3, col_wrap=3)
 
             # sns.boxplot(ax=axes[0], x='Iterations', y='Minimum Distance', data=df_md).set_title(title_md)
-            sns.scatterplot(ax=axes[0, 0], data=df_scatter, y='Median of MSEs', x='Minimum Distance', )
-            sns.lmplot(x='Minimum Distance', y="Median of MSEs", data=df_scatter, order=3, ci=None, x_jitter=.05)
-            sns.scatterplot(ax=axes[0, 1], data=df_scatter, y='Median of SNRs (Mixed Signals) in dB',
-                            x='Minimum Distance')
-            sns.scatterplot(ax=axes[0, 2], data=df_scatter, y='Median of SNRs (Mixed Signals) in dB',
-                            x='Median of MSEs')
+            #sns.scatterplot(ax=axes[0, 0], data=df_scatter, y='Median of MSEs', x='Minimum Distance', )
+            #sns.scatterplot(ax=axes[0, 1], data=df_scatter, y='Median of SNRs (dB)', x='Minimum Distance')
+            #sns.scatterplot(ax=axes[0, 2], data=df_scatter, y='Median of SNRs (dB)', x='Median of MSEs')
+            sns.regplot(ax=axes[0, 0], data=df_scatter, y="Median of MSEs", x='Minimum Distance', order=3, ci=None, x_jitter=.05, line_kws={"color": "red"})
+            sns.regplot(ax=axes[0, 1], data=df_scatter, y='Median of SNRs (dB)', x='Minimum Distance', fit_reg=True, line_kws={"color": "red"})
+            sns.regplot(ax=axes[0, 2], data=df_scatter, y='Median of SNRs (dB)', x='Median of MSEs', logx=True, line_kws={"color": "red"})
 
-            sns.scatterplot(ax=axes[1, 0], data=df_scatter, y='Mean of MSEs', x='Minimum Distance')
-            sns.scatterplot(ax=axes[1, 1], data=df_scatter, y='Mean of SNRs (Mixed Signals) in dB',
-                            x='Minimum Distance')
-            sns.scatterplot(ax=axes[1, 2], data=df_scatter, y='Mean of SNRs (Mixed Signals) in dB', x='Mean of MSEs')
+            #sns.scatterplot(ax=axes[1, 0], data=df_scatter, y='Mean of MSEs', x='Minimum Distance')
+            #sns.scatterplot(ax=axes[1, 1], data=df_scatter, y='Mean of SNRs (dB)', x='Minimum Distance')
+            #sns.scatterplot(ax=axes[1, 2], data=df_scatter, y='Mean of SNRs (dB)', x='Mean of MSEs')
+            sns.regplot(ax=axes[1, 0], data=df_scatter, y='Mean of MSEs', x='Minimum Distance', order=3, ci=None, x_jitter=.05, line_kws={"color": "red"})#order=3, ci=None, x_jitter=.05)
+            sns.regplot(ax=axes[1, 1], data=df_scatter, y='Mean of SNRs (dB)', x='Minimum Distance', fit_reg=True, line_kws={"color": "red"})
+            sns.regplot(ax=axes[1, 2], data=df_scatter, y='Mean of SNRs (dB)', x='Mean of MSEs', logx=True, line_kws={"color": "red"})#order=3, ci=None, x_jitter=.05)
 
-            sns.scatterplot(ax=axes[2, 0], data=df_scatter, x='Theoretical Minimum Distance (from SNR)',
-                            y='Minimum Distance')
-            sns.scatterplot(ax=axes[2, 1], data=df_scatter, y='Theoretical Minimum Distance (from SNR)',
-                            x='Minimum Distance')
-            sns.lmplot(x='Theoretical Minimum Distance (from SNR)', y="Minimum Distance", data=df_scatter, order=1, ci=None, yx_jitter=.03)
+            #sns.scatterplot(ax=axes[2, 0], data=df_scatter, x='Theor. MD (from SNR)', y='Minimum Distance')
+            #sns.scatterplot(ax=axes[2, 1], data=df_scatter, y='Theor. MD (from SNR)', x='Minimum Distance')
+            sns.regplot(ax=axes[2, 0], data=df_scatter, x='Theor. MD (from SNR)', y='Minimum Distance', fit_reg=True, line_kws={"color": "red"})
+            sns.regplot(ax=axes[2, 1], data=df_scatter, y='Theor. MD (from SNR)', x='Minimum Distance', fit_reg=True, line_kws={"color": "red"})
 
             plt.savefig(os.path.join(folder_to_save, file_name_scatter), dpi=300)
             plt.show()
