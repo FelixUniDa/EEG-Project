@@ -118,6 +118,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
                 white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='sample')
 
             if data_type == 'delorme':
+
                 # parameter for add_artifact function for delorme artefacts
                 fs = 1000
                 eeg_components = 4
@@ -126,7 +127,6 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
                 prop = 0.1
                 snr_dB = 3
                 artifacts = 5
-
                 if (delorme_type == 'all'):
                     type = np.array(['eye', 'muscle', 'linear', 'electric', 'noise'])
                     artifacts = 5
@@ -136,26 +136,27 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
                 if (eeg_components < artifacts):
                     artifacts = eeg_components
 
-                eeg_data_artif = np.zeros_like(eeg_data)
-                eeg_data_outlier = np.zeros_like(eeg_data)
-                for i in range(0, eeg_components):
+                # Mix data before adding artifacts
+                c, r = eeg_data.shape
+                MM = mixing_matrix(r, None, m=artifacts)
+                # print(MM)
+                mixdata = (MM @ eeg_data.T).T
+
+                # Add artifacts
+                eeg_data_artif = np.zeros_like(mixdata)
+                eeg_data_outlier = np.zeros_like(mixdata)
+                for i in range(0, eeg_components+artifacts):
                     if (i < artifacts):
-                        data_outl, outlier = add_artifact(eeg_data[0::, i], fs, prop=prop, snr_dB=snr_dB,
+                        data_outl, outlier = add_artifact(mixdata[0::, i], fs, prop=prop, snr_dB=snr_dB,
                                                           number=artifacts, type=type[i], seed=None)
                         eeg_data_artif[0::, i] = data_outl
                         eeg_data_outlier[0::, i] = outlier
                     else:
-                        eeg_data_artif[0::, i] = eeg_data[0::, i]
+                        eeg_data_artif[0::, i] = mixdata[0::, i]
                         eeg_data_outlier[0::, i] = eeg_data_outlier[0::, i]
 
                 # plt.plot(eeg_data_artif)
                 # plt.show()
-
-                c, r = eeg_data_artif.shape
-                MM = mixing_matrix(r, None, m=artifacts)
-                # print(MM)
-                mixdata = MM @ eeg_data_artif.T
-                noise = eeg_data_outlier
 
                 # get
                 # noise_lvl = 100
@@ -163,19 +164,14 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
 
                 # apply noise and/or create outlier
                 mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl),
-                                                         prop=p_outlier, std=std_outlier, type=outlier_type) for dat in
-                                          mixdata])
+                                                         prop=p_outlier, std=std_outlier, type=outlier_type) for dat in eeg_data_artif])
 
+                noise = (mixdata_noise - eeg_data_artif).T
+                eeg_data_outlier = eeg_data_outlier[:, 0:artifacts]
+                data_ideal = np.concatenate((eeg_data, eeg_data_outlier), axis=1)
                 # centering the data and whitening the data:
-                white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='sample')
+                white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise.T, type='sample')
 
-                """
-                mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl),
-                                                         prop=p_outlier, std=3, type='impulse') for dat in mixdata])
-                mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=noise_lvl),
-                                                         prop=p_outlier, std=3, type=outlier_type) for dat in mixdata])
-                noise = mixdata_noise - mixdata
-                """
 
             if (seed is not None):
                 new_MM = False
@@ -209,14 +205,25 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
             return
 
         unmixed_data = W @ white_data - W @ W_whiten @ noise
-        md_data[i] = md(W_whiten @ MM, W)
-        MSE_data[i] = np.mean(MSE(unmixed_data, data.T))
-        MSE_mean_data[i] = np.mean(MSE(unmixed_data, data.T))
-        MSE_med_data[i] = np.median(MSE(unmixed_data, data.T))
-        SNR_data[i] = np.mean(SNR(unmixed_data, data.T))
-        SNR_mean_data[i] = np.mean(SNR(unmixed_data, data.T))
-        SNR_med_data[i] = np.median(SNR(unmixed_data, data.T))
-        SNR_hmean_data[i] = hmean(10 ** (SNR(unmixed_data, data.T) / 10))
+
+        if(data_type != 'delorme'):
+            md_data[i] = md(W_whiten @ MM, W)
+            MSE_data[i] = np.mean(MSE(unmixed_data, data.T))
+            MSE_mean_data[i] = np.mean(MSE(unmixed_data, data.T))
+            MSE_med_data[i] = np.median(MSE(unmixed_data, data.T))
+            SNR_data[i] = np.mean(SNR(unmixed_data, data.T))
+            SNR_mean_data[i] = np.mean(SNR(unmixed_data, data.T))
+            SNR_med_data[i] = np.median(SNR(unmixed_data, data.T))
+            SNR_hmean_data[i] = hmean(10 ** (SNR(unmixed_data, data.T) / 10))
+        else:
+            MSE_data[i] = np.mean(MSE(unmixed_data, data_ideal.T))
+            MSE_mean_data[i] = np.mean(MSE(unmixed_data, data_ideal.T))
+            MSE_med_data[i] = np.median(MSE(unmixed_data, data_ideal.T))
+            SNR_data[i] = np.mean(SNR(unmixed_data, data_ideal.T))
+            SNR_mean_data[i] = np.mean(SNR(unmixed_data, data_ideal.T))
+            SNR_med_data[i] = np.median(SNR(unmixed_data, data_ideal.T))
+            SNR_hmean_data[i] = hmean(10 ** (SNR(unmixed_data, data_ideal.T) / 10))
+
 
         # data_storage[i] = md(W_whiten @ MM, W)
         # print(data_storage[i])
@@ -318,7 +325,7 @@ if __name__ == "__main__":
 
     # check if data should be based on standard 4 signals, delorme artefacts or eeg
     signal_types = ['standard', 'delorme', 'eeg']
-    signal_type = signal_types[0]
+    signal_type = signal_types[1]
 
     # track time for how long this run takes
     start_time = time.time()
@@ -331,7 +338,7 @@ if __name__ == "__main__":
 
     ica_method = 'jade'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
     folder_to_save = 'results_Monte_Carlo_JADE'
-    type_list_to_test = ["Type scat"]
+    type_list_to_test = ["Type 1"]
 
     # quick adjustment -> this is here to make quick checks for the implementations not for the big runs!
     # type_list_to_test = ["Type 6"]
@@ -640,14 +647,14 @@ if __name__ == "__main__":
             #sns.scatterplot(ax=axes[0, 0], data=df_scatter, y='Median of MSEs', x='Minimum Distance', )
             #sns.scatterplot(ax=axes[0, 1], data=df_scatter, y='Median of SNRs (dB)', x='Minimum Distance')
             #sns.scatterplot(ax=axes[0, 2], data=df_scatter, y='Median of SNRs (dB)', x='Median of MSEs')
-            sns.regplot(ax=axes[0, 0], data=df_scatter, y="Median of MSEs", x='Minimum Distance', order=3, ci=None, x_jitter=.05, line_kws={"color": "red"})
+            sns.regplot(ax=axes[0, 0], data=df_scatter, y="Median of MSEs", x='Minimum Distance', order=2, ci=None, x_jitter=.05, line_kws={"color": "red"})
             sns.regplot(ax=axes[0, 1], data=df_scatter, y='Median of SNRs (dB)', x='Minimum Distance', fit_reg=True, line_kws={"color": "red"})
             sns.regplot(ax=axes[0, 2], data=df_scatter, y='Median of SNRs (dB)', x='Median of MSEs', logx=True, line_kws={"color": "red"})
 
             #sns.scatterplot(ax=axes[1, 0], data=df_scatter, y='Mean of MSEs', x='Minimum Distance')
             #sns.scatterplot(ax=axes[1, 1], data=df_scatter, y='Mean of SNRs (dB)', x='Minimum Distance')
             #sns.scatterplot(ax=axes[1, 2], data=df_scatter, y='Mean of SNRs (dB)', x='Mean of MSEs')
-            sns.regplot(ax=axes[1, 0], data=df_scatter, y='Mean of MSEs', x='Minimum Distance', order=3, ci=None, x_jitter=.05, line_kws={"color": "red"})#order=3, ci=None, x_jitter=.05)
+            sns.regplot(ax=axes[1, 0], data=df_scatter, y='Mean of MSEs', x='Minimum Distance', order=2, ci=None, x_jitter=.05, line_kws={"color": "red"})#order=3, ci=None, x_jitter=.05)
             sns.regplot(ax=axes[1, 1], data=df_scatter, y='Mean of SNRs (dB)', x='Minimum Distance', fit_reg=True, line_kws={"color": "red"})
             sns.regplot(ax=axes[1, 2], data=df_scatter, y='Mean of SNRs (dB)', x='Mean of MSEs', logx=True, line_kws={"color": "red"})#order=3, ci=None, x_jitter=.05)
 
