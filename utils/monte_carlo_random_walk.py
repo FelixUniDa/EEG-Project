@@ -1,7 +1,7 @@
 import numpy as np
 # import numba
 import matplotlib
-matplotlib.use('Qt5Agg')
+# matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -282,7 +282,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
                       columns=['Method', '# Runs', 'Sample Size', 'Noise-level [dB]', 'Percentage Outliers (3Std)',
                                'Seed', 'Mean_MD', 'Std_MD', 'Median_MD', 'nMAD_MD', 'Mean_MSE', 'Std_MSE', 'Median_MSE',
                                'nMAD_MSE', 'Mean_SNR', 'Std_SNR', 'Median_SNR', 'nMAD_SNR', 'Time elapsed [s]'])
-    df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_JADE', 'Monte_Carlo_runs_JADE.csv'), index=True,
+    df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_JADE_comparison', 'Monte_Carlo_runs_JADE_comparison.csv'), index=True,
               header=True, mode='a')
 
     # mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'SNR [dB]': [noise_lvl], 'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med], 'nMAD': [nMAD], 'Time elapsed [s]': [t1]}
@@ -337,11 +337,11 @@ if __name__ == "__main__":
     df_SNR = pd.DataFrame()
 
     ica_method = 'jade'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
-    folder_to_save = 'results_Monte_Carlo_JADE'
-    type_list_to_test = ["Type 1", "Type 2", "Type 3", "Type 4", "Type 5", "Type 6", "Type 7"]
+    folder_to_save = 'results_Monte_Carlo_JADE_comparison'
+    # type_list_to_test = ["Type 1", "Type 2", "Type 3", "Type 4", "Type 5", "Type 6", "Type 7"]
 
     # quick adjustment -> this is here to make quick checks for the implementations not for the big runs!
-    # type_list_to_test = ["Type 6"]
+    type_list_to_test = ["Type 5"]
 
     for name in type_list_to_test:
         # parameter for each type to test
@@ -377,8 +377,8 @@ if __name__ == "__main__":
                 print("Ready samplesize {}".format(s))
 
             ### setup figure ###
-            sns.set()
-            plt.clf()
+            # sns.set()
+            # plt.clf()
             plt.ylim(top=1, bottom=0)
             fig, axes = plt.subplots(3, 1, figsize=(12, 16))
             plt.subplots_adjust(bottom=0.1, hspace=0.5)
@@ -438,7 +438,7 @@ if __name__ == "__main__":
                 print("Ready noise level {} with sample size {}".format(snr, s))
 
             ### setup figure ###
-            sns.set()
+            # sns.set()
             plt.clf()
             plt.ylim(top=1, bottom=0)
             fig, axes = plt.subplots(3, 1, figsize=(12, 16))
@@ -502,7 +502,7 @@ if __name__ == "__main__":
 
 
             ### setup figure ###
-            sns.set()
+            # sns.set()
             plt.clf()
             fig, axes = plt.subplots(3, 1, figsize=(12, 16))
             plt.subplots_adjust(bottom=0.1, hspace=0.5)
@@ -567,7 +567,7 @@ if __name__ == "__main__":
                 print("Ready Partitionsize {}".format(ps))
             
             ### setup figure ###
-            sns.set()
+            # sns.set()
             plt.clf()
             fig, axes = plt.subplots(3, 1, figsize=(12, 16))
             plt.subplots_adjust(bottom=0.1, hspace=0.5)
@@ -630,9 +630,9 @@ if __name__ == "__main__":
             df_scatter = pd.DataFrame(data=d_scatter)
 
             ### setup figure ###
-            sns.set()
-            sns.set_theme(style='darkgrid')
-            #sns.set_context('paper')
+            # sns.set()
+            # sns.set_theme(style='darkgrid')
+            # sns.set_context('paper')
             fig, axes = plt.subplots(3, 3)
             fig.canvas.manager.window.showMaximized()
             fig.tight_layout()
