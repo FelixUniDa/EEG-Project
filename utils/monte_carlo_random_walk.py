@@ -325,7 +325,7 @@ if __name__ == "__main__":
 
     # check if data should be based on standard 4 signals, delorme artefacts or eeg
     signal_types = ['standard', 'delorme', 'eeg']
-    signal_type = signal_types[1]
+    signal_type = signal_types[0]
 
     # track time for how long this run takes
     start_time = time.time()
@@ -338,7 +338,7 @@ if __name__ == "__main__":
 
     ica_method = 'jade'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
     folder_to_save = 'results_Monte_Carlo_JADE'
-    type_list_to_test = ["Type 1"]
+    type_list_to_test = ["Type 1", "Type 2", "Type 3", "Type 4", "Type 5", "Type 6", "Type 7"]
 
     # quick adjustment -> this is here to make quick checks for the implementations not for the big runs!
     # type_list_to_test = ["Type 6"]
