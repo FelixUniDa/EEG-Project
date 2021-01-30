@@ -23,7 +23,7 @@ from utils import *
 
 
 
-def create_artif(x=1000, fs=1000, eeg_components=1, artifacts=1, type='eye'):
+def create_artif(x=10000, fs=1000, eeg_components=1, artifacts=1, type='eye'):
 
 
 
@@ -72,7 +72,7 @@ def create_artif(x=1000, fs=1000, eeg_components=1, artifacts=1, type='eye'):
     # plt.show()
 
 
-    noise_lvl = 30
+    noise_lvl = 1000
     p_outlier = 0.0
     std_outlier = 3
     outlier_type = 'impulse'
@@ -141,7 +141,7 @@ if __name__ == "__main__":
     sns.set_context('paper')
 
     artifacts = 4
-    eeg_data, eeg_data_artif, mixdata_noise, artif_white_data, data_ideal = create_artif(x=1000, fs=1000, eeg_components=4, artifacts=artifacts, type='all')
+    eeg_data, eeg_data_artif, mixdata_noise, artif_white_data, data_ideal = create_artif(x=10000, fs=1000, eeg_components=4, artifacts=artifacts, type='all')
     W_power, _ = PowerICA.powerICA(artif_white_data, 'pow3')
     c = CoroICA(partitionsize=10, groupsize=1000)
     c.fit(artif_white_data.T)
