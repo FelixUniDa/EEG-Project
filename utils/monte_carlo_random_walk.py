@@ -115,7 +115,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
                                           mixdata])
                 noise = mixdata_noise - mixdata
                 # centering the data and whitening the data:
-                white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='sample')
+                white_data, W_whiten, W_dewhiten, _ = whitening(mixdata_noise, type='spatmed')
 
             if data_type == 'delorme':
 
@@ -300,7 +300,7 @@ if __name__ == "__main__":
     noise_list = np.array([40, 30, 20, 10, 6, 3])
     noise_list2 = np.array([40, 35, 30, 25, 20, 15, 10, 8, 6, 3, 1, 0])
     outlier_list = np.array([0.001, 0.0025, 0.005, 0.01, 0.015, 0.05, 0.10, 0.20, 0.50])
-    n_runs = 100
+    n_runs = 1000
     std_outlier = 100
 
     ### setup experiment types ###
@@ -636,8 +636,9 @@ if __name__ == "__main__":
             fig, axes = plt.subplots(3, 3)
             fig.canvas.manager.window.showMaximized()
             fig.tight_layout()
+            title_scatter = 'Scatterplots of metrics, ' + 'Runs: ' + str(n_runs)
+            fig.suptitle(title_scatter)
             # plt.subplots_adjust(bottom=0.1, hspace=0.5)
-            title_scatter = 'Scatterplots of metrics'
             # fig.suptitle(title_scatter)
             file_name_scatter = 'Scatterplot.jpg'
 
