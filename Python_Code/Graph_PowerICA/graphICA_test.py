@@ -6,15 +6,65 @@ from utils import *
 from graph_PowerICA import*
 from PowerICA import*
 
+
+def genrAs(n, mc=0.01):
+  Il = np.ones((n, n))
+  Il = np.triu(Il,k=1 )
+  
+  lt = np.where(Il.flatten()>0.5)
+  
+  ind = np.random.binomial(1,mc,int(np.ceil(n*(n-1)/2)))
+  
+  A = np.zeros((n*n)) # weight/shift matrix
+  lt = lt[0][np.where(ind!=0)]
+  A[lt] = 1
+  A = A.reshape(n,n)
+  A = A + A.T
+
+  return A
+
+
+def GenWs(A, e1, e2, w):
+  n = np.shape(A)[0]
+  A = np.triu(A,k=1 )
+  Il = np.ones((n, n))
+  Il = np.triu(Il,k=1 )
+  
+  nz = np.where(np.abs(A.flatten())>0.0001)[0]
+  l = len(nz)
+  lt = np.where(Il.flatten()>0.5)[0]e
+  z = np.setdiff1d(lt,nz)
+  
+  W = A
+  W[np.where(np.abs(W)>0.0001)] = w
+  W[np.where(np.abs(W)<=0.0001)] = 0
+  W = W.flatten()
+  ind1 = np.random.binomial(1,e1,len(nz))
+  ind2 = np.random.binomial(1,e2,len(z))
+  
+  W[nz[np.where(ind1!=0)]] = 0  
+  
+  W[z[np.where(ind2!=0)]] = w
+  
+  W = W.reshape(n,n)
+  W = W+W.T
+  return W
+
+
+
 if __name__ == "__main__":
 
     N = 1000
     P = 4
     ### Set up experiment as in R Code ###
     ### Erdos Renyi Graph ###
+    A = genrAs(N)
+    #W1 = GenWs(A,0.8,0.2,1) #parameters taken from RCode, even the paperversion wird Hops genommen...
+
     G1 = graphs.ErdosRenyi(N,p=0.05).W.toarray()
     G2 = G1 @ G1
-    Ws = np.array([G1,G1,G1,G1,G2,G2,G2,G2]).reshape(1000,1000,8)
+    Ws1 = np.array([G1,G1,G1,G1,G2,G2,G2,G2]).reshape(1000,1000,8)
+
 
     ### Graph Moving Average Signals ###
     e = np.zeros((N,P))
