@@ -1,18 +1,56 @@
-from utils_neu import*
+#%%
+from utils import*
 import numpy as np
 from pygsp import graphs
 import matplotlib.pyplot as plt
 from fast_Radical import*
 
 
-def Graph_powerICA(X, nonlin, Ws,lam=0.001, seed=None):
-    """BSS Algorithm that combines Graph decorrelation with FastICA.
+def GraphAutoCorrelation(X, Ws):
+
+  n = np.shape(X)[0]
+  K = np.shape(X)[1]
+  P = np.shape(Ws)[2]
+  
+  ### calculate graph autocovariance Stilde ###
+  Stilde = np.zeros((K,K,P))
+  for p in range(0,P):
+    Yw = Ws[:,:,p] @ X  
+    Yw = Yw/np.sqrt(np.mean(Yw**2,axis=0))
+    Stilde[:,:,p] = (X.T @ Yw)/n 
+    Stilde[:,:,p] = (Stilde[:,:,p]+Stilde[:,:,p].T)/2
+
+  return Stilde, K
+
+def GradeUpdate(w0, Stilde, K):
+
+    w = w0
+    wn = w
+    for k in range(0,K):
+        #wn = wn+(2*R[:,:,k] @ w @ w.T * R[:,:,k] @ w)
+        wold = wn
+        #print(wn)
+        wn = Stilde[:,:,k] @ w
+        #print(wn)
+        wn = w @ w.T @ wn
+        #print(wn)
+        wn = 2 * Stilde[:,:,k] @ wn
+        #print(wn)
+        wn = wn+wold
+        
+    return wn
+
+
+
+def Graph_powerICA(X, nonlin, Ws,b=0.5, seed=None,Huber_param=1.345,lp_param=1.5,fair_param=1.3998):
+    """This function is implemented based on Algorithm 1 in paper below.
+       S. Basiri, E. Ollila and V. Koivunen, "Alternative Derivation of 
+       FastICA With Novel Power Iteration Algorithm," in IEEE Signal 
+       Processing Letters, vol. 24, no. 9, pp. 1378-1382, Sept. 2017.
 
     Args:
         X (array):  d*n array of mixture recordings (X should be centered and whitened).
         nonlin (String): String ICA nonlinearities. The following nonlinearities are supported:
-        Ws (PxPxK): Adjacency matric(es)
-        b (float, optional): Balance Parameter for objective function. Defaults to 0.001.
         tanh, pow3, gaus, skew, rt06, lt06, bt00, bt02, bt06, bt10, 
         bt12, bt14, bt16, tan1, tan2, tan3, tan4, gau1, gau2, gau3
         seed (integer): Set seed for reproducible initial guess. If None W0 will be different each time.
@@ -35,7 +73,7 @@ def Graph_powerICA(X, nonlin, Ws,lam=0.001, seed=None):
     #W0 = scipy.stats.ortho_group.rvs(d)     #initial guess for unmixing Matrix
 
     Stilde,K = GraphAutoCorrelation(X.T,Ws)
-    print(Stilde)
+    #print(Stilde)
     if d>n:
         print('Data has invalid shape! Should be d × n array with d < n!')
     if not np.isreal(X).all():
@@ -51,8 +89,8 @@ def Graph_powerICA(X, nonlin, Ws,lam=0.001, seed=None):
         ## (2) Compute the orthogonal operator
         Orth = (I - W.T.dot(W))
         ## (3-6) compute Node:1 and Node:2 in series
-        w1, delta1, flg1 = Node1(X, nonlin, w0,Stilde,K,lam, Orth) 
-        w2, delta2, flg2 = Node2(X, nonlin, w0,Stilde,K,lam, Orth)
+        w1, delta1, flg1 = Node1(X, nonlin, w0,Stilde,K,b, Orth, Huber_param,lp_param,fair_param) 
+        w2, delta2, flg2 = Node2(X, nonlin, w0,Stilde,K,b, Orth, Huber_param,lp_param,fair_param)
 
         #print('Orth',Orth,'W',W)
         flg = flg1*flg2
@@ -73,7 +111,7 @@ def Graph_powerICA(X, nonlin, Ws,lam=0.001, seed=None):
     return W,flg
 
 
-def Node1(X, nonlin, w0,Stilde,K,lam,Orth):
+def Node1(X, nonlin, w0,Stilde,K,b,Orth,Huber_param,lp_param,fair_param):
     """Computes largest value of non-Gaussianity measure delta = |gamma-beta| for
        a rowvector of the estimated unmixing matrix that is a local maximizer 
        of the eigenvalue gamma with largest Euclidean distance to to the bulk of 
@@ -105,11 +143,11 @@ def Node1(X, nonlin, w0,Stilde,K,lam,Orth):
     while i <= MaxIter:
         wOld = w
         s = w.T @ X
-        gs = g(s,nonlin)
+        gs = g(s,nonlin,Huber_param,lp_param,fair_param)
         w = (X @ gs.T)/n #(4)
-        wg = GraDeUpdate(wOld,Stilde,K)
-        print(w,wg)
-        w = (1-lam)*w + lam*wg
+        wg = GradeUpdate(wOld,Stilde,K)
+        #print(w,wg)
+        w = (1-b)*w + b*wg
         w = Orth @ w #(5)
         w = w/np.linalg.norm(w); #(6)   
         if np.linalg.norm(w - wOld) < epsilon or np.linalg.norm(w + wOld) < epsilon:
@@ -117,7 +155,7 @@ def Node1(X, nonlin, w0,Stilde,K,lam,Orth):
             break
         i = i + 1 #(3)
     if i <= MaxIter:
-        beta = Edgs(s,nonlin)
+        beta = Edgs(s,nonlin,Huber_param,lp_param,fair_param)
         delta = np.absolute((s @ gs.T)/n - beta)
     else:
         print('Node1 did not converge after',MaxIter,'iterations\n')
@@ -125,11 +163,10 @@ def Node1(X, nonlin, w0,Stilde,K,lam,Orth):
         flg = 0
         delta = -1
     return w, delta, flg
+    ###########################################################################
 
-###########################################################################
 
-
-def Node2(X, nonlin,w0,Stilde,K,lam,Orth):
+def Node2(X, nonlin,w0,Stilde,K,b,Orth,Huber_param,lp_param,fair_param):
     """Computes largest value of non-Gaussianity measure delta = |gamma-beta| for
        a rowvector of the estimated unmixing matrix that is a local minimizer 
        of the eigenvalue gamma with largest Euclidean distance to to the bulk of 
@@ -160,16 +197,16 @@ def Node2(X, nonlin,w0,Stilde,K,lam,Orth):
     gs = 0
     # Compute the upper bound
     s_max = np.sqrt(np.sum(X**2,axis=0))
-    gs_max = g(s_max,nonlin)
+    gs_max = g(s_max,nonlin,Huber_param,lp_param,fair_param)
     c = (s_max @ gs_max.T)/n + 0.5
     while i <= MaxIter:
         wOld = w
         s = w.T @ X
-        gs = g(s,nonlin)
+        gs = g(s,nonlin,Huber_param,lp_param,fair_param)
         m = (X @ gs.T)/n
         w = m - c*w    #(4)
-        wg = GraDeUpdate(wOld,Stilde,K)
-        w = (1-lam)*w + lam*wg
+        wg = GradeUpdate(wOld,Stilde,K)
+        w = (1-b)*w + b*wg
         w = Orth @ w     #(5)
         w = w/np.linalg.norm(w)  #(6)
         if np.linalg.norm(w - wOld) < epsilon or np.linalg.norm(w + wOld) < epsilon:
@@ -178,7 +215,7 @@ def Node2(X, nonlin,w0,Stilde,K,lam,Orth):
         i = i + 1  #(3)
         #print(w)
     if i <= MaxIter:
-        beta = Edgs(s,nonlin)
+        beta = Edgs(s,nonlin,Huber_param,lp_param,fair_param)
         delta = np.absolute((s @ gs.T)/n - beta)#gamma is delta and s@gs.T/n is gamma
     else:
         print('Node2 did not converge after',MaxIter,'iterations\n')
@@ -186,40 +223,10 @@ def Node2(X, nonlin,w0,Stilde,K,lam,Orth):
         flg = 0
         delta = -1
     return w, delta, flg
-
-###########################################################################
-
-def GraphAutoCorrelation(X, Ws):
-
-  n = np.shape(X)[0]
-  K = np.shape(X)[1]
-  P = np.shape(Ws)[2]
-  
-  ### calculate graph autocovariance Stilde ###
-  Stilde = np.zeros((K,K,P))
-  for p in range(0,P):
-    Yw = Ws[:,:,p] @ X  
-    Yw = Yw/np.sqrt(np.mean(Yw**2))
-    Stilde[:,:,p] = (X.T @ Yw)/n 
-    Stilde[:,:,p] = (Stilde[:,:,p]+Stilde[:,:,p].T)/2
-
-  return Stilde, K
-
-###########################################################################
-
-def GraDeUpdate(w0, R, K):
-
-    w = w0
-    wn = w
-    for k in range(0,K):
-        wn = wn+(2*R[:,:,k] @ w @ w.T * R[:,:,k] @ w)
-
-    return wn
-
-###########################################################################
+    ###########################################################################
 
 
-def g(s,nonlin):
+def g(s,nonlin,Huber_param,lp_param,fair_param):
     """ This function computes the ICA nonlinearity for a given input s = w.T @ x.
    
 
@@ -239,6 +246,20 @@ def g(s,nonlin):
         g = s*np.exp(-(1/2)*s**2)
     elif nonlin =='skew':
         g = s**2
+    elif nonlin =='fair':## pretty shitty?! probably sth wrong maybe sweep over different A's
+        fair_param = 1.3998
+        g = fair_param*s/(np.absolute(s)+fair_param)
+    elif nonlin =='Pseudo-Huber':
+        g = np.divide(s,np.sqrt(1+s**2/2))
+    elif nonlin =='lp':
+        lp_param=1.5
+        g = np.sign(s)*np.absolute(s)**(lp_param-1)
+    elif nonlin =='Huber':
+        Huber_param = 1.345
+        if np.linalg.norm(s) <= Huber_param:
+            g = s
+        elif np.linalg.norm(s) > Huber_param:
+            g = Huber_param*np.sign(s)
     elif nonlin =='bt06':
         g = np.maximum(0,s-0.6)**2 - np.minimum(0,s+0.6)**2
     elif nonlin =='bt10':
@@ -270,7 +291,7 @@ def g(s,nonlin):
     ##########################################################################
 
 
-def Edgs(s,nonlin):
+def Edgs(s,nonlin,Huber_param,lp_param,fair_param):
     """This function computes E[g'(w^t*x)]for a given input s = w.T @ x.
 
     Args:
@@ -289,7 +310,18 @@ def Edgs(s,nonlin):
         dg = (1 - s**2) * np.exp(- (1/2)*s**2)
     elif nonlin =='skew':
         dg =  0.5*s 
-    elif nonlin =='bt06':
+    elif nonlin =='fair':
+        dg = fair_param**2/((s+fair_param)**2)
+    elif nonlin =='Pseudo-Huber':
+        dg = np.divide(1,(1+s**2/2)**(3/2))
+    elif nonlin =='lp':
+        dg = (lp_param-1)*s*np.sign(s)*np.absolute(s)**(lp_param-3)
+    elif nonlin =='Huber':
+        if np.linalg.norm(s) <= Huber_param:
+            dg = 1
+        elif np.linalg.norm(s) > Huber_param:
+            dg = Huber_param
+    elif nonlin =='bt06':#pseudo Huber
         dg = 2*np.maximum(0,s-0.6) - 2*np.minimum(0,s+0.6)
     elif nonlin =='bt10':
         dg =  2*np.maximum(0,s-1.0) - 2*np.minimum(0,s+1.0)
@@ -317,3 +349,4 @@ def Edgs(s,nonlin):
         print('Invalid nonlinearity')
         pass
     return np.mean(dg)
+
