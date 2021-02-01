@@ -149,7 +149,7 @@ def Node1(X, nonlin, w0,Stilde,K,b,Orth,Huber_param,lp_param,fair_param):
         #print(w,wg)
         w = (1-b)*w + b*wg
         w = Orth @ w #(5)
-        w = w/np.linalg.norm(w); #(6)   
+        w = w/np.linalg.norm(w) #(6)
         if np.linalg.norm(w - wOld) < epsilon or np.linalg.norm(w + wOld) < epsilon:
             #print('Node1 converged after',i,'iterations\n')
             break

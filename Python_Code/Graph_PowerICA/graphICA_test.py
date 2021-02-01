@@ -3,8 +3,8 @@ from pygsp import graphs
 import numpy as np
 import matplotlib.pyplot as plt
 from utils import *
-from graph_PowerICA import*
-from PowerICA import*
+from graph_powerICA import*
+from powerICA import*
 
 
 def genrAs(n, mc=0.01):
