@@ -20,21 +20,21 @@ def GraphAutoCorrelation(X, Ws):
     Stilde[:,:,p] = (X.T @ Yw)/n 
     Stilde[:,:,p] = (Stilde[:,:,p]+Stilde[:,:,p].T)/2
 
-  return Stilde, K
+  return Stilde, P
 
-def GradeUpdate(w0, Stilde, K):
+def GradeUpdate(w0, Stilde, P):
 
     w = w0
     wn = w
-    for k in range(0,K):
+    for p in range(0,P):
         #wn = wn+(2*R[:,:,k] @ w @ w.T * R[:,:,k] @ w)
         wold = wn
         #print(wn)
-        wn = Stilde[:,:,k] @ w
+        wn = Stilde[:,:,p] @ w
         #print(wn)
         wn = w @ w.T @ wn
         #print(wn)
-        wn = 2 * Stilde[:,:,k] @ wn
+        wn = 2 * Stilde[:,:,p] @ wn
         #print(wn)
         wn = wn+wold
         
@@ -72,7 +72,7 @@ def Graph_powerICA(X, nonlin, Ws,b=0.5, seed=None,Huber_param=1.345,lp_param=1.5
     #     np.random.seed(seed)
     #W0 = scipy.stats.ortho_group.rvs(d)     #initial guess for unmixing Matrix
 
-    Stilde,K = GraphAutoCorrelation(X.T,Ws)
+    Stilde,P = GraphAutoCorrelation(X.T,Ws)
     #print(Stilde)
     if d>n:
         print('Data has invalid shape! Should be d × n array with d < n!')
@@ -89,8 +89,8 @@ def Graph_powerICA(X, nonlin, Ws,b=0.5, seed=None,Huber_param=1.345,lp_param=1.5
         ## (2) Compute the orthogonal operator
         Orth = (I - W.T.dot(W))
         ## (3-6) compute Node:1 and Node:2 in series
-        w1, delta1, flg1 = Node1(X, nonlin, w0,Stilde,K,b, Orth, Huber_param,lp_param,fair_param) 
-        w2, delta2, flg2 = Node2(X, nonlin, w0,Stilde,K,b, Orth, Huber_param,lp_param,fair_param)
+        w1, delta1, flg1 = Node1(X, nonlin, w0,Stilde,P,b, Orth, Huber_param,lp_param,fair_param) 
+        w2, delta2, flg2 = Node2(X, nonlin, w0,Stilde,P,b, Orth, Huber_param,lp_param,fair_param)
 
         #print('Orth',Orth,'W',W)
         flg = flg1*flg2
@@ -111,7 +111,7 @@ def Graph_powerICA(X, nonlin, Ws,b=0.5, seed=None,Huber_param=1.345,lp_param=1.5
     return W,flg
 
 
-def Node1(X, nonlin, w0,Stilde,K,b,Orth,Huber_param,lp_param,fair_param):
+def Node1(X, nonlin, w0,Stilde,P,b,Orth,Huber_param,lp_param,fair_param):
     """Computes largest value of non-Gaussianity measure delta = |gamma-beta| for
        a rowvector of the estimated unmixing matrix that is a local maximizer 
        of the eigenvalue gamma with largest Euclidean distance to to the bulk of 
@@ -145,7 +145,7 @@ def Node1(X, nonlin, w0,Stilde,K,b,Orth,Huber_param,lp_param,fair_param):
         s = w.T @ X
         gs = g(s,nonlin,Huber_param,lp_param,fair_param)
         w = (X @ gs.T)/n #(4)
-        wg = GradeUpdate(wOld,Stilde,K)
+        wg = GradeUpdate(wOld,Stilde,P)
         #print(w,wg)
         w = (1-b)*w + b*wg
         w = Orth @ w #(5)
@@ -166,7 +166,7 @@ def Node1(X, nonlin, w0,Stilde,K,b,Orth,Huber_param,lp_param,fair_param):
     ###########################################################################
 
 
-def Node2(X, nonlin,w0,Stilde,K,b,Orth,Huber_param,lp_param,fair_param):
+def Node2(X, nonlin,w0,Stilde,P,b,Orth,Huber_param,lp_param,fair_param):
     """Computes largest value of non-Gaussianity measure delta = |gamma-beta| for
        a rowvector of the estimated unmixing matrix that is a local minimizer 
        of the eigenvalue gamma with largest Euclidean distance to to the bulk of 
@@ -205,7 +205,7 @@ def Node2(X, nonlin,w0,Stilde,K,b,Orth,Huber_param,lp_param,fair_param):
         gs = g(s,nonlin,Huber_param,lp_param,fair_param)
         m = (X @ gs.T)/n
         w = m - c*w    #(4)
-        wg = GradeUpdate(wOld,Stilde,K)
+        wg = GradeUpdate(wOld,Stilde,P)
         w = (1-b)*w + b*wg
         w = Orth @ w     #(5)
         w = w/np.linalg.norm(w)  #(6)
