@@ -62,7 +62,7 @@ from utils import *
 #              experiments I've done. 
 
 #function [Yopt,Wopt]=RADICAL(X)
-def RADICAL(X, seed=None):
+def RADICAL(X, K = 150, sweeps = 5, seed=None):
 
     # The recommended default parameter values are:
     # K=150
@@ -72,7 +72,7 @@ def RADICAL(X, seed=None):
 
     # ************************************************************
     # User should change parameter values here:
-    K=150
+    K=K
     AUG_FLAG=0
     reps=30
     stdev=0.175
@@ -92,7 +92,7 @@ def RADICAL(X, seed=None):
 
     X_white = X
 
-    sweeps = dim-1
+    sweeps = sweeps#dim-1
     oldTotalRot = np.identity(dim)
     sweepIter = 0             # Current sweep number.
     totalRot = np.identity(dim)
