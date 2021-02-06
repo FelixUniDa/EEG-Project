@@ -3,7 +3,8 @@ from utils import*
 import numpy as np
 from pygsp import graphs
 import matplotlib.pyplot as plt
-#from fast_Radical import*
+from fast_Radical import *
+import scipy
 
 
 def GraphAutoCorrelation(X, Ws):
@@ -42,7 +43,7 @@ def GradeUpdate(w0, Stilde, P):
 
 
 
-def Graph_powerICA(X, nonlin, Ws, b=0.5, seed=None,Huber_param=1.345,lp_param=1.5,fair_param=1.3998):
+def Graph_powerICA(X, nonlin, Ws, b=0.5, seed=None, Huber_param=1.345,lp_param=1.5,fair_param=1.3998, radical=0):
     """This function is implemented based on Algorithm 1 in paper below.
        S. Basiri, E. Ollila and V. Koivunen, "Alternative Derivation of 
        FastICA With Novel Power Iteration Algorithm," in IEEE Signal 
@@ -67,10 +68,13 @@ def Graph_powerICA(X, nonlin, Ws, b=0.5, seed=None,Huber_param=1.345,lp_param=1.
     flg = 0
     #print(C)
     W = np.zeros((d,d), dtype=X.dtype)
-    #W0 = RADICAL(X,K=50,sweeps=1)
-    # if seed is not None:
-    #     np.random.seed(seed)
-    W0 = scipy.stats.ortho_group.rvs(d)     #initial guess for unmixing Matrix
+
+    # initial guess for unmixing Matrix
+    if(radical == 1):
+        W0 = RADICAL(X, K=50, sweeps=1)
+    else:
+        W0 = scipy.stats.ortho_group.rvs(d)
+
 
     Stilde,K = GraphAutoCorrelation(X.T, Ws)
     #print(Stilde)
@@ -89,8 +93,8 @@ def Graph_powerICA(X, nonlin, Ws, b=0.5, seed=None,Huber_param=1.345,lp_param=1.
         ## (2) Compute the orthogonal operator
         Orth = (I - W.T.dot(W))
         ## (3-6) compute Node:1 and Node:2 in series
-        w1, delta1, flg1 = Node1(X, nonlin, w0, Stilde, K, b, Orth, Huber_param,lp_param,fair_param)
-        w2, delta2, flg2 = Node2(X, nonlin, w0, Stilde, K, b, Orth, Huber_param,lp_param,fair_param)
+        w1, delta1, flg1 = Node1(X, nonlin, w0, Stilde, K, b, Orth, Huber_param, lp_param, fair_param)
+        w2, delta2, flg2 = Node2(X, nonlin, w0, Stilde, K, b, Orth, Huber_param, lp_param, fair_param)
 
         #print('Orth',Orth,'W',W)
         flg = flg1*flg2
@@ -145,8 +149,11 @@ def Node1(X, nonlin, w0,Stilde,P,b,Orth,Huber_param,lp_param,fair_param):
         s = w.T @ X
         gs = g(s,nonlin,Huber_param,lp_param,fair_param)
         w = (X @ gs.T)/n #(4)
-        wg = GradeUpdate(wOld, Stilde, K)
+        wg = GradeUpdate(wOld, Stilde, P)
         #print(w,wg)
+        diff = np.sum(np.abs(wg))/np.sum(np.abs(w)) #scale w and wg
+        w = diff * w
+
         w = (1-b)*w + b*wg
         w = Orth @ w #(5)
         w = w/np.linalg.norm(w) #(6)
@@ -206,6 +213,8 @@ def Node2(X, nonlin,w0,Stilde,P,b,Orth,Huber_param,lp_param,fair_param):
         m = (X @ gs.T)/n
         w = m - c*w    #(4)
         wg = GradeUpdate(wOld,Stilde,P)
+        diff = np.sum(np.abs(wg)) / np.sum(np.abs(w))  # scale w and wg
+        w = diff * w
         w = (1-b)*w + b*wg
         w = Orth @ w     #(5)
         w = w/np.linalg.norm(w)  #(6)

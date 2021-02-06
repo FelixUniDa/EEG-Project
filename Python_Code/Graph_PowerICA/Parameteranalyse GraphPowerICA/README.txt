@@ -8,4 +8,9 @@ Comparison of PowerICA with pow3 nonlinearity and GraphPowerICA with differing P
 - Monte-Carlo-Runs: 	100
 
 
-Missing Boxplots are due to the algorithm having convergence problems, which rules out those parameters anyway.
+Missing Boxplots are due to the algorithm having convergence problems, which rules out those parameters anyway. 
+Unnormalized vectors! -> lambda needs to be approximately 1.15x larger to reach similar results with gaus/gau1/gau2/gau3 ( need another analysis to really know best value)
+
+looking at different nonlinearities shows that the vector norms vary massively for PowerICA (pow3 around 20, while gaus around 0.6),so lambda needs to be much smaller
+
+Surprising: lp-loss nonlinearity works quite well with lambda around 0.55-0.65( not with noise though)
