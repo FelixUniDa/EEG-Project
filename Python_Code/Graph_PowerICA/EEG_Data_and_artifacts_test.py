@@ -4,36 +4,35 @@ import matplotlib.pyplot as plt
 from utils import *
 from graph_powerICA import*
 from PowerICA import*
+import datetime
 import mne
 
 
 if __name__ == "__main__":
   ## pow3 seems to be best for eeg data
-  nonlin = 'gaus'
-  t_start = 22500
-  N = 1000
+  nonlin = 'pow3'
+  t_start = 6200
+  N = 2000
   b = 0.7
-  P = 4
 
-  ## total variance of data to be represented by the unmixed components
-  totvar1 = 95
-  totvar2 = 95
+  ## total variance of data to be represented by the unmixed components , choose 1,2 or 3-sigma for 
+  totvar1 = 95.4
+  totvar2 = 95.4
 
+  # load mne sample data of oddball experiment
   sample_data_folder = mne.datasets.sample.data_path()
   sample_data_raw_file = os.path.join(sample_data_folder, 'MEG', 'sample',
                               'sample_audvis_filt-0-40_raw.fif')
 
-  # Might try different data sets, for example:
-  # unfiltered sample_audvis_raw.fif
-  # sample_audvis-eeg-oct-6p-fwd.fif
-  # etc...
-  #
+  # Might try different data sets,from https://mne.tools/stable/overview/datasets_index.html
+
   raw = mne.io.read_raw_fif(sample_data_raw_file)
   print(raw.info)
   eeg = np.array(raw.get_data(picks=['eeg'])) # pick only eeg channels
   data = eeg[:, t_start:t_start+N]   #return the number of channels, and samplesize as wanted
   data = 2 * (data - np.min(data)) / (np.max(data) - np.min(data)) - 1  # Normalize EEG data between -1 and 1
   data = data.T
+
 
   """
   Event correspondences:
@@ -46,11 +45,12 @@ if __name__ == "__main__":
   'button': 32}
   """
 
+
   stim = np.array(raw.get_data(picks=['stim']))[6,t_start:t_start+N]
   stim = stim.T
   print(stim.shape)
   eeg = data.copy()
-  fs = 1000
+  fs = 150
   # delorme_type = 'all'
   prop = 0.5
   snr_dB = 3
@@ -62,22 +62,21 @@ if __name__ == "__main__":
                                       number=artifacts, type=type[i], seed=None)
     
     # give some more weight to artifacts, otherwise they become negligible
-    # place artifacts at 3 channels each, 15 in total (one fourth of eeg channels)
-    data[0::, i] = data[0::, i] + 5*np.real(outlier)
-    data[0::, i+40] = data[0::, i+5] + 5*np.real(outlier)
-    data[0::, i+25] = data[0::, i+5] + 5*np.real(outlier)
+    # place artifacts at 4 channels each, 20 in total (one third of eeg channels)
+    data[0::, i] = data[0::, i] + 10*np.real(outlier)
+    data[0::, i+10] = data[0::, i+10] + 10*np.real(outlier)
+    data[0::, i+40] = data[0::, i+5] + 10*np.real(outlier)
+    data[0::, i+25] = data[0::, i+5] + 10*np.real(outlier)
     arts[::,i] = outlier
 
-  white_data1,W_whiten1,n_comp1 = whitening(data.T, type='sample', percentile=totvar1/100)
+  white_data1,W_whiten1,n_comp1 = whitening(data.T, type='Mscat', percentile=totvar1/100)
   white_data2,W_whiten2,n_comp2 = whitening(eeg.T, type='sample', percentile=totvar2/100)
   
   corr = np.triu(np.corrcoef(eeg),k=1)
   A1 = np.zeros(corr.shape)
-  A1[np.where(corr>0.85)] = 1
+  A1[np.where(corr>0.85)] = corr[np.where(corr>0.85)] #1
   A1 = np.real(A1 + A1.T)
-  A2 = A1@A1
-  plt.spy(A1)
-  Ws = np.array([A1,A1,A1,A1,A2,A2,A2,A2]).reshape(N,N,8)
+  Ws = np.repeat(A1,n_comp1).reshape(N,N,n_comp1)
 
   W_graphpower1,_ = Graph_powerICA(np.real(white_data1),nonlin=nonlin,Ws=Ws,b=b)
   W_power1,_ = powerICA(white_data1,'pow3')
@@ -169,5 +168,13 @@ while(i<n_comp2):
     fig7.suptitle('Recovered clean eeg signals PowerICA \n( '+ str(totvar2) +'% data represented )')
     
     i = i+1
+
+date = datetime.datetime.now()
+fig4.savefig(fname="EEG-Plots/Recovered_artifacts_and_eeg_signals_GraphPowerICA_( "+ str(totvar2) +"%_data_represented)_b="+str(b)+"_nonlin="+nonlin+"_samples="+str(N)+date.strftime("_%d-%m-%Y_%H-%M-%S")+".png")
+fig5.savefig(fname="EEG-Plots/Recovered_artifacts_and_eeg_signals_PowerICA_( "+ str(totvar2) +"%_data_represented)_b="+str(b)+"_nonlin="+nonlin+"_samples="+str(N)+date.strftime("_%d-%m-%Y_%H-%M-%S")+".png")
+fig6.savefig(fname="EEG-Plots/Recovered_clean_eeg_signals_GraphPowerICA_( "+ str(totvar2) +"%_data_represented)_b="+str(b)+"_nonlin="+nonlin+"_samples="+str(N)+date.strftime("_%d-%m-%Y_%H-%M-%S")+".png")
+fig7.savefig(fname="EEG-Plots/Recovered_clean_eeg_signals_PowerICA_( "+ str(totvar2) +"%_data_represented)_b="+str(b)+"_nonlin="+nonlin+"_samples="+str(N)+date.strftime("_%d-%m-%Y_%H-%M-%S")+".png")
+
+
 plt.show()
-# %%
+
