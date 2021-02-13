@@ -2,11 +2,21 @@
 import numpy as np
 from pygsp import graphs, reduction, plotting
 import matplotlib.pyplot as plt
-from utils import *
+import os
+import sys
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+sys.path.append(BASE_DIR)
+sys.path.append(os.path.join(BASE_DIR, 'Python_Code', 'JADE'))
+sys.path.append(os.path.join(BASE_DIR, 'utils', 'utils'))
+sys.path.append(os.path.join(BASE_DIR, 'Python_Code', 'Compare_ICA_algos'))
+
+from utils.utils import *
 from graph_powerICA import*
 from PowerICA import*
 import datetime
 import mne
+import seaborn as sns
+import pandas as pd
 
 
 if __name__ == "__main__":
@@ -103,6 +113,10 @@ if __name__ == "__main__":
   unMixed_graphpower2 = W_graphpower2 @ np.real(white_data2)
   unMixed_power2 = W_power2 @ white_data2
 
+  sns.set(style='darkgrid', )
+  # plt.clf()
+  sns.set(rc={'axes.labelsize': 16})
+  sns.set_context('paper')
 
   ### plot figures ###
   fig1, axs1 = plt.subplots(21,figsize=(16,9), sharex=True)
@@ -138,7 +152,7 @@ if __name__ == "__main__":
   while(i<5):
       axs3[i].plot(times, arts[:, i], lw=3)
       axs3[i].set_ylabel('Artifact: ' + str(i))
-      fig3.suptitle('Artifacts')
+      fig3.suptitle('Artifacts', fontsize=20)
       i+=1
   i=0
 
@@ -149,16 +163,16 @@ if __name__ == "__main__":
 
 
       axs4[i].plot(times, unMixed_graphpower1.T[:, i], lw=1)
-      axs4[i].set_ylabel('IC: ' + str(i),rotation=0)
+      #axs4[i].set_ylabel('IC: ' + str(i),rotation=0)
       axs4[n_comp1].plot(times,stim,lw=1)
-      axs4[n_comp1].set_ylabel('Events',rotation=0)
-      fig4.suptitle('Recovered artifacts and eeg signals GraphPowerICA \n( ' + str(totvar1) + '% data represented )')
+      #axs4[n_comp1].set_ylabel('Events',rotation=0)
+      fig4.suptitle('Recovered artifacts and eeg signals GraphPowerICA \n( ' + str(totvar1) + '% data represented )', fontsize=20)
 
       axs5[i].plot(times, unMixed_power1.T[:, i], lw=1)
-      axs5[i].set_ylabel('IC: ' + str(i),rotation=0)
+      #axs5[i].set_ylabel('IC: ' + str(i),rotation=0)
       axs5[n_comp1].plot(times,stim,lw=1)
-      axs5[n_comp1].set_ylabel('Events',rotation=0)
-      fig5.suptitle('Recovered artifacts and eeg signals PowerICA \n( '+ str(totvar1) +'% data represented )')
+      #axs5[n_comp1].set_ylabel('Events',rotation=0)
+      fig5.suptitle('Recovered artifacts and eeg signals PowerICA \n( '+ str(totvar1) +'% data represented )', fontsize=20)
       
       i = i+1
 
@@ -176,15 +190,15 @@ if __name__ == "__main__":
 
 
       axs6[i].plot(times, unMixed_graphpower2.T[:, i], lw=1)
-      axs6[i].set_ylabel('IC: ' + str(i),rotation=0)
+      #axs6[i].set_ylabel('IC: ' + str(i),rotation=0)
       axs6[n_comp2].plot(times,stim,lw=1)
-      axs6[n_comp2].set_ylabel('Events',rotation=0)
+      #axs6[n_comp2].set_ylabel('Events',rotation=0)
       fig6.suptitle('Recovered clean eeg signals GraphPowerICA \n( '+ str(totvar2) +'% data represented )')
 
       axs7[i].plot(times, unMixed_power2.T[:, i], lw=1)
-      axs7[i].set_ylabel('IC: ' + str(i),rotation=0)
+      #axs7[i].set_ylabel('IC: ' + str(i),rotation=0)
       axs7[n_comp2].plot(times,stim,lw=1)
-      axs7[n_comp2].set_ylabel('Events',rotation=0)
+      #axs7[n_comp2].set_ylabel('Events',rotation=0)
       fig7.suptitle('Recovered clean eeg signals PowerICA \n( '+ str(totvar2) +'% data represented )')
       
       i = i+1

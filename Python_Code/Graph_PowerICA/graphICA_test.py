@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from utils import *
 from graph_powerICA import*
 import pygsp
+import seaborn as sns
+import pandas as pd
 
 import os
 import sys
@@ -65,18 +67,18 @@ def GenWs(A, e1, e2, w):
 
 
 if __name__ == "__main__":
-  runs = 1000
+  runs = 25
   mds_power = np.zeros(runs)
   mse_power = np.zeros(runs)
   mse_Graphpower = np.zeros(runs)
   mds_graphpower = np.zeros(runs)
-  b_ins = [0.72]
+  bins = [0.7]
+  N = 1000
 
-  for b in b_ins:
-    for i in range(0,runs):
-      print("run:",i)
-      N = 1000
-      P = 4
+  for b in bins:
+    for i in range(0, runs):
+      print("run:", i)
+      P = 1
       ### Set up experiment as in R Code ###
       ### Erdos Renyi Graph ###
       #A1 = genrAs(N)
@@ -94,10 +96,10 @@ if __name__ == "__main__":
       #Ws2 = np.array([A3,A3,A3,A3,A4,A4,A4,A4]).reshape(1000,1000,8)
 
 
-      data = np.stack([create_signal(f=2,c='ecg',x=1000),
-                  create_signal(f=5,c='cos',x=1000),
-                  create_signal(f=10,c='rect',x=1000),
-                  create_signal(f=25,c='sawt',x=1000),
+      data = np.stack([create_signal(f=2,c='ecg',x=N),
+                  create_signal(f=5,c='cos',x=N),
+                  create_signal(f=10,c='rect',x=N),
+                  create_signal(f=25,c='sawt',x=N),
                   # create_signal(f=13, c='ecg', x=1000),
                   # create_signal(f=17, c='cos', x=1000),
                   # create_signal(f=29, c='rect', x=1000),
@@ -121,10 +123,10 @@ if __name__ == "__main__":
       #   S[:,j] = e[:,j]+theta[j]*Ws1[:,:,j]@e[:,j]
       #
       ### Mix Signals and whiten ###
-      mixmat = mixing_matrix(4)
+      mixmat = mixing_matrix(4, seed=None)
       mixeddata = mixmat @ data.T
       mixdata_noise = np.stack([create_outlier(apply_noise(dat, type='white', SNR_dB=100),
-                                               std=100, prop=0.0, type='impulse') for dat in mixeddata])
+                                               std=100, prop=0.00, type='impulse') for dat in mixeddata])
 
 
       #### running weighted median smoother ####
@@ -141,24 +143,18 @@ if __name__ == "__main__":
 
       # plt.plot(white_data.T)
       # plt.show()
-
-      C = np.triu(np.corrcoef(data), k=1) #Mscat(mixeddata, 'Huber')
+      C = np.triu(np.corrcoef(data), k=4) #Mscat(mixeddata, 'Huber')
       thres = 0.7
       C[np.where(abs(C < thres))] = 0
       C[np.where(abs(C >= thres))] = 1
       C = C + C.T
       edges = np.sum(C[np.where(C == 1)])
       print(edges)
-      Ws1 = np.zeros((4, N, N))
-      Ws1[0, :, :] = C
-      Ws1[1, :, :] = C
-      Ws1[2, :, :] = C
-      Ws1[3, :, :] = C
-      Ws1 = Ws1.reshape(N, N, 4)
-      #np.stack([C, C, C, C]) #, A2, A2, A2, A2]).reshape(1000, 1000, 8)
+
+      Ws1 = np.stack([C, C, C, C]).reshape(N, N, 4)
 
       W_graphpower,_ = Graph_powerICA(white_data, 'gaus', Ws1, b=b, radical=0)
-      W_power,_ = powerICA(white_data, 'gaus')
+      W_power,_ = powerICA(white_data, 'pow3')
 
       unMixed_graphpower = W_graphpower @ white_data
       unMixed_power = W_power @ white_data
@@ -168,41 +164,78 @@ if __name__ == "__main__":
       mse_power[i] = np.mean(MSE(unMixed_power, data.T))
       mse_Graphpower[i] = np.mean(MSE(unMixed_graphpower, data.T))
 
+
+    d_md_power = {'Minimum Distance': mds_power, 'Sample Size': N}
+    d_md_graphPower = {'Minimum Distance': mds_graphpower, 'Sample Size': N}
+    d_mse_power = {'Mean Squared Error': mse_power, 'Sample Size': N}
+    d_mse_graphPower = {'Mean Squared Error': mse_Graphpower, 'Sample Size': N}
+
+    df_md_power = pd.DataFrame(data=d_md_power)
+    df_md_graphPower = pd.DataFrame(data=d_md_graphPower)
+    df_mean_MSE_power = pd.DataFrame(data=d_mse_power)
+    df_mean_MSE_graphPower = pd.DataFrame(data=d_mse_graphPower)
+
+
     print(np.mean(mds_power), np.mean(mds_graphpower))
     print(np.mean(mse_power), np.mean(mse_Graphpower))
-    fig1, axs1 = plt.subplots(1, 2, sharex=True)
-    axs1[0].boxplot(mds_power)
-    axs1[0].set_xlabel("powerICA")
-    axs1[1].boxplot(mds_graphpower)
-    axs1[1].set_xlabel("Graph-powerICA")
-    fig1.suptitle('Lambda: ' + str(b))
+
+    sns.set(style='darkgrid', )
+    sns.set(rc={'axes.labelsize': 20})
+    #plt.clf()
+    #sns.set_context('paper')
+    fig, axes = plt.subplots(2, 2, figsize=(12, 16), sharey=True)
+    plt.subplots_adjust(bottom=0.1, hspace=0.5)
+    title = 'samples: ' + str(N) #+ 'Lambda: ' + str(b) +
+    fig.suptitle(title, fontsize=20)
+
+    title_Power = 'Power ICA'
+    title_GraphPower = 'Graph-Power ICA'
+
+    #plt.ylim(0, 0.7)
+    sn1 = sns.boxplot(ax=axes[0, 0], x='Sample Size', y='Minimum Distance', data=df_md_power).set_title(title_Power, fontsize=20)
+    sn2 = sns.boxplot(ax=axes[0, 1], x='Sample Size', y='Minimum Distance', data=df_md_graphPower).set_title(title_GraphPower, fontsize=20)
+
+    #plt.ylim(0, 0.1)
+    sn3 = sns.boxplot(ax=axes[1, 0], x='Sample Size', y='Mean Squared Error', data=df_mean_MSE_power)#.set_title(title_Power)
+    sn4 = sns.boxplot(ax=axes[1, 1], x='Sample Size', y='Mean Squared Error', data=df_mean_MSE_graphPower)#.set_title(title_GraphPower)
+
+
+    # fig1, axs1 = plt.subplots(1, 2, sharey=True)
+    # axs1[0].boxplot(mds_power)
+    # axs1[0].set_xlabel("powerICA")
+    # axs1[0].set_ylabel("Minimum Distance")
+    # axs1[1].boxplot(mds_graphpower)
+    # axs1[1].set_xlabel("Graph-powerICA")
+    # fig1.suptitle('Lambda: ' + str(b) + ', samples: ' + str(N))
 
     plt.show()
 #%%
 
-  # i = 0
-  # fig1, axs1 = plt.subplots(4)
-  # fig2, axs2 = plt.subplots(4)
-  # fig3, axs3 = plt.subplots(4)
-  #
-  # while (i < 4):
-  #   # input signals
-  #   axs1[i].plot(data.T[i, :], lw=1)
-  #   axs1[i].set_ylabel('sig: ' + str(i))
-  #   fig1.suptitle('Input Signals')
-  #
-  #
-  #   axs2[i].plot(unMixed_power[i, :], lw=1)
-  #   axs2[i].set_ylabel('sig: ' + str(i))
-  #   fig2.suptitle('Unmixed Signals PowerICA')
-  #   #axs2[i].set_ylim(ymin=-1, ymax=1)
-  #
-  #   axs3[i].plot(unMixed_graphpower[i, :], lw=1)
-  #   axs3[i].set_ylabel('sig: ' + str(i))
-  #   fig3.suptitle('Unmixed Signals Graph PowerICA')
-  #   #axs3[i].set_ylim(ymin=-1, ymax=1)
-  #
-  #   i = i + 1
-  #
-  # plt.show()
+  i = 0
+  fig1, axs1 = plt.subplots(4)
+  fig2, axs2 = plt.subplots(4)
+  fig3, axs3 = plt.subplots(4)
+
+  while (i < 4):
+    # input signals
+    axs1[i].plot(data.T[i, :], lw=1)
+    axs1[i].set_ylabel('sig: ' + str(i))
+    fig1.suptitle('Input Signals')
+
+
+    axs2[i].plot(unMixed_power[i, :], lw=1)
+    axs2[i].set_ylabel('sig: ' + str(i))
+    fig2.suptitle('Unmixed Signals PowerICA')
+    #axs2[i].set_ylim(ymin=-2, ymax=2)
+    axs2[i].set_xlabel("samples")
+
+    axs3[i].plot(unMixed_graphpower[i, :], lw=1)
+    axs3[i].set_ylabel('sig: ' + str(i))
+    fig3.suptitle('Unmixed Signals Graph PowerICA')
+    #axs3[i].set_ylim(ymin=-2, ymax=2)
+    axs3[i].set_xlabel("samples")
+
+    i = i + 1
+
+  plt.show()
 
