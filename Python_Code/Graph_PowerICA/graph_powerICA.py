@@ -14,12 +14,12 @@ def GraphAutoCorrelation(X, Ws):
   P = np.shape(Ws)[2]
   
   ### calculate graph autocovariance Stilde ###
-  Stilde = np.zeros((K,K,P))
-  for p in range(0,P):
-    Yw = Ws[:,:,p] @ X  
+  Stilde = np.zeros((K, K, P))
+  for p in range(0, P):
+    Yw = Ws[:, :, p] @ X
     Yw = Yw/np.sqrt(np.mean(Yw**2, axis=0))
-    Stilde[:,:,p] = (X.T @ Yw)/n 
-    Stilde[:,:,p] = (Stilde[:,:,p]+Stilde[:,:,p].T)/2
+    Stilde[:, :, p] = (X.T @ Yw)/n
+    Stilde[:, :, p] = (Stilde[:, :, p] + Stilde[:, :, p].T)/2
 
   return Stilde, P
 
@@ -31,11 +31,11 @@ def GradeUpdate(w0, Stilde, P):
         #wn = wn+(2*R[:,:,k] @ w @ w.T * R[:,:,k] @ w)
         wold = wn
         #print(wn)
-        wn = Stilde[:,:,p] @ w
+        wn = Stilde[:, :, p] @ w
         #print(wn)
         wn = w @ w.T @ wn
         #print(wn)
-        wn = 2 * Stilde[:,:,p] @ wn
+        wn = 2 * Stilde[:, :, p] @ wn
         #print(wn)
         wn = wn+wold
         
@@ -76,7 +76,7 @@ def Graph_powerICA(X, nonlin, Ws, b=0.5, seed=None, Huber_param=1.345,lp_param=1
         W0 = scipy.stats.ortho_group.rvs(d)
 
 
-    Stilde,K = GraphAutoCorrelation(X.T, Ws)
+    Stilde, K = GraphAutoCorrelation(X.T, Ws)
     #print(Stilde)
     if d>n:
         print('Data has invalid shape! Should be d × n array with d < n!')
