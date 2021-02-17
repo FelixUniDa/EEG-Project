@@ -11,6 +11,7 @@ import neurokit2
 import time
 from scipy.stats import hmean, median_abs_deviation
 import scipy
+import robustsp as rsp
 
 import os
 import sys
@@ -47,8 +48,7 @@ sns.set_context("poster")
 # ToDo: write experiment results to csv
 
 
-def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=None, noise_lvl=20, std_outlier=3,
-                    p_outlier=0.0, outlier_type='impulse', partition=30):
+def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=None, noise_lvl=20, std_outlier=3, p_outlier=0.0, outlier_type='impulse', partition=10):
     """
     Do a Monte Carlo simulation of n_runs, plot a histogram, mean and standard deviation
     and write results to csv
@@ -180,7 +180,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
         # print(white_data.shape)
         if (ica_method == "jade"):
             # Perform JADE
-            W = jadeR(white_data, is_whitened=True, verbose=False)
+            W = jadeR(white_data, is_whitened=True, verbose=False, robust_loc= True, rho_x= lambda x: rsp.MLocHUB(x))
             W = np.squeeze(np.asarray(W))
         elif (ica_method == "power_ica"):
             # Perform PowerICA
@@ -282,7 +282,7 @@ def monte_carlo_run(n_runs, data_size, ica_method, data_type='standard', seed=No
                       columns=['Method', '# Runs', 'Sample Size', 'Noise-level [dB]', 'Percentage Outliers (3Std)',
                                'Seed', 'Mean_MD', 'Std_MD', 'Median_MD', 'nMAD_MD', 'Mean_MSE', 'Std_MSE', 'Median_MSE',
                                'nMAD_MSE', 'Mean_SNR', 'Std_SNR', 'Median_SNR', 'nMAD_SNR', 'Time elapsed [s]'])
-    df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_JADE_comparison', 'Monte_Carlo_runs_JADE_comparison.csv'), index=True,
+    df.to_csv(os.path.join(BASE_DIR, 'utils', 'results_Monte_Carlo_JADE/Robust_loc/Huber', 'Monte_Carlo_runs_JADE.csv'), index=True,
               header=True, mode='a')
 
     # mc_data = {'Method': [ica_method], '# Runs': [n_runs], 'Sample Size': [data_size], 'SNR [dB]': [noise_lvl], 'Percentage Outliers (3Std)': [p], 'Seed': [seed], 'Mean': [mu], 'Std': [sigma], 'Median': [med], 'nMAD': [nMAD], 'Time elapsed [s]': [t1]}
@@ -337,12 +337,8 @@ if __name__ == "__main__":
     df_SNR = pd.DataFrame()
 
     ica_method = 'jade'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
-    folder_to_save = 'results_Monte_Carlo_JADE_comparison'
-    # type_list_to_test = ["Type 1", "Type 2", "Type 3", "Type 4", "Type 5", "Type 6", "Type 7"]
-
-    # quick adjustment -> this is here to make quick checks for the implementations not for the big runs!
-    type_list_to_test = ["Type 5"]
-
+    folder_to_save = 'results_Monte_Carlo_JADE/Robust_loc/Huber'
+    type_list_to_test = ["Type 5"]  # "Type 1", "Type 2", "Type 3", "Type 4",, "Type 2", "Type 3", "Type 4", "Type 1", "Type 6", "Type 7"
     for name in type_list_to_test:
         # parameter for each type to test
         noise = type_dict.get(name)[0]
@@ -411,7 +407,7 @@ if __name__ == "__main__":
             plt.ylim(top=60, bottom=0)
             sns.boxplot(ax=axes[2], x='Sample Size', y='Signal to Noise Ratio\n (Mixed Signals) in dB',hue='Location', data=df_SNR).set_title(title_SNR)
             plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
-            plt.show()
+            #plt.show()
 
         if name == "Type 5":
             outlier_type = "impulse"
@@ -468,7 +464,7 @@ if __name__ == "__main__":
             plt.ylim(top=60, bottom=0)
             sns.boxplot(ax=axes[2], x='SNR(additive noise)', y='Signal to Noise Ratio\n (Mixed Signals) in dB',hue='Location', data=df_SNR).set_title(title_SNR)
             plt.savefig(os.path.join(folder_to_save, file_name), dpi=300)
-            plt.show()
+            #plt.show()
 
         if name == "Type 6" or name == "Type 7":
             outlier_type = type_dict.get(name)[4]
@@ -537,7 +533,7 @@ if __name__ == "__main__":
             sns.boxplot(ax=axes[1], x='Outlier Percentage', y='Mean Squared Error',hue='Location', data=df_MSE).set_title(title_MSE)
             sns.boxplot(ax=axes[2], x='Outlier Percentage', y='Signal to Noise Ratio\n (Mixed Signals) in dB',hue='Location', data=df_SNR).set_title(title_SNR)
             plt.savefig(os.path.join(folder_to_save, file_name_SNR), dpi=300)
-            plt.show()
+            #plt.show()
 
         if name == "Type 8":
             outlier_type = "impulse"
