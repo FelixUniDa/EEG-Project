@@ -34,9 +34,10 @@ from numpy import abs, append, arange, arctan2, argsort, array, concatenate, \
     sign, sin, sqrt, zeros, mean
 import numpy as np
 from numpy.linalg import eig, pinv
+from icecream import ic 
 
 
-def jadeR(X, m=None, verbose=True, is_whitened=False, rho_x = lambda x: np.mean, robust_loc = False):
+def jadeR(X, m=None, verbose=True, is_whitened=False, rho_x = lambda x: np.mean(x), robust_loc = False):
 
 
     """
@@ -204,11 +205,21 @@ def jadeR(X, m=None, verbose=True, is_whitened=False, rho_x = lambda x: np.mean,
         # (0,0,1,2) third row (0,0,2,0) (0,0,2,1)(0,0,2,2)first round)
         if robust_loc:
             temp = np.multiply(Xijm, X).T
+            #ic(temp)
             for i in range(m):
+                t = np.multiply(temp,np.repeat(X[:,i],m,axis = 1).T)
+                #ic(t)
                 for j in range(m):
-                    t = np.multiply(temp,np.repeat(X[:,j],m,axis = 1).T)
-                    Qij[i, j] = rho_x(t[i, :])
+                    #ic(t.shape)
+                    mu = rho_x(t[j, :])
+                    # ic(t[j, :].shape)
+                    # ic(mu)
+                    Qij[j, i] = mu
             Qij = Qij - R - 2 * dot(R[:, im], R[:, im].T)
+            # for debugging
+            # Qij_ = multiply(Xijm, X).T * X / float(T) - R - 2 * dot(R[:, im], R[:, im].T)
+            # ic(Qij)
+            # ic(Qij_)
         else: 
             Qij = multiply(Xijm, X).T * X / float(T) - R - 2 * dot(R[:, im], R[:, im].T)
 
@@ -222,15 +233,23 @@ def jadeR(X, m=None, verbose=True, is_whitened=False, rho_x = lambda x: np.mean,
             if robust_loc:
                 temp = np.multiply(Xijm, X).T
                 for i in range(m):
+                    t = np.multiply(temp,np.repeat(X[:,i],m,axis = 1).T)
+                    #ic(t.shape)
                     for j in range(m):
-                        t = np.multiply(temp,np.repeat(X[:, j], m, axis=1).T)
-                        Qij[i, j] = rho_x(t[i, :])
-                        Qij = Qij - R - 2 * dot(R[:, im], R[:, im].T)
+                        #ic(t)
+                        mu = rho_x(t[j, :])
+                        Qij[j, i] = mu
+                Qij = sqrt(2) * Qij - R[:, im] * R[:, jm].T - R[:, jm] * R[:, im].T
+                # for debugging
+                # Qij_ = sqrt(2) * multiply(Xijm, X).T * X / float(T) - R[:, im] * R[:, jm].T - R[:, jm] * R[:, im].T
+                # ic(Qij)
+                # ic(Qij_)
             else: 
                 Qij = sqrt(2) * multiply(Xijm, X).T * X / float(T) - R[:, im] * R[:, jm].T - R[:, jm] * R[:, im].T
             CM[:, Range] = Qij
             Range = Range + m
 
+    #ic(CM)
     # if Symmetry isn't taken into account : nbcm = m(m+1)/2 cumulants matrices stored in a big m x m*nbcm array.
     # due to Symmetry we only calculate: 3 auto cumulants, and 51 cross cumulants (odd/even)
     V = matrix(eye(m, dtype=float64))
