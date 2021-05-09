@@ -383,6 +383,17 @@ def mixing_matrix(n_components, seed=None, m=0):
 
     return mixingmat
 
+def weightedMedianSmoother(mixdata_noise):
+    #### running weighted median smoother ####
+    r, c = mixdata_noise.shape
+    win_len_half = 5
+    mixdata_noise_ms = np.zeros_like(mixdata_noise)
+    for rr in range(0, r):
+        for cc in range(win_len_half, int(c - win_len_half)):
+            x_win = mixdata_noise[rr, (cc - win_len_half):(cc + win_len_half)]
+            mixdata_noise_ms[rr, cc] = np.median(np.hamming(2 * win_len_half) * x_win)
+    return mixdata_noise_ms
+
 
 def whitening(x, type='sample', loss='Huber', percentile=1, r=0):
     """linearly transform the observed signals X in a way that potential 
