@@ -338,9 +338,9 @@ if __name__ == "__main__":
     df_MSE = pd.DataFrame()
     df_SNR = pd.DataFrame()
 
-    ica_method = 'radical'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
-    folder_to_save = 'results_Monte_Carlo_RADICAL'
-    type_list_to_test = ["Type 4", "Type 5", "Type 6"]
+    ica_method = 'jade'  # further changes need to be made in plt.savefig & !df.to_csv in def monte_carlo!
+    folder_to_save = 'results_on_MacBook_M1'
+    type_list_to_test = ["Type 1"]
 
     # quick adjustment -> this is here to make quick checks for the implementations not for the big runs!
     # type_list_to_test = ["Type 6"]
