@@ -1,22 +1,13 @@
 #%%
 import numpy as np
-from pygsp import graphs, reduction, plotting
+from sklearn.covariance import GraphicalLasso
 import matplotlib.pyplot as plt
-import os
-import sys
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, 'Python_Code', 'JADE'))
-sys.path.append(os.path.join(BASE_DIR, 'utils', 'utils'))
-sys.path.append(os.path.join(BASE_DIR, 'Python_Code', 'Compare_ICA_algos'))
-
-from utils.utils import *
+from utils import *
+import seaborn as sns
 from graph_powerICA import*
 from PowerICA import*
 import datetime
 import mne
-import seaborn as sns
-import pandas as pd
 
 
 if __name__ == "__main__":
@@ -88,18 +79,26 @@ if __name__ == "__main__":
   white_data1,W_whiten1,n_comp1 = whitening(data.T, type='sample', percentile=totvar1/100)
   white_data2,W_whiten2,n_comp2 = whitening(eeg.T, type='sample', percentile=totvar2/100)
   
-  corr = np.triu(np.corrcoef(eeg),k=1)
-  A1 = np.zeros(corr.shape)
-  A1[np.where(corr>0.85)] = 1
-  A1 = np.real(A1 + A1.T)
-  A2 = A1 @ A1
+#   corr = np.triu(np.corrcoef(eeg),k=1)
+#   A1 = np.zeros(corr.shape)
+#   A1[np.where(corr>0.85)] = 1
+#   A1 = np.real(A1 + A1.T)
+  # A2 = np.real(A1 + A1.T)
   # G = graphs.Graph(A1)
   # G.set_coordinates(kind='spring')
-  plt.spy(A2)
+  # plt.spy(A1)
   # plotting.plot_graph(G, show_edges = True)
+
+  covariance_estimator = GraphicalLasso(max_iter=1000,alpha=0.06,tol=0.001,verbose=1)
+  covariance_estimator.fit(data.T)
+  connectivity = covariance_estimator.covariance_
+  A1 = np.zeros(connectivity.shape)
+  A1 = np.triu(connectivity,k=1)
+  A1 = A1 + A1.T
+  plt.spy(A1)
+
   Ws1 = np.repeat(A1,n_comp1).reshape(N,N,n_comp1)
   Ws2 = np.repeat(A1,n_comp2).reshape(N,N,n_comp2)
-  
 
   W_graphpower1,_ = Graph_powerICA(np.real(white_data1),nonlin=nonlin,Ws=Ws1,b=b)
   W_power1,_ = powerICA(white_data1,'pow3')
@@ -113,10 +112,29 @@ if __name__ == "__main__":
   unMixed_graphpower2 = W_graphpower2 @ np.real(white_data2)
   unMixed_power2 = W_power2 @ white_data2
 
-  sns.set(style='darkgrid', )
-  # plt.clf()
-  sns.set(rc={'axes.labelsize': 16})
-  sns.set_context('paper')
+  sns.set_style("darkgrid")
+  fighist,hist = plt.subplots(4,5,figsize=(16,9), sharex=True)
+  hist[0,0] = plt.hist(eeg[:, 0])
+  hist[0,1] = plt.hist(eeg[:, 1])
+  hist[0,2] = plt.hist(eeg[:, 2])
+  hist[0,3] = plt.hist(eeg[:, 3])
+  hist[0,4] = plt.hist(eeg[:, 4])
+  hist[1,0] = plt.hist(data[:, 0])
+  hist[1,1] = plt.hist(data[:, 1])
+  hist[1,2] = plt.hist(data[:, 2])
+  hist[1,3] = plt.hist(data[:, 3])
+  hist[1,4] = plt.hist(data[:, 4])
+  hist[2,0] = plt.hist(white_data1.T[:, 0])
+  hist[2,1] = plt.hist(white_data1.T[:, 1])
+  hist[2,2] = plt.hist(white_data1.T[:, 2])
+  hist[2,3] = plt.hist(white_data1.T[:, 3])
+  hist[2,4] = plt.hist(white_data1.T[:, 4])
+  hist[3,0] = plt.hist(unMixed_power2.T[:, 0])
+  hist[3,1] = plt.hist(unMixed_power2.T[:, 1])
+  hist[3,2] = plt.hist(unMixed_power2.T[:, 2])
+  hist[3,3] = plt.hist(unMixed_power2.T[:, 3])
+  hist[3,4] = plt.hist(unMixed_power2.T[:, 4])
+
 
   ### plot figures ###
   fig1, axs1 = plt.subplots(21,figsize=(16,9), sharex=True)
@@ -152,7 +170,7 @@ if __name__ == "__main__":
   while(i<5):
       axs3[i].plot(times, arts[:, i], lw=3)
       axs3[i].set_ylabel('Artifact: ' + str(i))
-      fig3.suptitle('Artifacts', fontsize=20)
+      fig3.suptitle('Artifacts')
       i+=1
   i=0
 
@@ -163,16 +181,16 @@ if __name__ == "__main__":
 
 
       axs4[i].plot(times, unMixed_graphpower1.T[:, i], lw=1)
-      #axs4[i].set_ylabel('IC: ' + str(i),rotation=0)
+      axs4[i].set_ylabel('IC: ' + str(i),rotation=0)
       axs4[n_comp1].plot(times,stim,lw=1)
-      #axs4[n_comp1].set_ylabel('Events',rotation=0)
-      fig4.suptitle('Recovered artifacts and eeg signals GraphPowerICA \n( ' + str(totvar1) + '% data represented )', fontsize=20)
+      axs4[n_comp1].set_ylabel('Events',rotation=0)
+      fig4.suptitle('Recovered artifacts and eeg signals GraphPowerICA \n( ' + str(totvar1) + '% data represented )')
 
       axs5[i].plot(times, unMixed_power1.T[:, i], lw=1)
-      #axs5[i].set_ylabel('IC: ' + str(i),rotation=0)
+      axs5[i].set_ylabel('IC: ' + str(i),rotation=0)
       axs5[n_comp1].plot(times,stim,lw=1)
-      #axs5[n_comp1].set_ylabel('Events',rotation=0)
-      fig5.suptitle('Recovered artifacts and eeg signals PowerICA \n( '+ str(totvar1) +'% data represented )', fontsize=20)
+      axs5[n_comp1].set_ylabel('Events',rotation=0)
+      fig5.suptitle('Recovered artifacts and eeg signals PowerICA \n( '+ str(totvar1) +'% data represented )')
       
       i = i+1
 
@@ -190,15 +208,15 @@ if __name__ == "__main__":
 
 
       axs6[i].plot(times, unMixed_graphpower2.T[:, i], lw=1)
-      #axs6[i].set_ylabel('IC: ' + str(i),rotation=0)
+      axs6[i].set_ylabel('IC: ' + str(i),rotation=0)
       axs6[n_comp2].plot(times,stim,lw=1)
-      #axs6[n_comp2].set_ylabel('Events',rotation=0)
+      axs6[n_comp2].set_ylabel('Events',rotation=0)
       fig6.suptitle('Recovered clean eeg signals GraphPowerICA \n( '+ str(totvar2) +'% data represented )')
 
       axs7[i].plot(times, unMixed_power2.T[:, i], lw=1)
-      #axs7[i].set_ylabel('IC: ' + str(i),rotation=0)
+      axs7[i].set_ylabel('IC: ' + str(i),rotation=0)
       axs7[n_comp2].plot(times,stim,lw=1)
-      #axs7[n_comp2].set_ylabel('Events',rotation=0)
+      axs7[n_comp2].set_ylabel('Events',rotation=0)
       fig7.suptitle('Recovered clean eeg signals PowerICA \n( '+ str(totvar2) +'% data represented )')
       
       i = i+1
