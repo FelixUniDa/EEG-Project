@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from utils import *
 from graph_powerICA import*
 from PowerICA import*
+from scipy import stats
 
 
 def genrAs(n, mc=0.01):
