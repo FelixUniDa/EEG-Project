@@ -2,19 +2,23 @@
 from sklearn.covariance import GraphicalLasso
 import numpy as np
 import matplotlib.pyplot as plt
-from utils import *
+
 from graph_powerICA import*
-from PowerICA import*
+# import depending on machine
+from Python_Code.PowerICA_Python.PowerICA import*
+from utils.utils import *
+# from utils import *
+# from PowerICA import*
 from scipy import stats
 
 
 def genrAs(n, mc=0.01):
   Il = np.ones((n, n))
-  Il = np.triu(Il,k=1 )
+  Il = np.triu(Il, k=1)
   
   lt = np.where(Il.flatten()>0.5)
   
-  ind = np.random.binomial(1,mc,int(np.ceil(n*(n-1)/2)))
+  ind = np.random.binomial(1, mc, int(np.ceil(n*(n-1)/2)))
   
   A = np.zeros((n*n)) # weight/shift matrix
   lt = lt[0][np.where(ind!=0)]
@@ -27,27 +31,27 @@ def genrAs(n, mc=0.01):
 
 def GenWs(A, e1, e2, w):
   n = np.shape(A)[0]
-  A = np.triu(A,k=1 )
+  A = np.triu(A, k=1)
   Il = np.ones((n, n))
-  Il = np.triu(Il,k=1 )
+  Il = np.triu(Il, k=1)
   
   nz = np.where(np.abs(A.flatten())>0.0001)[0]
   l = len(nz)
   lt = np.where(Il.flatten()>0.5)[0]
-  z = np.setdiff1d(lt,nz)
+  z = np.setdiff1d(lt, nz)
   
   W = A
-  W[np.where(np.abs(W)>0.0001)] = w
-  W[np.where(np.abs(W)<=0.0001)] = 0
+  W[np.where(np.abs(W) > 0.0001)] = w
+  W[np.where(np.abs(W) <= 0.0001)] = 0
   W = W.flatten()
-  ind1 = np.random.binomial(1,e1,len(nz))
-  ind2 = np.random.binomial(1,e2,len(z))
+  ind1 = np.random.binomial(1, e1, len(nz))
+  ind2 = np.random.binomial(1, e2, len(z))
   
   W[nz[np.where(ind1!=0)]] = 0  
   
   W[z[np.where(ind2!=0)]] = w
   
-  W = W.reshape(n,n)
+  W = W.reshape(n, n)
   W = W+W.T
   return W
 
@@ -57,7 +61,7 @@ if __name__ == "__main__":
   nonlins = ['gaus']
   #nonlins = ['gaus']
   bs = [0.7]  
-  Signaltypes= ["GMA"]
+  Signaltypes = ["GMA"]
   for b in bs:
     runs = 1
     mds_power = np.zeros(runs)
@@ -65,7 +69,7 @@ if __name__ == "__main__":
     for nonlin in nonlins:
       for Signaltype in Signaltypes:
         for i in range(0,runs):
-          print("run:",i)
+          print("run:", i)
           N = 500
           P = 4
           
@@ -91,7 +95,7 @@ if __name__ == "__main__":
             theta = np.array([0.02,0.04,0.06,0.08])
             data = np.zeros((N, P))
             for j in range(0,P):
-              data[:,j] = e[:,j]+theta[j]*Ws[:,:,j]@e[:,j]
+              data[:, j] = e[:, j]+theta[j]*Ws[:, :, j]@e[:, j]
             
 
           elif Signaltype == "Standard":
@@ -122,13 +126,13 @@ if __name__ == "__main__":
           
           for ii in range(N):
             for jj in range(N):
-              if  np.abs(part_corr[ii,jj]) > stats.norm.ppf(0.8, loc=0, scale=1) :
-                part_corr[ii,jj] = 1
+              if np.abs(part_corr[ii, jj]) > stats.norm.ppf(0.8, loc=0, scale=1):
+                part_corr[ii, jj] = 1
               else:
-                part_corr[ii,jj] = 0
+                part_corr[ii, jj] = 0
 #%%   
           #mixeddata = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=20),prop=0.00,type='impulse',std=100) for dat in mixeddata])
-          white_data,W_whiten,n_comp= whitening(mixeddata, type='sample', percentile = 0.999999)
+          white_data, W_whiten, n_comp = whitening(mixeddata, type='sample', percentile=0.999999)
           #print(part_corr)
 #%%
           # covariance_estimator = GraphicalLasso(max_iter=1000,alpha=1.5,tol=0.001,verbose=1)
@@ -139,7 +143,7 @@ if __name__ == "__main__":
           #A1 = A1 + A1.T
           plt.figure()
           plt.spy(B1)
-          Ws1 = np.repeat(B1,n_comp).reshape(N,N,n_comp)
+          Ws1 = np.repeat(B1, n_comp).reshape(N, N, n_comp)
           fp = np.count_nonzero(B1[np.where(A1==0)])
           tp = np.sum(B1[np.where(np.abs(A1) > 0)])
           fn = np.sum(np.abs(B1[np.where(np.abs(A1) > 0)]-1))
@@ -150,8 +154,8 @@ if __name__ == "__main__":
           specificity = tn/(tn+fp) 
           print(false_discovery_rate,sensitivity,specificity)
 #%%
-          W_graphpower,_ = Graph_powerICA(white_data,nonlin='gaus',Ws=Ws,b=0.7)
-          W_power,_ = powerICA(white_data,'pow3')
+          W_graphpower, _ = Graph_powerICA(white_data, nonlin='gaus', Ws=Ws, b=0.7)
+          W_power, _ = powerICA(white_data,'pow3')
 
           unMixed_graphpower = W_graphpower @ white_data
           unMixed_power = W_power @ white_data
@@ -177,7 +181,8 @@ if __name__ == "__main__":
         fig3, axs3 = plt.subplots(P, sharex=True)
         fig4, axs4 = plt.subplots(P, sharex=True)
         fig5, axs5 = plt.subplots(P, sharex=True)
-        k=0
+        k = 0
+
         while(k<P):
             # input signals
           axs1[k].plot(data[:, k], lw=3)
