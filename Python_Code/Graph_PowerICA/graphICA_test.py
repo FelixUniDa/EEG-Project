@@ -1,15 +1,26 @@
 #%%
+import os
+import sys
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+sys.path.append(BASE_DIR)
+sys.path.append(os.path.join(BASE_DIR, 'Python_Code', 'JADE'))
+sys.path.append(os.path.join(BASE_DIR, 'utils'))
+sys.path.append(os.path.join(BASE_DIR, 'Python_Code', 'Compare_ICA_algos'))
+
 from sklearn.covariance import GraphicalLasso
 import numpy as np
 import matplotlib.pyplot as plt
 
 from graph_powerICA import*
 # import depending on machine
-from Python_Code.PowerICA_Python.PowerICA import*
-from utils.utils import *
-# from utils import *
-# from PowerICA import*
+# from Python_Code.PowerICA_Python.PowerICA import*
+# from utils.utils import *
+from utils import *
+from PowerICA import*
 from scipy import stats
+
+
 
 
 def genrAs(n, mc=0.01):
