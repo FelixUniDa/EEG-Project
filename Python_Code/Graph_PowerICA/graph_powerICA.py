@@ -112,7 +112,7 @@ def Graph_powerICA(X, nonlin, Ws, b=0.5, seed=None, Huber_param=1.345,lp_param=1
         ## (8) compute the last demixing vector
     if flg == 1:
         W[d-1,:] = (W0[d-1,:] @ (I - W.T @ W))/np.linalg.norm(W0[d-1,:] @ (I - W.T @ W))
-    return W,flg
+    return W, flg
 
 
 def Node1(X, nonlin, w0,Stilde,P,b,Orth,Huber_param,lp_param,fair_param):

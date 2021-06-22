@@ -10,9 +10,26 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, 'utils', 'utils'))
 
-from utils import *
+from utils.utils import *
 
-def FastICA_GraDe(X, Ws, G = None, g = None, dg = None, b=0.98, eps=1e-06, maxiter=1000):
+
+def GraphAutoCorrelation(X, Ws):
+  n = np.shape(X)[0]
+  K = np.shape(X)[1]
+  P = np.shape(Ws)[2]
+
+  ### calculate graph autocovariance Stilde ###
+  Stilde = np.zeros((K, K, P))
+  for p in range(0, P):
+    Yw = Ws[:, :, p] @ X
+    Yw = Yw / np.sqrt(np.mean(Yw ** 2, axis=0))
+    Stilde[:, :, p] = (X.T @ Yw) / n
+    Stilde[:, :, p] = (Stilde[:, :, p] + Stilde[:, :, p].T) / 2
+
+  return Stilde, P
+
+
+def FastICA_GraDe(X, Ws, nonlin = 'tanh', b=0.3, eps=1e-06, maxiter=1000):
   """BSS Algorithm that combines Graph decorrelation with FastICA. 
      It implements the Algorithm as given in 
      "Graph Signal Processing Meets Blind Source Separation", Submitted on 24 Aug 2020, 
@@ -34,7 +51,6 @@ def FastICA_GraDe(X, Ws, G = None, g = None, dg = None, b=0.98, eps=1e-06, maxit
   n = np.shape(X)[0]  # number of samples
   K = np.shape(X)[1]  # number of signals
   P = np.shape(Ws)[2] # number of graphs
-  
 
   ###           prewhitening            ###
   ### We can use our whitening function ###
@@ -44,47 +60,46 @@ def FastICA_GraDe(X, Ws, G = None, g = None, dg = None, b=0.98, eps=1e-06, maxit
   # W_Whitening = E @ np.diag(d**(-0.5))@ E.T
   # X_centered = X - mu
   # Y = X_centered @ W_Whitening.T  #centered and whitened data
-  Y, W_Whitening, _, _ = whitening(X.T)
-  Y = Y.T
+  # Y, W_Whitening, _, _ = whitening(X.T)
+  # Y = Y.T
+  Y = X
 
   ### calculate graph autocovariance Stilde ###
-  Stilde = np.zeros((K, K, P))
-  for p in range(0, P): # Go over all graphs
-    #Ws1 = Ws[:, :, p]
-    Yw = Ws[:, :, p] @ Y
-    Yw = Yw/np.sqrt(np.mean(Yw**2, axis=0))
-    Stilde[:, :, p] = (Y.T @ Yw)/n
-    Stilde[:, :, p] = (Stilde[:, :, p]+Stilde[:, :, p].T)/2
+  Stilde, _ = GraphAutoCorrelation(Y, Ws)
+  # Stilde = np.zeros((K, K, P))
+  # for p in range(0, P): # Go over all graphs
+  #   Yw = Ws[:, :, p] @ Y
+  #   Yw = Yw/np.sqrt(np.mean(Yw**2, axis=0))
+  #   Stilde[:, :, p] = (Y.T @ Yw)/n
+  #   Stilde[:, :, p] = (Stilde[:, :, p]+Stilde[:, :, p].T)/2
   
   
   U_old = np.eye(K)
-  U = scipy.stats.ortho_group.rvs(K)
+  U = np.eye(K) #scipy.stats.ortho_group.rvs(K)
   W = np.zeros((K, K))
   
   iter = 0
   while iter < maxiter:    
-    #YV = Y @ U.T
-    #W_FastICA = np.mean(G(YV), axis=1)*(g(YV).T@Y)/n-np.diag(np.mean(dg(YV))).T @ U #replace with powerica
-    W_FastICA = np.zeros((K, K))
+    YV = Y @ U.T
+    W_FastICA = np.mean(G_nonlin(YV, nonlin), axis=0) * (g(YV, nonlin).T@Y)/n - np.diag(np.mean(Edgs(YV, nonlin), axis=0)).T @ U #replace with powerica
     W_GraDe = np.zeros((K, K))
 
     #### Graph Decorrelation Update step ### -> Here nan due to extreme values in wn
     for j in range(0, K):
       w = U[j, ].reshape(K, 1)
-      wn = w
-      for p in range(0, P):
-        wn = wn + 2 * (Stilde[:, :, p] @ (w @ (w.T @ (Stilde[:, :, p] @ w))))
+      wn = w.copy()
+      for mi in range(0, P):
+        wn = wn + 2 * (Stilde[:, :, mi] @ (w @ (w.T @ (Stilde[:, :, mi] @ w))))
       
       W_GraDe[j,] = wn[:, 0]
-      if( W_FastICA[j, np.where(np.max(np.abs(W[j,])))] < 0):
-         W_FastICA[j, ] = -W_FastICA[j,]
-      if(W_GraDe[j, np.where(np.max(abs(W[j,])))] < 0):
+      if( W_FastICA[j, np.argmax(np.abs(W[j,]))] < 0):
+         W_FastICA[j, ] = -W_FastICA[j, ]
+      if(W_GraDe[j, np.argmax(abs(W[j, ]))] < 0):
          W_GraDe[j, ] = -W_GraDe[j, ]
   
     ### composite update step ###
-    W = (1-b)*W_FastICA + (b)*W_GraDe
-    
-    U = W# np.linalg.inv(np.sqrt(W@W.T)).T @ W #unclear step, probably related to squared symmetric fastICA
+    W = (1-b)*W_FastICA + b*W_GraDe
+    U = np.linalg.solve(matSqrt(W@W.T), np.eye(K)).T @ W #unclear step, probably related to squared symmetric fastICA
     iter = iter+1
     if(np.linalg.norm(abs(U)-abs(U_old))<eps):
       break
@@ -93,178 +108,38 @@ def FastICA_GraDe(X, Ws, G = None, g = None, dg = None, b=0.98, eps=1e-06, maxit
     U_old = U
    
   
-  GAMMA = U @ W_Whitening
-  return GAMMA, Y
+  #GAMMA = U @ W_Whitening
+  return W, Y
 
 
+def matSqrt(A):
+  eigval, eigvec = np.linalg.eigh(A)
+  return eigvec @ (np.diag(eigval**(1/2))) @ eigvec.T
 
 
-##########################
-###### Small test ########
-##########################
-if __name__ == "__main__":
-
-  G1 = graphs.ErdosRenyi(1000, p=0.1)
-  G2 = graphs.ErdosRenyi(1000, p=0.15)
-  G3 = graphs.ErdosRenyi(1000, p=0.2)
-  G4 = graphs.ErdosRenyi(1000, p=0.5)
-  S1 = graphs.Sensor(1000)
-  S2 = graphs.Sensor(1000)
-  S3 = graphs.Sensor(1000)
-
-  Ws = np.array([G1.W.toarray(), G2.W.toarray(), G3.W.toarray(), G4.W.toarray()]).reshape(1000, 1000, 4)
-  Ss = np.array([S1.W.toarray(), S2.W.toarray(), S3.W.toarray()]).reshape(1000, 1000, 3)
-
-
-  data = np.stack([create_signal(x=1000, f=2, c='ecg'),
-                  create_signal(x=1000, f=5, c='cos'),
-                  create_signal(x=1000, f=10, c='rect'),
-                  create_signal(x=1000, f=25, c='sawt')]).T
-
-  U, white_data = FastICA_GraDe(data, Ws)
-  print(U) # returns nan, have to check why
-  unMixed_fast = U @ white_data.T
-
-  i = 0
-  fig1, axs1 = plt.subplots(4)
-  fig2, axs2 = plt.subplots(4)
-
-  while (i < 4):
-    # input signals
-    axs1[i].plot(data[:, i], lw=1)
-    axs1[i].set_ylabel('sig: ' + str(i))
-    fig1.suptitle('Input Signals')
-
-    axs2[i].plot(unMixed_fast[i, :], lw=1)
-    axs2[i].set_ylabel('sig: ' + str(i))
-    fig2.suptitle('Unmixed Signals')
-
-    i = i + 1
-
-  plt.show()
-
-
-
-
-
-
-
-
-
-def Node1(X, nonlin, w0, Orth):
-    """Computes largest value of non-Gaussianity measure delta = |gamma-beta| for
-       a rowvector of the estimated unmixing matrix that is a local maximizer
-       of the eigenvalue gamma with largest Euclidean distance to to the bulk of
-       other eigenvalues.
+def G_nonlin(s, nonlin):  # , Huber_param, lp_param, fair_param):
+    """ This function computes the ICA nonlinearity for a given input s = w.T @ x.
 
     Args:
-        X (array): Array of the centerd and whitened mixed data with shape d x n  where d < n.
-        nonlin (String): String defining the used nonlinearity.
-        w0 (array): Initial guess for the rowvector w of the unmixing matrix M.T
-        Orth (array): Orthogonal operator that projects onto the
-        orthogonal complement of the subspace
+        s (array): Array containing the values of (w.T @ x)
+        nonlin (String): String defining the used nonlinearity
 
     Returns:
-        w[array]: Estimated rowvector after algorithm converges.
-        delta[float]: Non-Gaussianity measure for local maximizer of gamma.
-        flg[integer]: Returns 1 when the algorithm has successfully converged and 0 when the
-        algorithm could not converge.
-
+        G: Integral of Nonlinearity function g for used in PowerICA algorithm.
     """
-    a, n = np.shape(X)
-    ################################
-    MaxIter = 100000
-    epsilon = 0.0001
-    flg = 1
-    i = 1
-    w = w0
-    s = 0
-    gs = 0
-    while i <= MaxIter:
-      wOld = w
-      s = w.T @ X
-      gs = g(s, nonlin)
-      w = (X @ gs.T) / n  # (4)
-      w = Orth @ w  # (5)
-      w = w / np.linalg.norm(w);  # (6)
-      if np.linalg.norm(w - wOld) < epsilon or np.linalg.norm(w + wOld) < epsilon:
-        # print('Node1 converged after',i,'iterations\n')
-        break
-      i = i + 1  # (3)
-    if i <= MaxIter:
-      beta = Edgs(s, nonlin)
-      delta = np.absolute((s @ gs.T) / n - beta)
+    G = np.empty(np.shape(s))
+    if nonlin == 'tanh':
+      G = np.log(np.cosh(s))
+    elif nonlin == 'pow3':
+      G = 1/4 * s ** 4
     else:
-      print('Node1 did not converge after', MaxIter, 'iterations\n')
-      w = []
-      flg = 0
-      delta = -1
-    return w, delta, flg
-    ###########################################################################
-
-
-def Node2(X, nonlin, w0, Orth):
-  """Computes largest value of non-Gaussianity measure delta = |gamma-beta| for
-     a rowvector of the estimated unmixing matrix that is a local minimizer
-     of the eigenvalue gamma with largest Euclidean distance to to the bulk of
-     other eigenvalues.
-
-  Args:
-      X (array): Array of the centerd and whitened mixed data with shape d x n  where d < n.
-      nonlin (String): String defining the used nonlinearity.
-      w0 (array): Initial guess for the rowvector w of the unmixing matrix M.T.
-      Orth (array): Orthogonal operator that projects onto the
-      orthogonal complement of the subspace.
-
-  Returns:
-      w[array]: Estimated rowvector after algorithm converges
-      delta[float]: Non-Gaussianity measure for local minimizer of gamma
-      flg[integer]: Returns 1 when the algorithm has successfully converged and 0 when the
-      algorithm could not converge.
-
-  """
-  a, n = np.shape(X)
-  ################################
-  MaxIter = 10000
-  epsilon = 0.0001
-  flg = 1
-  i = 1
-  w = w0
-  s = 0
-  gs = 0
-  # Compute the upper bound
-  s_max = np.sqrt(np.sum(X ** 2, axis=0))
-  gs_max = g(s_max, nonlin)
-  c = (s_max @ gs_max.T) / n + 0.5
-  while i <= MaxIter:
-    wOld = w
-    s = w.T @ X
-    gs = g(s, nonlin)
-    m = (X @ gs.T) / n
-    w = m - c * w  # (4)
-    w = Orth @ w  # (5)
-    w = w / np.linalg.norm(w)  # (6)
-    if np.linalg.norm(w - wOld) < epsilon or np.linalg.norm(w + wOld) < epsilon:
-      # print('Node2 converged after',i,'iterations\n')
-      break
-    i = i + 1  # (3)
-  if i <= MaxIter:
-    beta = Edgs(s, nonlin)
-    delta = np.absolute((s @ gs.T) / n - beta)  # gamma is delta and s@gs.T/n is gamma
-  else:
-    print('Node2 did not converge after', MaxIter, 'iterations\n')
-    w = []
-    flg = 0
-    delta = -1
-  return w, delta, flg
-
-  ###########################################################################
-
+      print('Invalid nonlinearity')
+      pass
+    return G
 
 
 def g(s, nonlin): #, Huber_param, lp_param, fair_param):
     """ This function computes the ICA nonlinearity for a given input s = w.T @ x.
-
 
     Args:
         s (array): Array containing the values of (w.T @ x)
@@ -384,6 +259,55 @@ def Edgs(s, nonlin): #, Huber_param, lp_param, fair_param):
   else:
     print('Invalid nonlinearity')
     pass
-  return np.mean(dg)
+  return dg
 
+
+
+
+##########################
+###### Small test ########
+##########################
+if __name__ == "__main__":
+
+  G1 = graphs.ErdosRenyi(1000, p=0.1)
+  G2 = graphs.ErdosRenyi(1000, p=0.15)
+  G3 = graphs.ErdosRenyi(1000, p=0.2)
+  G4 = graphs.ErdosRenyi(1000, p=0.5)
+  S1 = graphs.Sensor(1000)
+  S2 = graphs.Sensor(1000)
+  S3 = graphs.Sensor(1000)
+
+  Ws = np.array([G1.W.toarray(), G2.W.toarray(), G3.W.toarray(), G4.W.toarray()]).reshape(1000, 1000, 4)
+  Ss = np.array([S1.W.toarray(), S2.W.toarray(), S3.W.toarray()]).reshape(1000, 1000, 3)
+
+
+  data = np.stack([create_signal(x=1000, f=2, c='ecg'),
+                  create_signal(x=1000, f=5, c='cos'),
+                  create_signal(x=1000, f=10, c='rect'),
+                  create_signal(x=1000, f=25, c='sawt')]).T
+
+  mixmat = mixing_matrix(4)
+  mixeddata = mixmat @ data.T
+  white_data, W_whiten, n_comp = whitening(mixeddata, type='sample', percentile=0.999999)
+  U, _ = FastICA_GraDe(white_data.T, Ws)
+  print(U) # returns nan, have to check why
+  unMixed_fast = U @ white_data
+
+  i = 0
+  fig1, axs1 = plt.subplots(4)
+  fig2, axs2 = plt.subplots(4)
+
+  while (i < 4):
+    # input signals
+    axs1[i].plot(data[:, i], lw=1)
+    axs1[i].set_ylabel('sig: ' + str(i))
+    fig1.suptitle('Input Signals')
+
+    axs2[i].plot(unMixed_fast[i, :], lw=1)
+    axs2[i].set_ylabel('sig: ' + str(i))
+    fig2.suptitle('Unmixed Signals')
+
+    i = i + 1
+
+  plt.show()
 

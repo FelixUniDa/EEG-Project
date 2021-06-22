@@ -4,8 +4,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utils import *
 from graph_powerICA import*
-from PowerICA import*
+from FastICA_GraDe import*
 from scipy import stats
+
+import os
+import sys
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(BASE_DIR)
+sys.path.append(os.path.join(BASE_DIR, 'Compare_ICA_algos'))
+sys.path.append(os.path.join(BASE_DIR, 'utils'))
+from PowerICA import *
+from utils.utils import *
 
 
 def genrAs(n, mc=0.01):
@@ -14,7 +23,7 @@ def genrAs(n, mc=0.01):
   
   lt = np.where(Il.flatten()>0.5)
   
-  ind = np.random.binomial(1,mc,int(np.ceil(n*(n-1)/2)))
+  ind = np.random.binomial(1, mc, int(np.ceil(n*(n-1)/2)))
   
   A = np.zeros((n*n)) # weight/shift matrix
   lt = lt[0][np.where(ind!=0)]
@@ -57,14 +66,15 @@ if __name__ == "__main__":
   nonlins = ['gaus']
   #nonlins = ['gaus']
   bs = [0.7]  
-  Signaltypes= ["GMA"]
+  Signaltypes= ["Standard"]
   for b in bs:
-    runs = 1
+    runs = 10
     mds_power = np.zeros(runs)
     mds_graphpower = np.zeros(runs)
+    mds_graphfast = np.zeros(runs)
     for nonlin in nonlins:
       for Signaltype in Signaltypes:
-        for i in range(0,runs):
+        for i in range(0, runs):
           print("run:",i)
           N = 500
           P = 4
@@ -73,7 +83,7 @@ if __name__ == "__main__":
           if Signaltype == "GMA" :
             ### Set up experiment as in R Code ###
             ### Erdos Renyi Graph ###
-            np.random.seed(1996)
+            #np.random.seed(1996)
             A1 = genrAs(N)
             A2 = A1@A1
             Ws = np.array([A1,A1,A1,A1,A2,A2,A2,A2]).reshape(N,N,2*P)
@@ -83,9 +93,9 @@ if __name__ == "__main__":
             e[:,1] = np.random.standard_t(10,N)
             e[:,2] = np.random.standard_t(15,N)
             e[:,3] = np.random.randn(N)
-            print(np.cov(e.T))
-            plt.figure()
-            plt.spy(A1)
+            #print(np.cov(e.T))
+            #plt.figure()
+            #plt.spy(A1)
 
 
             theta = np.array([0.02,0.04,0.06,0.08])
@@ -100,13 +110,13 @@ if __name__ == "__main__":
                         create_signal(f=10,c='rect',x=N), 
                         create_signal(f=25,c='sawt',x=N)]).T
           
-            # corr = np.triu(np.corrcoef(data),k=1)
-            # A1 = np.zeros(corr.shape)
-            # A1[np.where(corr>0.7)] = 1
+            corr = np.triu(np.corrcoef(data),k=1)
+            A1 = np.zeros(corr.shape)
+            A1[np.where(corr>0.7)] = 1
             # A1 = A1 #+ A1.T
             # A2 = A1 + A1.T
             # #plt.spy(A1)
-            # Ws = np.array([A1,A1,A1,A1]).reshape(N,N,4)
+            Ws = np.array([A1,A1,A1,A1]).reshape(N, N, 4)
             # Ws2 = np.array([A2,A2,A2,A2]).reshape(N,N,4)
 #%%
           ### Mix Signals and whiten ###
@@ -117,18 +127,18 @@ if __name__ == "__main__":
 #%%
           part_corr = np.copy(part_corr_temp) - np.eye(N)
           part_corr = 0.5*np.log((1.00001+part_corr)/(1.00001-part_corr))
-          print(np.count_nonzero(part_corr_temp==-1.0001))
+          #print(np.count_nonzero(part_corr_temp==-1.0001))
 #%%
           
           for ii in range(N):
             for jj in range(N):
-              if  np.abs(part_corr[ii,jj]) > stats.norm.ppf(0.8, loc=0, scale=1) :
+              if  np.abs(part_corr[ii, jj]) > stats.norm.ppf(0.8, loc=0, scale=1):
                 part_corr[ii,jj] = 1
               else:
                 part_corr[ii,jj] = 0
 #%%   
           #mixeddata = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=20),prop=0.00,type='impulse',std=100) for dat in mixeddata])
-          white_data,W_whiten,n_comp= whitening(mixeddata, type='sample', percentile = 0.999999)
+          white_data, W_whiten, n_comp= whitening(mixeddata, type='sample', percentile = 0.999999)
           #print(part_corr)
 #%%
           # covariance_estimator = GraphicalLasso(max_iter=1000,alpha=1.5,tol=0.001,verbose=1)
@@ -139,7 +149,8 @@ if __name__ == "__main__":
           #A1 = A1 + A1.T
           plt.figure()
           plt.spy(B1)
-          Ws1 = np.repeat(B1,n_comp).reshape(N,N,n_comp)
+          plt.show()
+          Ws1 = np.repeat(B1, n_comp).reshape(N, N, n_comp)
           fp = np.count_nonzero(B1[np.where(A1==0)])
           tp = np.sum(B1[np.where(np.abs(A1) > 0)])
           fn = np.sum(np.abs(B1[np.where(np.abs(A1) > 0)]-1))
@@ -148,20 +159,23 @@ if __name__ == "__main__":
           false_discovery_rate = fp/(fp + tp)
           sensitivity = tp/(tp+fn)
           specificity = tn/(tn+fp) 
-          print(false_discovery_rate,sensitivity,specificity)
+          #print(false_discovery_rate, sensitivity, specificity)
 #%%
-          W_graphpower,_ = Graph_powerICA(white_data,nonlin='gaus',Ws=Ws,b=0.7)
-          W_power,_ = powerICA(white_data,'pow3')
+          W_graphpower,_ = Graph_powerICA(white_data, nonlin='gaus', Ws=Ws, b=0.7)
+          W_graphfast, _ = FastICA_GraDe(white_data.T, Ws, nonlin='tanh', b=0.7)
+          W_power,_ = powerICA(white_data, 'pow3')
 
           unMixed_graphpower = W_graphpower @ white_data
+          unMixed_graphfast = W_graphfast @ white_data
           unMixed_power = W_power @ white_data
 
-          mds_power[0] = md(W_whiten@mixmat,W_power)
-          mds_graphpower[0] = md(W_whiten@mixmat,W_graphpower)
-          mse_graphpower = MSE(unMixed_graphpower,data.T)
-          print(mds_power, mds_graphpower, mse_graphpower)
+          mds_power[i] = md(W_whiten@mixmat, W_power)
+          mds_graphpower[i] = md(W_whiten@mixmat, W_graphpower)
+          mds_graphfast[i] = md(W_whiten@mixmat, W_graphfast)
+          mse_graphpower = MSE(unMixed_graphpower, data.T)
+          print(mds_power[i], mds_graphpower[i], mds_graphfast[i], mse_graphpower)
       #%%
-        # print(np.mean(mds_graphpower),np.mean(mds_power))
+        print(np.mean(mds_power), np.mean(mds_graphpower), np.mean(mds_graphfast))
         # fig1, axs1 = plt.subplots(1,2, sharey=True)  
         # axs1[0].boxplot(mds_power)
         # axs1[0].set_xlabel("PowerICA")

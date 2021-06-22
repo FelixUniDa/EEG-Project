@@ -785,13 +785,13 @@ def partial_corr(C):
             idx = np.ones(p, dtype=np.bool)
             idx[i] = False
             idx[j] = False
-            beta_i = linalg.lstsq(C[:, idx], C[:, i])[0]
-            beta_j = linalg.lstsq(C[:, idx], C[:, j])[0]
+            beta_i = np.linalg.lstsq(C[:, idx], C[:, i])[0]
+            beta_j = np.linalg.lstsq(C[:, idx], C[:, j])[0]
 
             res_j = C[:, j] - C[:, idx].dot(beta_j)
             res_i = C[:, i] - C[:, idx].dot(beta_i)
             
-            corr = stats.pearsonr(res_i, res_j)[0]
+            corr = scipy.stats.pearsonr(res_i, res_j)[0]
             P_corr[i, j] = corr
             P_corr[j, i] = corr
         
