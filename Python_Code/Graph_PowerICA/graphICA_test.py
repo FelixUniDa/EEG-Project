@@ -1,7 +1,21 @@
 #%%
+import os
+import sys
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+sys.path.append(BASE_DIR)
+sys.path.append(os.path.join(BASE_DIR, 'Python_Code', 'JADE'))
+sys.path.append(os.path.join(BASE_DIR, 'utils'))
+sys.path.append(os.path.join(BASE_DIR, 'Python_Code', 'Compare_ICA_algos'))
+
 from sklearn.covariance import GraphicalLasso
 import numpy as np
 import matplotlib.pyplot as plt
+
+from graph_powerICA import*
+# import depending on machine
+# from Python_Code.PowerICA_Python.PowerICA import*
+# from utils.utils import *
 from utils import *
 from graph_powerICA import*
 from FastICA_GraDe import*
@@ -19,7 +33,7 @@ from utils.utils import *
 
 def genrAs(n, mc=0.01):
   Il = np.ones((n, n))
-  Il = np.triu(Il,k=1 )
+  Il = np.triu(Il, k=1)
   
   lt = np.where(Il.flatten()>0.5)
   
@@ -36,27 +50,27 @@ def genrAs(n, mc=0.01):
 
 def GenWs(A, e1, e2, w):
   n = np.shape(A)[0]
-  A = np.triu(A,k=1 )
+  A = np.triu(A, k=1)
   Il = np.ones((n, n))
-  Il = np.triu(Il,k=1 )
+  Il = np.triu(Il, k=1)
   
   nz = np.where(np.abs(A.flatten())>0.0001)[0]
   l = len(nz)
   lt = np.where(Il.flatten()>0.5)[0]
-  z = np.setdiff1d(lt,nz)
+  z = np.setdiff1d(lt, nz)
   
   W = A
-  W[np.where(np.abs(W)>0.0001)] = w
-  W[np.where(np.abs(W)<=0.0001)] = 0
+  W[np.where(np.abs(W) > 0.0001)] = w
+  W[np.where(np.abs(W) <= 0.0001)] = 0
   W = W.flatten()
-  ind1 = np.random.binomial(1,e1,len(nz))
-  ind2 = np.random.binomial(1,e2,len(z))
+  ind1 = np.random.binomial(1, e1, len(nz))
+  ind2 = np.random.binomial(1, e2, len(z))
   
   W[nz[np.where(ind1!=0)]] = 0  
   
   W[z[np.where(ind2!=0)]] = w
   
-  W = W.reshape(n,n)
+  W = W.reshape(n, n)
   W = W+W.T
   return W
 
@@ -101,7 +115,7 @@ if __name__ == "__main__":
             theta = np.array([0.02,0.04,0.06,0.08])
             data = np.zeros((N, P))
             for j in range(0,P):
-              data[:,j] = e[:,j]+theta[j]*Ws[:,:,j]@e[:,j]
+              data[:, j] = e[:, j]+theta[j]*Ws[:, :, j]@e[:, j]
             
 
           elif Signaltype == "Standard":
@@ -135,7 +149,7 @@ if __name__ == "__main__":
               if  np.abs(part_corr[ii, jj]) > stats.norm.ppf(0.8, loc=0, scale=1):
                 part_corr[ii,jj] = 1
               else:
-                part_corr[ii,jj] = 0
+                part_corr[ii, jj] = 0
 #%%   
           #mixeddata = np.stack([create_outlier(apply_noise(dat,type='white', SNR_dB=20),prop=0.00,type='impulse',std=100) for dat in mixeddata])
           white_data, W_whiten, n_comp= whitening(mixeddata, type='sample', percentile = 0.999999)
@@ -191,7 +205,8 @@ if __name__ == "__main__":
         fig3, axs3 = plt.subplots(P, sharex=True)
         fig4, axs4 = plt.subplots(P, sharex=True)
         fig5, axs5 = plt.subplots(P, sharex=True)
-        k=0
+        k = 0
+
         while(k<P):
             # input signals
           axs1[k].plot(data[:, k], lw=3)

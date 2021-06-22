@@ -12,6 +12,8 @@ from scipy.stats.distributions import chi2
 import scipy as sp
 from scipy.optimize import linear_sum_assignment
 from scipy.signal import butter, sosfilt
+from scipy import linalg
+from scipy import stats
 
 
 def create_signal(x=10000, c='sin', ampl=1, fs=1000, f=2, eeg_components=1):
